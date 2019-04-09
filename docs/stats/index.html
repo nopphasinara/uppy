@@ -21,8 +21,8 @@
     <meta name="twitter:title" content="Stats — Uppy File Uploader">
     <meta name="twitter:description" content="Sleek, modular file uploader that integrates seamlessly with any website or app. It fetches files from local disk, Google Drive, Dropbox, Instagram, remote URLs, cameras etc, and then uploads them to the final destination. It’s fast, easy to use and let’s you worry about more important problems than building a file uploader.
 ">
-    <meta property="og:image" content="http://uppy.io/images/uppy-social-pink.jpg">
-    <meta name="twitter:image" content="http://uppy.io/images/uppy-social-pink.jpg">
+    <meta property="og:image" content="http://uppy.io/images/uppy-social-pink.png">
+    <meta name="twitter:image" content="http://uppy.io/images/uppy-social-pink.png">
     
     <meta name="google-site-verification" content="JxARoHXoCI8bD07pLV_u3z6xpuWNcSIZIcHEytyCkUc" />
 
@@ -34,7 +34,8 @@
     <script>
       window.PAGE_TYPE = "docs"
     </script>
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/main.css?version=2">
+    <!-- ^-- poor man's solution to css cache busting. bump the version when there's something new we really want users to see -->
   </head>
   <body class="page-inner">
     <div class="page">
@@ -94,63 +95,50 @@
         <a href="/docs">Docs</a>
       
     </h2>
+
     <ul class="menu-root">
       
         
         
         
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/" class="sidebar-link">Getting Started</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/uppy/" class="sidebar-link">Uppy</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/companion/" class="sidebar-link">Companion</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/stores/" class="sidebar-link">Custom Stores</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/contributing.html" class="sidebar-link">Contributing</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/stats/" class="sidebar-link current">Stats</a>
           </li>
@@ -158,24 +146,23 @@
       
         
         
-        
-        
-        
           <li>
             
-              <h3><a href="/docs/plugins/">Plugins</a></h3>
+            <h3><a href="/docs/plugins/">Plugins</a></h3>
             
           </li>
+        
+        
+          
+          
+          
           <li>
             <a href="/docs/plugins/" class="sidebar-link">List & Common Options</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/writing-plugins/" class="sidebar-link">Writing Plugins</a>
           </li>
@@ -183,179 +170,37 @@
       
         
         
-        
-        
-        
           <li>
             
-              <h3>Local Sources</h3>
+            <h3>UI Elements</h3>
             
           </li>
-          <li>
-            <a href="/docs/dashboard/" class="sidebar-link">Dashboard</a>
-          </li>
         
-      
         
-        
-        
-        
-        
-          <li>
-            <a href="/docs/drag-drop/" class="sidebar-link">Drag & Drop</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/file-input/" class="sidebar-link">File Input</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/webcam/" class="sidebar-link">Webcam</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            
-              <h3><a href="/docs/providers/">Remote Providers</a></h3>
-            
-          </li>
-          <li>
-            <a href="/docs/providers/" class="sidebar-link">Provider Plugins</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/dropbox/" class="sidebar-link">Dropbox</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/google-drive/" class="sidebar-link">Google Drive</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/instagram/" class="sidebar-link">Instagram</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/url/" class="sidebar-link">Import From URL</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            
-              <h3>Uploaders</h3>
-            
-          </li>
-          <li>
-            <a href="/docs/tus/" class="sidebar-link">Tus</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/xhr-upload/" class="sidebar-link">XHR Upload</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/aws-s3/" class="sidebar-link">AWS S3</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/aws-s3-multipart/" class="sidebar-link">AWS S3 Multipart</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            
-              <h3>UI Elements</h3>
-            
-          </li>
+          
+          
+          
           <li>
             <a href="/docs/status-bar/" class="sidebar-link">Status Bar</a>
           </li>
         
-      
+          
+          
+          
+          <li>
+            <a href="/docs/dashboard/" class="sidebar-link">Dashboard</a>
+          </li>
         
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/progress-bar/" class="sidebar-link">Progress Bar</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/informer/" class="sidebar-link">Informer</a>
           </li>
@@ -363,14 +208,148 @@
       
         
         
+          <li>
+            
+            <h3>Sources</h3>
+            
+          </li>
         
+        
+          
+          
+          
+          <li>
+            <a href="/docs/drag-drop/" class="sidebar-link">Drag & Drop</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/file-input/" class="sidebar-link">File Input</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/webcam/" class="sidebar-link">Webcam</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/providers/" class="sidebar-link">Provider Plugins</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <span title='Requires Companion'>ⓒ </span><a href="/docs/dropbox/" class="sidebar-link">Dropbox</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <span title='Requires Companion'>ⓒ </span><a href="/docs/google-drive/" class="sidebar-link">Google Drive</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <span title='Requires Companion'>ⓒ </span><a href="/docs/instagram/" class="sidebar-link">Instagram</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <span title='Requires Companion'>ⓒ </span><a href="/docs/url/" class="sidebar-link">Import From URL</a>
+          </li>
+        
+      
         
         
           <li>
             
-              <h3>File Processing</h3>
+            <h3>Destinations</h3>
             
           </li>
+        
+        
+          
+          
+          
+          <li>
+            <a href="/docs/tus/" class="sidebar-link">Tus</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/xhr-upload/" class="sidebar-link">XHR</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/aws-s3/" class="sidebar-link">AWS S3</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/aws-s3-multipart/" class="sidebar-link">AWS S3 Multipart</a>
+          </li>
+        
+      
+        
+        
+          <li>
+            
+            <h3><a href="/docs/robodog/">File Processing</a></h3>
+            
+          </li>
+        
+        
+          
+          
+          
+          <li>
+            <a href="/docs/robodog/" class="sidebar-link">Robodog Introduction</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/robodog/picker/" class="sidebar-link">Robodog File Picker</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/robodog/form/" class="sidebar-link">Robodog Form</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/robodog/upload/" class="sidebar-link">Robodog Upload</a>
+          </li>
+        
+          
+          
+          
           <li>
             <a href="/docs/transloadit/" class="sidebar-link">Transloadit</a>
           </li>
@@ -378,24 +357,23 @@
       
         
         
-        
-        
-        
           <li>
             
-              <h3>Miscellaneous</h3>
+            <h3>Miscellaneous</h3>
             
           </li>
+        
+        
+          
+          
+          
           <li>
             <a href="/docs/form/" class="sidebar-link">Form</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/golden-retriever/" class="sidebar-link">Golden Retriever</a>
           </li>
@@ -403,121 +381,60 @@
       
         
         
-        
-        
-        
           <li>
             
-              <h3><a href="/docs/react/">React Components</a></h3>
+            <h3><a href="/docs/react/">React</a></h3>
             
           </li>
+        
+        
+          
+          
+          
           <li>
             <a href="/docs/react/" class="sidebar-link">Introduction</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/react/status-bar/" class="sidebar-link">&lt;StatusBar /></a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/react/drag-drop/" class="sidebar-link">&lt;DragDrop /></a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/react/progress-bar/" class="sidebar-link">&lt;ProgressBar /></a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/react/dashboard/" class="sidebar-link">&lt;Dashboard /></a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/react/dashboard-modal/" class="sidebar-link">&lt;DashboardModal /></a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/redux/" class="sidebar-link">Redux</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            
-              <h3><a href="/docs/robodog/">Robodog</a></h3>
-            
-          </li>
-          <li>
-            <a href="/docs/robodog/" class="sidebar-link">Introduction</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/robodog/picker/" class="sidebar-link">File Picker</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/robodog/form/" class="sidebar-link">Form</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/robodog/upload/" class="sidebar-link">Upload</a>
           </li>
         
       
@@ -544,6 +461,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
 
   </div>
 </div>
+
 
 
 <div class="Content js-Content docs with-sidebar">
@@ -583,12 +501,12 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
         
         <tr>
           <td><a class="Stats-package" target="_blank" href="https://npmjs.com/package/uppy">uppy</a></td>
-          <td>402 kB</td>
+          <td>401 kB</td>
           <td class="
             Stats-large
             
           ">
-            103 kB
+            102 kB
           </td>
         </tr>
       
@@ -600,19 +518,19 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
             
             
           ">
-            11.8 kB
+            11.9 kB
           </td>
         </tr>
       
         
         <tr>
           <td><a class="Stats-package" target="_blank" href="https://npmjs.com/package/@uppy/dashboard">@uppy/dashboard</a></td>
-          <td>93.8 kB</td>
+          <td>94.5 kB</td>
           <td class="
             
             
           ">
-            27 kB
+            27.2 kB
           </td>
         </tr>
       
@@ -655,96 +573,96 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
         
         <tr>
           <td><a class="Stats-package" target="_blank" href="https://npmjs.com/package/@uppy/dropbox">@uppy/dropbox</a></td>
-          <td>41.4 kB</td>
+          <td>42.5 kB</td>
           <td class="
             
             
           ">
-            12.8 kB
+            13 kB
           </td>
         </tr>
       
         
         <tr>
           <td><a class="Stats-package" target="_blank" href="https://npmjs.com/package/@uppy/google-drive">@uppy/google-drive</a></td>
-          <td>42.4 kB</td>
+          <td>43.4 kB</td>
           <td class="
             
             
           ">
-            12.9 kB
+            13.1 kB
           </td>
         </tr>
       
         
         <tr>
           <td><a class="Stats-package" target="_blank" href="https://npmjs.com/package/@uppy/instagram">@uppy/instagram</a></td>
-          <td>43 kB</td>
+          <td>44.1 kB</td>
           <td class="
             
             
           ">
-            13.4 kB
+            13.6 kB
           </td>
         </tr>
       
         
         <tr>
           <td><a class="Stats-package" target="_blank" href="https://npmjs.com/package/@uppy/url">@uppy/url</a></td>
-          <td>23.8 kB</td>
+          <td>25.1 kB</td>
           <td class="
             
             Stats-small
           ">
-            8.09 kB
+            8.34 kB
           </td>
         </tr>
       
         
         <tr>
           <td><a class="Stats-package" target="_blank" href="https://npmjs.com/package/@uppy/tus">@uppy/tus</a></td>
-          <td>43.4 kB</td>
+          <td>44.5 kB</td>
           <td class="
             
             
           ">
-            12.5 kB
+            12.6 kB
           </td>
         </tr>
       
         
         <tr>
           <td><a class="Stats-package" target="_blank" href="https://npmjs.com/package/@uppy/xhr-upload">@uppy/xhr-upload</a></td>
-          <td>20.2 kB</td>
+          <td>21.7 kB</td>
           <td class="
             
             Stats-small
           ">
-            6.22 kB
+            6.51 kB
           </td>
         </tr>
       
         
         <tr>
           <td><a class="Stats-package" target="_blank" href="https://npmjs.com/package/@uppy/aws-s3">@uppy/aws-s3</a></td>
-          <td>25.5 kB</td>
+          <td>27 kB</td>
           <td class="
             
             Stats-small
           ">
-            7.66 kB
+            7.91 kB
           </td>
         </tr>
       
         
         <tr>
           <td><a class="Stats-package" target="_blank" href="https://npmjs.com/package/@uppy/aws-s3-multipart">@uppy/aws-s3-multipart</a></td>
-          <td>22.8 kB</td>
+          <td>24.2 kB</td>
           <td class="
             
             Stats-small
           ">
-            6.5 kB
+            6.77 kB
           </td>
         </tr>
       
@@ -756,7 +674,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
             
             Stats-small
           ">
-            8.65 kB
+            8.66 kB
           </td>
         </tr>
       
@@ -787,12 +705,12 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
         
         <tr>
           <td><a class="Stats-package" target="_blank" href="https://npmjs.com/package/@uppy/transloadit">@uppy/transloadit</a></td>
-          <td>169 kB</td>
+          <td>170 kB</td>
           <td class="
             Stats-large
             
           ">
-            44.5 kB
+            44.4 kB
           </td>
         </tr>
       
@@ -828,7 +746,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
             
             
           ">
-            29.1 kB
+            29.3 kB
           </td>
         </tr>
       

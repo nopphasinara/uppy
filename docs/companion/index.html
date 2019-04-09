@@ -21,8 +21,8 @@
     <meta name="twitter:title" content="Companion — Uppy File Uploader">
     <meta name="twitter:description" content="Sleek, modular file uploader that integrates seamlessly with any website or app. It fetches files from local disk, Google Drive, Dropbox, Instagram, remote URLs, cameras etc, and then uploads them to the final destination. It’s fast, easy to use and let’s you worry about more important problems than building a file uploader.
 ">
-    <meta property="og:image" content="http://uppy.io/images/uppy-social-pink.jpg">
-    <meta name="twitter:image" content="http://uppy.io/images/uppy-social-pink.jpg">
+    <meta property="og:image" content="http://uppy.io/images/uppy-social-pink.png">
+    <meta name="twitter:image" content="http://uppy.io/images/uppy-social-pink.png">
     
     <meta name="google-site-verification" content="JxARoHXoCI8bD07pLV_u3z6xpuWNcSIZIcHEytyCkUc" />
 
@@ -34,7 +34,8 @@
     <script>
       window.PAGE_TYPE = "docs"
     </script>
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/main.css?version=2">
+    <!-- ^-- poor man's solution to css cache busting. bump the version when there's something new we really want users to see -->
   </head>
   <body class="page-inner">
     <div class="page">
@@ -95,63 +96,50 @@
         <a href="/docs">Docs</a>
       
     </h2>
+
     <ul class="menu-root">
       
         
         
         
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/" class="sidebar-link">Getting Started</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/uppy/" class="sidebar-link">Uppy</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/companion/" class="sidebar-link current">Companion</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/stores/" class="sidebar-link">Custom Stores</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/contributing.html" class="sidebar-link">Contributing</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/stats/" class="sidebar-link">Stats</a>
           </li>
@@ -159,24 +147,23 @@
       
         
         
-        
-        
-        
           <li>
             
-              <h3><a href="/docs/plugins/">Plugins</a></h3>
+            <h3><a href="/docs/plugins/">Plugins</a></h3>
             
           </li>
+        
+        
+          
+          
+          
           <li>
             <a href="/docs/plugins/" class="sidebar-link">List & Common Options</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/writing-plugins/" class="sidebar-link">Writing Plugins</a>
           </li>
@@ -184,179 +171,37 @@
       
         
         
-        
-        
-        
           <li>
             
-              <h3>Local Sources</h3>
+            <h3>UI Elements</h3>
             
           </li>
-          <li>
-            <a href="/docs/dashboard/" class="sidebar-link">Dashboard</a>
-          </li>
         
-      
         
-        
-        
-        
-        
-          <li>
-            <a href="/docs/drag-drop/" class="sidebar-link">Drag & Drop</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/file-input/" class="sidebar-link">File Input</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/webcam/" class="sidebar-link">Webcam</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            
-              <h3><a href="/docs/providers/">Remote Providers</a></h3>
-            
-          </li>
-          <li>
-            <a href="/docs/providers/" class="sidebar-link">Provider Plugins</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/dropbox/" class="sidebar-link">Dropbox</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/google-drive/" class="sidebar-link">Google Drive</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/instagram/" class="sidebar-link">Instagram</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/url/" class="sidebar-link">Import From URL</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            
-              <h3>Uploaders</h3>
-            
-          </li>
-          <li>
-            <a href="/docs/tus/" class="sidebar-link">Tus</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/xhr-upload/" class="sidebar-link">XHR Upload</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/aws-s3/" class="sidebar-link">AWS S3</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/aws-s3-multipart/" class="sidebar-link">AWS S3 Multipart</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            
-              <h3>UI Elements</h3>
-            
-          </li>
+          
+          
+          
           <li>
             <a href="/docs/status-bar/" class="sidebar-link">Status Bar</a>
           </li>
         
-      
+          
+          
+          
+          <li>
+            <a href="/docs/dashboard/" class="sidebar-link">Dashboard</a>
+          </li>
         
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/progress-bar/" class="sidebar-link">Progress Bar</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/informer/" class="sidebar-link">Informer</a>
           </li>
@@ -364,14 +209,148 @@
       
         
         
+          <li>
+            
+            <h3>Sources</h3>
+            
+          </li>
         
+        
+          
+          
+          
+          <li>
+            <a href="/docs/drag-drop/" class="sidebar-link">Drag & Drop</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/file-input/" class="sidebar-link">File Input</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/webcam/" class="sidebar-link">Webcam</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/providers/" class="sidebar-link">Provider Plugins</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <span title='Requires Companion'>ⓒ </span><a href="/docs/dropbox/" class="sidebar-link">Dropbox</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <span title='Requires Companion'>ⓒ </span><a href="/docs/google-drive/" class="sidebar-link">Google Drive</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <span title='Requires Companion'>ⓒ </span><a href="/docs/instagram/" class="sidebar-link">Instagram</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <span title='Requires Companion'>ⓒ </span><a href="/docs/url/" class="sidebar-link">Import From URL</a>
+          </li>
+        
+      
         
         
           <li>
             
-              <h3>File Processing</h3>
+            <h3>Destinations</h3>
             
           </li>
+        
+        
+          
+          
+          
+          <li>
+            <a href="/docs/tus/" class="sidebar-link">Tus</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/xhr-upload/" class="sidebar-link">XHR</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/aws-s3/" class="sidebar-link">AWS S3</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/aws-s3-multipart/" class="sidebar-link">AWS S3 Multipart</a>
+          </li>
+        
+      
+        
+        
+          <li>
+            
+            <h3><a href="/docs/robodog/">File Processing</a></h3>
+            
+          </li>
+        
+        
+          
+          
+          
+          <li>
+            <a href="/docs/robodog/" class="sidebar-link">Robodog Introduction</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/robodog/picker/" class="sidebar-link">Robodog File Picker</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/robodog/form/" class="sidebar-link">Robodog Form</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/robodog/upload/" class="sidebar-link">Robodog Upload</a>
+          </li>
+        
+          
+          
+          
           <li>
             <a href="/docs/transloadit/" class="sidebar-link">Transloadit</a>
           </li>
@@ -379,24 +358,23 @@
       
         
         
-        
-        
-        
           <li>
             
-              <h3>Miscellaneous</h3>
+            <h3>Miscellaneous</h3>
             
           </li>
+        
+        
+          
+          
+          
           <li>
             <a href="/docs/form/" class="sidebar-link">Form</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/golden-retriever/" class="sidebar-link">Golden Retriever</a>
           </li>
@@ -404,121 +382,60 @@
       
         
         
-        
-        
-        
           <li>
             
-              <h3><a href="/docs/react/">React Components</a></h3>
+            <h3><a href="/docs/react/">React</a></h3>
             
           </li>
+        
+        
+          
+          
+          
           <li>
             <a href="/docs/react/" class="sidebar-link">Introduction</a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/react/status-bar/" class="sidebar-link">&lt;StatusBar /></a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/react/drag-drop/" class="sidebar-link">&lt;DragDrop /></a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/react/progress-bar/" class="sidebar-link">&lt;ProgressBar /></a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/react/dashboard/" class="sidebar-link">&lt;Dashboard /></a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/react/dashboard-modal/" class="sidebar-link">&lt;DashboardModal /></a>
           </li>
         
-      
-        
-        
-        
-        
-        
+          
+          
+          
           <li>
             <a href="/docs/redux/" class="sidebar-link">Redux</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            
-              <h3><a href="/docs/robodog/">Robodog</a></h3>
-            
-          </li>
-          <li>
-            <a href="/docs/robodog/" class="sidebar-link">Introduction</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/robodog/picker/" class="sidebar-link">File Picker</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/robodog/form/" class="sidebar-link">Form</a>
-          </li>
-        
-      
-        
-        
-        
-        
-        
-          <li>
-            <a href="/docs/robodog/upload/" class="sidebar-link">Upload</a>
           </li>
         
       
@@ -547,6 +464,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
 </div>
 
 
+
 <div class="Content js-Content docs with-sidebar">
     <h1>Companion</h1>
     <blockquote>
@@ -566,6 +484,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
 <h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><p>Install from NPM:</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="token function">npm</span> <span class="token function">install</span> @uppy/companion
 </pre></td></tr></table></figure>
+<p>If you don’t have a Node.js project with a <code>package.json</code> you might want to install/run Companion globally like so: <code>[sudo] npm install -g @uppy/companion@0.30.0</code>.</p>
 <h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><p>Companion may either be used as a pluggable express app, which you plug into your already existing server, or it may simply be run as a standalone server:</p>
 <h3 id="Plugging-into-an-already-existing-server"><a href="#Plugging-into-an-already-existing-server" class="headerlink" title="Plugging into an already existing server"></a>Plugging into an already existing server</h3><p>To plug Companion into an existing server, call its <code>.app</code> method, passing in an <a href="#Options">options</a> object as a parameter.</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre>
@@ -753,7 +672,7 @@ app<span class="token punctuation">.</span><span class="token function">use</spa
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 </pre></td></tr></table></figure>
 <p>The default value simply returns <code>filename</code>, so all files will be uploaded to the root of the bucket as their original file name.</p>
-<h3 id="Running-in-Kubernetes"><a href="#Running-in-Kubernetes" class="headerlink" title="Running in Kubernetes"></a>Running in Kubernetes</h3><p>We have <a href="https://github.com/transloadit/uppy/blob/master/packages/%40uppy/companion/KUBERNETES.md" target="_blank" rel="noopener">a detailed guide on running Companion in Kubernetes</a> for you, that’s how we currently run our example server at <a href="http://server.uppy.io" target="_blank" rel="noopener">http://server.uppy.io</a>.</p>
+<h3 id="Running-in-Kubernetes"><a href="#Running-in-Kubernetes" class="headerlink" title="Running in Kubernetes"></a>Running in Kubernetes</h3><p>We have <a href="https://github.com/transloadit/uppy/blob/master/packages/%40uppy/companion/KUBERNETES.md" target="_blank" rel="noopener">a detailed guide on running Companion in Kubernetes</a> for you, that’s how we currently run our example server at <a href="https://companion.uppy.io" target="_blank" rel="noopener">https://companion.uppy.io</a>.</p>
 <h3 id="Adding-custom-providers"><a href="#Adding-custom-providers" class="headerlink" title="Adding custom providers"></a>Adding custom providers</h3><p>As of now, Companion supports <strong>Google Drive</strong>, <strong>Dropbox</strong>, <strong>Instagram</strong>, and <strong>URL</strong> (remote urls) out of the box, but you may also choose to add your own custom providers. You can do this by passing the <code>customProviders</code> option when calling the Uppy <code>app</code> method. The custom provider is expected to support Oauth 1 or 2 for authentication/authorization.</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="token keyword">let</span> options <span class="token operator">=</span> <span class="token punctuation">{</span>
     customProviders<span class="token punctuation">:</span> <span class="token punctuation">{</span>
@@ -808,7 +727,7 @@ uppy<span class="token punctuation">.</span><span class="token function">app</sp
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="token function">npm</span> run start:companion
 </pre></td></tr></table></figure>
 <p>This would get the Companion instance running on <code>http://localhost:3020</code>. It uses <a href="https://github.com/remy/nodemon" target="_blank" rel="noopener">nodemon</a> so it will automatically restart when files are changed.</p>
-<h2 id="Live-example"><a href="#Live-example" class="headerlink" title="Live example"></a>Live example</h2><p>An example server is running at <a href="http://companion.uppy.io" target="_blank" rel="noopener">http://companion.uppy.io</a>, which is deployed with <a href="https://github.com/transloadit/uppy/blob/master/packages/%40uppy/companion/KUBERNETES.md" target="_blank" rel="noopener">Kubernetes</a></p>
+<h2 id="Live-example"><a href="#Live-example" class="headerlink" title="Live example"></a>Live example</h2><p>An example server is running at <a href="https://companion.uppy.io" target="_blank" rel="noopener">https://companion.uppy.io</a>, which is deployed with <a href="https://github.com/transloadit/uppy/blob/master/packages/%40uppy/companion/KUBERNETES.md" target="_blank" rel="noopener">Kubernetes</a></p>
 
     
     <div class="footer">Caught a mistake or want to contribute to the documentation?

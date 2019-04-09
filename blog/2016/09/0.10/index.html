@@ -21,8 +21,8 @@ Thinking about the future 🔮We have been spending quite a lot of time thinking
     <meta name="twitter:title" content="Uppy 0.10: Getting together, the future, Google Drive UI, exposed events — Uppy File Uploader">
     <meta name="twitter:description" content="Hi! Another month has passed and we have just released a new version of Uppy. Here’s what we’ve been up to.
 Thinking about the future 🔮We have been spending quite a lot of time thinking about Uppy’s future and the direction in which we would like to take this project.  Our primary concern is making Uppy as flexible as possible as well as compatible with popular libraries, such as React and React ">
-    <meta property="og:image" content="http://uppy.io/images/uppy-social-pink.jpg">
-    <meta name="twitter:image" content="http://uppy.io/images/uppy-social-pink.jpg">
+    <meta property="og:image" content="http://uppy.io/images/uppy-social-pink.png">
+    <meta name="twitter:image" content="http://uppy.io/images/uppy-social-pink.png">
     
     <meta name="google-site-verification" content="JxARoHXoCI8bD07pLV_u3z6xpuWNcSIZIcHEytyCkUc" />
 
@@ -34,7 +34,8 @@ Thinking about the future 🔮We have been spending quite a lot of time thinking
     <script>
       window.PAGE_TYPE = ""
     </script>
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/main.css?version=2">
+    <!-- ^-- poor man's solution to css cache busting. bump the version when there's something new we really want users to see -->
   </head>
   <body class="page-inner">
     <div class="page">
@@ -98,7 +99,7 @@ Thinking about the future 🔮We have been spending quite a lot of time thinking
         <ul>
   
   <li>
-    <a href="/blog/2019/03/liftoff-03/" class="sidebar-link">30 Days to Liftoff</a>
+    <a href="/blog/2019/04/liftoff-15/" class="sidebar-link">30 Days to Liftoff</a>
   </li>
   
   <li>
@@ -127,6 +128,18 @@ Thinking about the future 🔮We have been spending quite a lot of time thinking
   
   <li>
     <a href="/blog/2018/04/0.24/" class="sidebar-link">Uppy 0.24: Refreshed Dashboard, StatusBar and Provider UI, revamped XHR Response Handling</a>
+  </li>
+  
+  <li>
+    <a href="/blog/2018/02/0.23/" class="sidebar-link">Uppy 0.23: Import from Url, refactored thumbnail generation, XHR bundle</a>
+  </li>
+  
+  <li>
+    <a href="/blog/2017/12/0.22/" class="sidebar-link">Uppy 0.22: Preact, Form, Improved Dashboard, Custom Stores</a>
+  </li>
+  
+  <li>
+    <a href="/blog/2017/11/0.21/" class="sidebar-link">Uppy 0.21: End to End Tests, Accessibility, Additional Security for Uppy Server</a>
   </li>
   
 </ul>
@@ -228,7 +241,10 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
         </div>
     
   <br />
-  <br />
+    <ul class="Social">
+        <li><iframe src="https://ghbtns.com/github-btn.html?user=transloadit&repo=uppy&type=watch&count=true"
+                allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe></li>
+    </ul>
   <div id='discourse-comments'></div>
 
 <script type="text/javascript">

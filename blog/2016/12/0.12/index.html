@@ -21,8 +21,8 @@ Dashboard: local mode and multipart uploads support in UIPrior to this release, 
     <meta name="twitter:title" content="Uppy 0.12: Responsive. Cancel. Feedback. Refreshed ES6 server — Uppy File Uploader">
     <meta name="twitter:description" content="Hello! Here’s what’s new in Uppy 0.12.
 Dashboard: local mode and multipart uploads support in UIPrior to this release, we’ve optimized the Dashboard for usage with multiple “acquire plugins”, say Webcam + Google Drive. But sometimes all you need is “local disk” with drag &amp; drop support, nice file previews and progress. And now the Dashboard UI works great with that use case out of the box. Whe">
-    <meta property="og:image" content="http://uppy.io/images/uppy-social-pink.jpg">
-    <meta name="twitter:image" content="http://uppy.io/images/uppy-social-pink.jpg">
+    <meta property="og:image" content="http://uppy.io/images/uppy-social-pink.png">
+    <meta name="twitter:image" content="http://uppy.io/images/uppy-social-pink.png">
     
     <meta name="google-site-verification" content="JxARoHXoCI8bD07pLV_u3z6xpuWNcSIZIcHEytyCkUc" />
 
@@ -34,7 +34,8 @@ Dashboard: local mode and multipart uploads support in UIPrior to this release, 
     <script>
       window.PAGE_TYPE = ""
     </script>
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/main.css?version=2">
+    <!-- ^-- poor man's solution to css cache busting. bump the version when there's something new we really want users to see -->
   </head>
   <body class="page-inner">
     <div class="page">
@@ -98,7 +99,7 @@ Dashboard: local mode and multipart uploads support in UIPrior to this release, 
         <ul>
   
   <li>
-    <a href="/blog/2019/03/liftoff-03/" class="sidebar-link">30 Days to Liftoff</a>
+    <a href="/blog/2019/04/liftoff-15/" class="sidebar-link">30 Days to Liftoff</a>
   </li>
   
   <li>
@@ -127,6 +128,18 @@ Dashboard: local mode and multipart uploads support in UIPrior to this release, 
   
   <li>
     <a href="/blog/2018/04/0.24/" class="sidebar-link">Uppy 0.24: Refreshed Dashboard, StatusBar and Provider UI, revamped XHR Response Handling</a>
+  </li>
+  
+  <li>
+    <a href="/blog/2018/02/0.23/" class="sidebar-link">Uppy 0.23: Import from Url, refactored thumbnail generation, XHR bundle</a>
+  </li>
+  
+  <li>
+    <a href="/blog/2017/12/0.22/" class="sidebar-link">Uppy 0.22: Preact, Form, Improved Dashboard, Custom Stores</a>
+  </li>
+  
+  <li>
+    <a href="/blog/2017/11/0.21/" class="sidebar-link">Uppy 0.21: End to End Tests, Accessibility, Additional Security for Uppy Server</a>
   </li>
   
 </ul>
@@ -215,7 +228,10 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
         </div>
     
   <br />
-  <br />
+    <ul class="Social">
+        <li><iframe src="https://ghbtns.com/github-btn.html?user=transloadit&repo=uppy&type=watch&count=true"
+                allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe></li>
+    </ul>
   <div id='discourse-comments'></div>
 
 <script type="text/javascript">
