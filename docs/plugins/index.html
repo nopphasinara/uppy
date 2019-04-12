@@ -7,9 +7,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>List & Common Options — Uppy File Uploader</title>
+    <title>List of Plugins — Uppy File Uploader</title>
     <meta charset="utf-8">
-    <meta name="title" content="List &amp; Common Options — Uppy File Uploader">
+    <meta name="title" content="List of Plugins — Uppy File Uploader">
     <meta name="description" content="Sleek, modular file uploader that integrates seamlessly with any website or app. It fetches files from local disk, Google Drive, Dropbox, Instagram, remote URLs, cameras etc, and then uploads them to the final destination. It’s fast, easy to use and let’s you worry about more important problems than building a file uploader.
 ">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,8 +17,8 @@
     <meta name="twitter:site" content="@uppy_io">
     <meta name="twitter:creator" content="@uppy_io">
     <meta property="og:url" content="https://uppy.io/docs/plugins/index.html">
-    <meta property="og:title" content="List & Common Options — Uppy File Uploader">
-    <meta name="twitter:title" content="List & Common Options — Uppy File Uploader">
+    <meta property="og:title" content="List of Plugins — Uppy File Uploader">
+    <meta name="twitter:title" content="List of Plugins — Uppy File Uploader">
     <meta name="twitter:description" content="Sleek, modular file uploader that integrates seamlessly with any website or app. It fetches files from local disk, Google Drive, Dropbox, Instagram, remote URLs, cameras etc, and then uploads them to the final destination. It’s fast, easy to use and let’s you worry about more important problems than building a file uploader.
 ">
     <meta property="og:image" content="http://uppy.io/images/uppy-social-pink.png">
@@ -127,45 +127,21 @@
           
           
           <li>
+            <a href="/docs/plugins/" class="sidebar-link current">List of Plugins</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/plugins/" class="sidebar-link">Common Plugin Options</a>
+          </li>
+        
+          
+          
+          
+          <li>
             <a href="/docs/stores/" class="sidebar-link">Custom Stores</a>
-          </li>
-        
-          
-          
-          
-          <li>
-            <a href="/docs/contributing.html" class="sidebar-link">Contributing</a>
-          </li>
-        
-          
-          
-          
-          <li>
-            <a href="/docs/stats/" class="sidebar-link">Stats</a>
-          </li>
-        
-      
-        
-        
-          <li>
-            
-            <h3><a href="/docs/plugins/">Plugins</a></h3>
-            
-          </li>
-        
-        
-          
-          
-          
-          <li>
-            <a href="/docs/plugins/" class="sidebar-link current">List & Common Options</a>
-          </li>
-        
-          
-          
-          
-          <li>
-            <a href="/docs/writing-plugins/" class="sidebar-link">Writing Plugins</a>
           </li>
         
       
@@ -439,6 +415,37 @@
           </li>
         
       
+        
+        
+          <li>
+            
+            <h3><a href="/docs/contributing/">Contributing</a></h3>
+            
+          </li>
+        
+        
+          
+          
+          
+          <li>
+            <a href="/docs/contributing.html" class="sidebar-link">Contributing</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/writing-plugins/" class="sidebar-link">Writing Plugins</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/stats/" class="sidebar-link">Stats</a>
+          </li>
+        
+      
     </ul>
     <ul class="Social">
   <li><a href="https://twitter.com/uppy_io" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @uppy_io</a></li>
@@ -466,7 +473,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
 
 
 <div class="Content js-Content docs with-sidebar">
-    <h1>List & Common Options</h1>
+    <h1>List of Plugins</h1>
     <p>Plugins are what makes Uppy useful: they help select, manipulate and upload files.</p>
 <ul>
 <li><strong>Local Sources:</strong><ul>
@@ -507,38 +514,6 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
 </ul>
 </li>
 </ul>
-<h2 id="Common-options"><a href="#Common-options" class="headerlink" title="Common options"></a>Common options</h2><p>Each plugin can have any number of options (please see specific plugins for details), but these are shared between some:</p>
-<h3 id="id"><a href="#id" class="headerlink" title="id"></a><code>id</code></h3><p>A unique string identifying the plugin. By default, the plugin’s name is used, so usually it does not need to be configured manually. Use this if you need to add multiple plugins of the same type.</p>
-<h3 id="target"><a href="#target" class="headerlink" title="target"></a><code>target</code></h3><p>Can be a <code>string</code> CSS selector, a DOM element, or a Plugin class. Consider the following example, where <code>DragDrop</code> plugin will be rendered into a <code>body</code> element:</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="token keyword">const</span> Uppy <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/core'</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> DragDrop <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/drag-drop'</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> uppy <span class="token operator">=</span> <span class="token function">Uppy</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>DragDrop<span class="token punctuation">,</span> <span class="token punctuation">{</span> target<span class="token punctuation">:</span> <span class="token string">'body'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
-<span class="token comment">// or: uppy.use(DragDrop, { target: document.body })</span>
-</pre></td></tr></table></figure>
-<p>While in this one, we are using the <code>@uppy/dashboard</code> plugin, which can act as a host target for other plugins:</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="token keyword">const</span> Uppy <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/core'</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> Dashboard <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/dashboard'</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> GoogleDrive <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/google-drive'</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> uppy <span class="token operator">=</span> <span class="token function">Uppy</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Dashboard<span class="token punctuation">,</span> <span class="token punctuation">{</span>
-  trigger<span class="token punctuation">:</span> <span class="token string">'#uppyModalOpener'</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span>
-uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>GoogleDrive<span class="token punctuation">,</span> <span class="token punctuation">{</span>target<span class="token punctuation">:</span> Dashboard<span class="token punctuation">}</span><span class="token punctuation">)</span>
-</pre></td></tr></table></figure>
-<p>In the example above, the <code>Dashboard</code> gets rendered into an element with ID <code>uppy</code>, while <code>GoogleDrive</code> is rendered into the <code>Dashboard</code> itself.</p>
-<h3 id="locale"><a href="#locale" class="headerlink" title="locale: {}"></a><code>locale: {}</code></h3><p>Same as with Uppy.Core’s setting above, this allows you to override plugin’s locale string, so that instead of <code>Select files</code> in English, your users will see <code>Выберите файлы</code> in Russian. Example:</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>FileInput<span class="token punctuation">,</span> <span class="token punctuation">{</span>
-  target<span class="token punctuation">:</span> <span class="token string">'body'</span><span class="token punctuation">,</span>
-  locale<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-    strings<span class="token punctuation">:</span> <span class="token punctuation">{</span> selectToUpload<span class="token punctuation">:</span> <span class="token string">'Выберите файл для загрузки'</span> <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span>
-</pre></td></tr></table></figure>
-<p>See plugin documentation pages for other plugin-specific options.</p>
-<!-- Keep this heading, it is here to avoid breaking existing URLs -->
-<!-- Previously the content that is now at /docs/providers was here -->
-<h2 id="Provider-Plugins"><a href="#Provider-Plugins" class="headerlink" title="Provider Plugins"></a>Provider Plugins</h2><p>See the <a href="/docs/providers">Provider Plugins</a> documentation page for information on provider plugins.</p>
 
     
     <div class="footer">Caught a mistake or want to contribute to the documentation?

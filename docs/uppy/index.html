@@ -127,45 +127,21 @@
           
           
           <li>
+            <a href="/docs/plugins/" class="sidebar-link">List of Plugins</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/plugins/" class="sidebar-link">Common Plugin Options</a>
+          </li>
+        
+          
+          
+          
+          <li>
             <a href="/docs/stores/" class="sidebar-link">Custom Stores</a>
-          </li>
-        
-          
-          
-          
-          <li>
-            <a href="/docs/contributing.html" class="sidebar-link">Contributing</a>
-          </li>
-        
-          
-          
-          
-          <li>
-            <a href="/docs/stats/" class="sidebar-link">Stats</a>
-          </li>
-        
-      
-        
-        
-          <li>
-            
-            <h3><a href="/docs/plugins/">Plugins</a></h3>
-            
-          </li>
-        
-        
-          
-          
-          
-          <li>
-            <a href="/docs/plugins/" class="sidebar-link">List & Common Options</a>
-          </li>
-        
-          
-          
-          
-          <li>
-            <a href="/docs/writing-plugins/" class="sidebar-link">Writing Plugins</a>
           </li>
         
       
@@ -436,6 +412,37 @@
           
           <li>
             <a href="/docs/redux/" class="sidebar-link">Redux</a>
+          </li>
+        
+      
+        
+        
+          <li>
+            
+            <h3><a href="/docs/contributing/">Contributing</a></h3>
+            
+          </li>
+        
+        
+          
+          
+          
+          <li>
+            <a href="/docs/contributing.html" class="sidebar-link">Contributing</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/writing-plugins/" class="sidebar-link">Writing Plugins</a>
+          </li>
+        
+          
+          
+          
+          <li>
+            <a href="/docs/stats/" class="sidebar-link">Stats</a>
           </li>
         
       
@@ -837,6 +844,11 @@ uppy<span class="token punctuation">.</span><span class="token function">setStat
 </pre></td></tr></table></figure>
 <h3 id="info-hidden"><a href="#info-hidden" class="headerlink" title="info-hidden"></a><code>info-hidden</code></h3><p>Fired when “info” message should be hidden in the UI. See <a href="#info-visible"><code>info-visible</code></a>.</p>
 <h3 id="cancel-all"><a href="#cancel-all" class="headerlink" title="cancel-all"></a><code>cancel-all</code></h3><p>Fired when <a href=""><code>uppy.cancelAll()</code></a> is called, all uploads are canceled, files removed and progress is reset.</p>
+<h3 id="restriction-failed"><a href="#restriction-failed" class="headerlink" title="restriction-failed"></a><code>restriction-failed</code></h3><p>Fired when a file violates certain restrictions when added. This event is just providing another choice for those who want to customize the behavior of file upload restrictions.</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre>uppy<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'restriction-failed'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>file<span class="token punctuation">,</span> error<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// do some customized logic like showing system notice to users</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</pre></td></tr></table></figure>
 
     
     <div class="footer">Caught a mistake or want to contribute to the documentation?
