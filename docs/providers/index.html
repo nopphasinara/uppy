@@ -328,6 +328,13 @@
           
           
           <li>
+            <a href="/docs/robodog/dashboard/" class="sidebar-link">Robodog Dashboard</a>
+          </li>
+        
+          
+          
+          
+          <li>
             <a href="/docs/transloadit/" class="sidebar-link">Transloadit</a>
           </li>
         
@@ -476,7 +483,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
     <h1>Provider Plugins</h1>
     <p>The Provider plugins help you connect to your accounts with remote file providers such as <a href="https://dropbox.com" target="_blank" rel="noopener">Dropbox</a>, <a href="https://drive.google.com" target="_blank" rel="noopener">Google Drive</a>, <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a> and remote URLs (importing a file by pasting a direct link to it). Because this requires server-to-server communication, they work tightly with <a href="https://github.com/transloadit/companion" target="_blank" rel="noopener">Companion</a> to manage the server-to-server authorization for your account. Almost all of the communication (file download/upload) is done on the server-to-server end, so this saves you the stress and bills of data consumption on the client.</p>
 <p>As of now, the supported providers are <a href="/docs/dropbox"><strong>Dropbox</strong></a>, <a href="/docs/google-drive"><strong>GoogleDrive</strong></a>, <a href="/docs/instagram"><strong>Instagram</strong></a>, and <a href="/docs/url"><strong>URL</strong></a>.</p>
-<p>Usage of the Provider plugins is not that different from any other <em>acquirer</em> plugin, except that it takes an extra option <code>serverUrl</code>, which specifies the URL to the Companion that you are running. This allows Uppy to know what server to connect to when datacenter operations are required by the provider plugin.</p>
+<p>Usage of the Provider plugins is not that different from any other <em>acquirer</em> plugin, except that it takes an extra option <code>companionUrl</code>, which specifies the URL to the Companion that you are running. This allows Uppy to know what server to connect to when datacenter operations are required by the provider plugin.</p>
 <p>Here’s a quick example:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="token keyword">const</span> Uppy <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/core'</span><span class="token punctuation">)</span>
 <span class="token keyword">const</span> Dashboard <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/dashboaord'</span><span class="token punctuation">)</span>
@@ -487,19 +494,19 @@ uppy<span class="token punctuation">.</span><span class="token function">use</sp
 
 <span class="token comment">// for Google Drive</span>
 <span class="token keyword">const</span> GoogleDrive <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/google-drive'</span><span class="token punctuation">)</span>
-uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>GoogleDrive<span class="token punctuation">,</span> <span class="token punctuation">{</span>target<span class="token punctuation">:</span> Dashboard<span class="token punctuation">,</span> serverUrl<span class="token punctuation">:</span> <span class="token string">'http://localhost:3020'</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>GoogleDrive<span class="token punctuation">,</span> <span class="token punctuation">{</span>target<span class="token punctuation">:</span> Dashboard<span class="token punctuation">,</span> companionUrl<span class="token punctuation">:</span> <span class="token string">'http://localhost:3020'</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
 
 <span class="token comment">// for Dropbox</span>
 <span class="token keyword">const</span> Dropbox <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/dropbox'</span><span class="token punctuation">)</span>
-uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Dropbox<span class="token punctuation">,</span> <span class="token punctuation">{</span>target<span class="token punctuation">:</span> Dashboard<span class="token punctuation">,</span> serverUrl<span class="token punctuation">:</span> <span class="token string">'http://localhost:3020'</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Dropbox<span class="token punctuation">,</span> <span class="token punctuation">{</span>target<span class="token punctuation">:</span> Dashboard<span class="token punctuation">,</span> companionUrl<span class="token punctuation">:</span> <span class="token string">'http://localhost:3020'</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
 
 <span class="token comment">// for Instagram</span>
 <span class="token keyword">const</span> Instagram <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/instagram'</span><span class="token punctuation">)</span>
-uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Instagram<span class="token punctuation">,</span> <span class="token punctuation">{</span>target<span class="token punctuation">:</span> Dashboard<span class="token punctuation">,</span> serverUrl<span class="token punctuation">:</span> <span class="token string">'http://localhost:3020'</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Instagram<span class="token punctuation">,</span> <span class="token punctuation">{</span>target<span class="token punctuation">:</span> Dashboard<span class="token punctuation">,</span> companionUrl<span class="token punctuation">:</span> <span class="token string">'http://localhost:3020'</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
 
 <span class="token comment">// for URL</span>
 <span class="token keyword">const</span> Url <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/url'</span><span class="token punctuation">)</span>
-uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Url<span class="token punctuation">,</span> <span class="token punctuation">{</span>target<span class="token punctuation">:</span> Dashboard<span class="token punctuation">,</span> serverUrl<span class="token punctuation">:</span> <span class="token string">'http://localhost:3020'</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Url<span class="token punctuation">,</span> <span class="token punctuation">{</span>target<span class="token punctuation">:</span> Dashboard<span class="token punctuation">,</span> companionUrl<span class="token punctuation">:</span> <span class="token string">'http://localhost:3020'</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
 </pre></td></tr></table></figure>
 <p>⚠️ The <a href="/docs/dashboard">Dashboard</a> plugin is recommended as a universal container to all Provider plugins. It also comes with file previews, progress reporting and more. If you are using the Dashboard, it already <a href="/docs/dashboard/#CSS">comes with all the nessesary styles</a> and functionality for Providers to work well.</p>
 <p>If you are feeling adventurous, you can technically use a Provider plugin separately, without the Dashboard. Make sure to then include <code>@uppy/provider-views/dist/style.css</code> (or <code>style.min.css</code>) CSS file. But this is experimental, not officialy supported and not recommended.</p>

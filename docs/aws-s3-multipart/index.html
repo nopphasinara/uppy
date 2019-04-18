@@ -328,6 +328,13 @@
           
           
           <li>
+            <a href="/docs/robodog/dashboard/" class="sidebar-link">Robodog Dashboard</a>
+          </li>
+        
+          
+          
+          
+          <li>
             <a href="/docs/transloadit/" class="sidebar-link">Transloadit</a>
           </li>
         
@@ -478,7 +485,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="token keyword">const</span> AwsS3Multipart <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/aws-s3-multipart'</span><span class="token punctuation">)</span>
 uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>AwsS3Multipart<span class="token punctuation">,</span> <span class="token punctuation">{</span>
   limit<span class="token punctuation">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
-  serverUrl<span class="token punctuation">:</span> <span class="token string">'https://uppy-companion.myapp.net/'</span>
+  companionUrl<span class="token punctuation">:</span> <span class="token string">'https://uppy-companion.myapp.net/'</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 </pre></td></tr></table></figure>
 <h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><p>This plugin is published as the <code>@uppy/aws-s3-multipart</code> package.</p>
@@ -490,7 +497,7 @@ uppy<span class="token punctuation">.</span><span class="token function">use</sp
 </pre></td></tr></table></figure>
 <h2 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h2><p>The <code>@uppy/aws-s3-multipart</code> plugin has the following configurable options:</p>
 <h3 id="limit-0"><a href="#limit-0" class="headerlink" title="limit: 0"></a>limit: 0</h3><p>The maximum amount of chunks to upload simultaneously. Set to <code>0</code> to disable limiting.</p>
-<h3 id="serverUrl-null"><a href="#serverUrl-null" class="headerlink" title="serverUrl: null"></a>serverUrl: null</h3><p>The Companion URL to use for proxying calls to the S3 Multipart API.</p>
+<h3 id="companionUrl-null"><a href="#companionUrl-null" class="headerlink" title="companionUrl: null"></a>companionUrl: null</h3><p>The Companion URL to use for proxying calls to the S3 Multipart API.</p>
 <h3 id="createMultipartUpload-file"><a href="#createMultipartUpload-file" class="headerlink" title="createMultipartUpload(file)"></a>createMultipartUpload(file)</h3><p>A function that calls the S3 Multipart API to create a new upload. <code>file</code> is the file object from Uppy’s state. The most relevant keys are <code>file.name</code> and <code>file.type</code>.</p>
 <p>Return a Promise for an object with keys:</p>
 <ul>

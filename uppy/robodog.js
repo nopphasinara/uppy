@@ -2251,7 +2251,7 @@ function numberIsNaN (obj) {
   return obj !== obj // eslint-disable-line no-self-compare
 }
 
-},{"base64-js":5,"ieee754":40}],9:[function(require,module,exports){
+},{"base64-js":5,"ieee754":38}],9:[function(require,module,exports){
 /*!
   Copyright (c) 2017 Jed Watson.
   Licensed under the MIT License (MIT), see
@@ -2627,200 +2627,6 @@ module.exports = function pad (num, size) {
 };
 
 },{}],17:[function(require,module,exports){
-module.exports = dragDrop
-
-var flatten = require('flatten')
-var parallel = require('run-parallel')
-
-function dragDrop (elem, listeners) {
-  if (typeof elem === 'string') {
-    var selector = elem
-    elem = window.document.querySelector(elem)
-    if (!elem) {
-      throw new Error('"' + selector + '" does not match any HTML elements')
-    }
-  }
-
-  if (!elem) {
-    throw new Error('"' + elem + '" is not a valid HTML element')
-  }
-
-  if (typeof listeners === 'function') {
-    listeners = { onDrop: listeners }
-  }
-
-  var timeout
-
-  elem.addEventListener('dragenter', onDragEnter, false)
-  elem.addEventListener('dragover', onDragOver, false)
-  elem.addEventListener('dragleave', onDragLeave, false)
-  elem.addEventListener('drop', onDrop, false)
-
-  // Function to remove drag-drop listeners
-  return function remove () {
-    removeDragClass()
-    elem.removeEventListener('dragenter', onDragEnter, false)
-    elem.removeEventListener('dragover', onDragOver, false)
-    elem.removeEventListener('dragleave', onDragLeave, false)
-    elem.removeEventListener('drop', onDrop, false)
-  }
-
-  function onDragEnter (e) {
-    if (listeners.onDragEnter) {
-      listeners.onDragEnter(e)
-    }
-
-    // Prevent event
-    e.stopPropagation()
-    e.preventDefault()
-    return false
-  }
-
-  function onDragOver (e) {
-    e.stopPropagation()
-    e.preventDefault()
-    if (e.dataTransfer.items) {
-      // Only add "drag" class when `items` contains items that are able to be
-      // handled by the registered listeners (files vs. text)
-      var items = toArray(e.dataTransfer.items)
-      var fileItems = items.filter(function (item) { return item.kind === 'file' })
-      var textItems = items.filter(function (item) { return item.kind === 'string' })
-
-      if (fileItems.length === 0 && !listeners.onDropText) return
-      if (textItems.length === 0 && !listeners.onDrop) return
-      if (fileItems.length === 0 && textItems.length === 0) return
-    }
-
-    elem.classList.add('drag')
-    clearTimeout(timeout)
-
-    if (listeners.onDragOver) {
-      listeners.onDragOver(e)
-    }
-
-    e.dataTransfer.dropEffect = 'copy'
-    return false
-  }
-
-  function onDragLeave (e) {
-    e.stopPropagation()
-    e.preventDefault()
-
-    if (listeners.onDragLeave) {
-      listeners.onDragLeave(e)
-    }
-
-    clearTimeout(timeout)
-    timeout = setTimeout(removeDragClass, 50)
-
-    return false
-  }
-
-  function onDrop (e) {
-    e.stopPropagation()
-    e.preventDefault()
-
-    if (listeners.onDragLeave) {
-      listeners.onDragLeave(e)
-    }
-
-    clearTimeout(timeout)
-    removeDragClass()
-
-    var pos = {
-      x: e.clientX,
-      y: e.clientY
-    }
-
-    // text drop support
-    var text = e.dataTransfer.getData('text')
-    if (text && listeners.onDropText) {
-      listeners.onDropText(text, pos)
-    }
-
-    // file drop support
-    if (e.dataTransfer.items) {
-      // Handle directories in Chrome using the proprietary FileSystem API
-      var items = toArray(e.dataTransfer.items).filter(function (item) {
-        return item.kind === 'file'
-      })
-
-      if (items.length === 0) return
-
-      parallel(items.map(function (item) {
-        return function (cb) {
-          processEntry(item.webkitGetAsEntry(), cb)
-        }
-      }), function (err, results) {
-        // This catches permission errors with file:// in Chrome. This should never
-        // throw in production code, so the user does not need to use try-catch.
-        if (err) throw err
-        if (listeners.onDrop) {
-          listeners.onDrop(flatten(results), pos)
-        }
-      })
-    } else {
-      var files = toArray(e.dataTransfer.files)
-
-      if (files.length === 0) return
-
-      files.forEach(function (file) {
-        file.fullPath = '/' + file.name
-      })
-
-      if (listeners.onDrop) {
-        listeners.onDrop(files, pos)
-      }
-    }
-
-    return false
-  }
-
-  function removeDragClass () {
-    elem.classList.remove('drag')
-  }
-}
-
-function processEntry (entry, cb) {
-  var entries = []
-
-  if (entry.isFile) {
-    entry.file(function (file) {
-      file.fullPath = entry.fullPath // preserve pathing for consumer
-      cb(null, file)
-    }, function (err) {
-      cb(err)
-    })
-  } else if (entry.isDirectory) {
-    var reader = entry.createReader()
-    readEntries()
-  }
-
-  function readEntries () {
-    reader.readEntries(function (entries_) {
-      if (entries_.length > 0) {
-        entries = entries.concat(toArray(entries_))
-        readEntries() // continue reading entries until `readEntries` returns no more
-      } else {
-        doneEntries()
-      }
-    })
-  }
-
-  function doneEntries () {
-    parallel(entries.map(function (entry) {
-      return function (cb) {
-        processEntry(entry, cb)
-      }
-    }), cb)
-  }
-}
-
-function toArray (list) {
-  return Array.prototype.slice.call(list || [], 0)
-}
-
-},{"flatten":36,"run-parallel":55}],18:[function(require,module,exports){
 
 module.exports = require('./socket');
 
@@ -2832,7 +2638,7 @@ module.exports = require('./socket');
  */
 module.exports.parser = require('engine.io-parser');
 
-},{"./socket":19,"engine.io-parser":30}],19:[function(require,module,exports){
+},{"./socket":18,"engine.io-parser":29}],18:[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies.
@@ -3580,7 +3386,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./transport":20,"./transports/index":21,"component-emitter":11,"debug":28,"engine.io-parser":30,"indexof":41,"parseqs":46,"parseuri":47}],20:[function(require,module,exports){
+},{"./transport":19,"./transports/index":20,"component-emitter":11,"debug":27,"engine.io-parser":29,"indexof":39,"parseqs":44,"parseuri":45}],19:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -3739,7 +3545,7 @@ Transport.prototype.onClose = function () {
   this.emit('close');
 };
 
-},{"component-emitter":11,"engine.io-parser":30}],21:[function(require,module,exports){
+},{"component-emitter":11,"engine.io-parser":29}],20:[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies
@@ -3797,7 +3603,7 @@ function polling (opts) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./polling-jsonp":22,"./polling-xhr":23,"./websocket":25,"xmlhttprequest-ssl":26}],22:[function(require,module,exports){
+},{"./polling-jsonp":21,"./polling-xhr":22,"./websocket":24,"xmlhttprequest-ssl":25}],21:[function(require,module,exports){
 (function (global){
 
 /**
@@ -4033,7 +3839,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./polling":24,"component-inherit":12}],23:[function(require,module,exports){
+},{"./polling":23,"component-inherit":12}],22:[function(require,module,exports){
 (function (global){
 /**
  * Module requirements.
@@ -4450,7 +4256,7 @@ function unloadHandler () {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./polling":24,"component-emitter":11,"component-inherit":12,"debug":28,"xmlhttprequest-ssl":26}],24:[function(require,module,exports){
+},{"./polling":23,"component-emitter":11,"component-inherit":12,"debug":27,"xmlhttprequest-ssl":25}],23:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -4697,7 +4503,7 @@ Polling.prototype.uri = function () {
   return schema + '://' + (ipv6 ? '[' + this.hostname + ']' : this.hostname) + port + this.path + query;
 };
 
-},{"../transport":20,"component-inherit":12,"debug":28,"engine.io-parser":30,"parseqs":46,"xmlhttprequest-ssl":26,"yeast":86}],25:[function(require,module,exports){
+},{"../transport":19,"component-inherit":12,"debug":27,"engine.io-parser":29,"parseqs":44,"xmlhttprequest-ssl":25,"yeast":83}],24:[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies.
@@ -4988,7 +4794,7 @@ WS.prototype.check = function () {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../transport":20,"component-inherit":12,"debug":28,"engine.io-parser":30,"parseqs":46,"ws":7,"yeast":86}],26:[function(require,module,exports){
+},{"../transport":19,"component-inherit":12,"debug":27,"engine.io-parser":29,"parseqs":44,"ws":7,"yeast":83}],25:[function(require,module,exports){
 (function (global){
 // browser shim for xmlhttprequest module
 
@@ -5030,7 +4836,7 @@ module.exports = function (opts) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"has-cors":39}],27:[function(require,module,exports){
+},{"has-cors":37}],26:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -5184,7 +4990,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],28:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 (function (process){
 /**
  * This is the web browser implementation of `debug()`.
@@ -5384,7 +5190,7 @@ function localstorage() {
 
 }).call(this,require('_process'))
 
-},{"./debug":29,"_process":51}],29:[function(require,module,exports){
+},{"./debug":28,"_process":49}],28:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -5611,7 +5417,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":27}],30:[function(require,module,exports){
+},{"ms":26}],29:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -6218,7 +6024,7 @@ exports.decodePayloadAsBinary = function (data, binaryType, callback) {
   });
 };
 
-},{"./keys":31,"./utf8":32,"after":1,"arraybuffer.slice":2,"base64-arraybuffer":4,"blob":6,"has-binary2":38}],31:[function(require,module,exports){
+},{"./keys":30,"./utf8":31,"after":1,"arraybuffer.slice":2,"base64-arraybuffer":4,"blob":6,"has-binary2":36}],30:[function(require,module,exports){
 
 /**
  * Gets the keys for an object.
@@ -6239,7 +6045,7 @@ module.exports = Object.keys || function keys (obj){
   return arr;
 };
 
-},{}],32:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 /*! https://mths.be/utf8js v2.1.2 by @mathias */
 
 var stringFromCharCode = String.fromCharCode;
@@ -6451,13 +6257,13 @@ module.exports = {
 	decode: utf8decode
 };
 
-},{}],33:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 // This file can be required in Browserify and Node.js for automatic polyfill
 // To use it:  require('es6-promise/auto');
 'use strict';
 module.exports = require('./').polyfill();
 
-},{"./":34}],34:[function(require,module,exports){
+},{"./":33}],33:[function(require,module,exports){
 (function (process,global){
 /*!
  * @overview es6-promise - a tiny implementation of Promises/A+.
@@ -7645,7 +7451,7 @@ return Promise$1;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"_process":51}],35:[function(require,module,exports){
+},{"_process":49}],34:[function(require,module,exports){
 'use strict';
 
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -7733,32 +7539,7 @@ module.exports = function extend() {
 	return target;
 };
 
-},{}],36:[function(require,module,exports){
-module.exports = function flatten(list, depth) {
-  depth = (typeof depth == 'number') ? depth : Infinity;
-
-  if (!depth) {
-    if (Array.isArray(list)) {
-      return list.map(function(i) { return i; });
-    }
-    return list;
-  }
-
-  return _flatten(list, 1);
-
-  function _flatten(list, d) {
-    return list.reduce(function (acc, item) {
-      if (Array.isArray(item) && d < depth) {
-        return acc.concat(_flatten(item, d + 1));
-      }
-      else {
-        return acc.concat(item);
-      }
-    }, []);
-  }
-};
-
-},{}],37:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -7942,7 +7723,7 @@ function getFormElementValue(element, trim) {
 
 // For UMD build access to getFieldData
 getFormData.getFieldData = getFieldData;
-},{}],38:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 (function (Buffer){
 /* global Blob File */
 
@@ -8011,7 +7792,7 @@ function hasBinary (obj) {
 
 }).call(this,require("buffer").Buffer)
 
-},{"buffer":8,"isarray":42}],39:[function(require,module,exports){
+},{"buffer":8,"isarray":40}],37:[function(require,module,exports){
 
 /**
  * Module exports.
@@ -8030,7 +7811,7 @@ try {
   module.exports = false;
 }
 
-},{}],40:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = (nBytes * 8) - mLen - 1
@@ -8116,7 +7897,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],41:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 
 var indexOf = [].indexOf;
 
@@ -8127,14 +7908,14 @@ module.exports = function(arr, obj){
   }
   return -1;
 };
-},{}],42:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 var toString = {}.toString;
 
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-},{}],43:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 (function (global){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -8578,7 +8359,7 @@ module.exports = throttle;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],44:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 var wildcard = require('wildcard');
 var reMimePartSplit = /[\/\+\.]/;
 
@@ -8604,7 +8385,7 @@ module.exports = function(target, pattern) {
   return pattern ? test(pattern.split(';')[0]) : test;
 };
 
-},{"wildcard":85}],45:[function(require,module,exports){
+},{"wildcard":82}],43:[function(require,module,exports){
 /**
 * Create an event emitter with namespaces
 * @name createNamespaceEmitter
@@ -8742,7 +8523,7 @@ module.exports = function createNamespaceEmitter () {
   return emitter
 }
 
-},{}],46:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 /**
  * Compiles a querystring
  * Returns string representation of the object
@@ -8781,7 +8562,7 @@ exports.decode = function(qs){
   return qry;
 };
 
-},{}],47:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 /**
  * Parses an URI
  *
@@ -8822,7 +8603,7 @@ module.exports = function parseuri(str) {
     return uri;
 };
 
-},{}],48:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('preact')) :
   typeof define === 'function' && define.amd ? define(['preact'], factory) :
@@ -9381,7 +9162,7 @@ return CSSTransitionGroup;
 })));
 
 
-},{"preact":49}],49:[function(require,module,exports){
+},{"preact":47}],47:[function(require,module,exports){
 !function() {
     'use strict';
     function h(nodeName, attributes) {
@@ -9796,7 +9577,7 @@ return CSSTransitionGroup;
     if ('undefined' != typeof module) module.exports = preact; else self.preact = preact;
 }();
 
-},{}],50:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 module.exports = prettierBytes
 
 function prettierBytes (num) {
@@ -9828,7 +9609,7 @@ function prettierBytes (num) {
   }
 }
 
-},{}],51:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -10014,7 +9795,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],52:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 var has = Object.prototype.hasOwnProperty
@@ -10134,7 +9915,7 @@ function querystringify(obj, prefix) {
 exports.stringify = querystringify;
 exports.parse = querystring;
 
-},{}],53:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10174,7 +9955,7 @@ module.exports = function required(port, protocol) {
   return port !== 0;
 };
 
-},{}],54:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 (function (global){
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -11115,60 +10896,7 @@ module.exports = function required(port, protocol) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],55:[function(require,module,exports){
-(function (process){
-module.exports = runParallel
-
-function runParallel (tasks, cb) {
-  var results, pending, keys
-  var isSync = true
-
-  if (Array.isArray(tasks)) {
-    results = []
-    pending = tasks.length
-  } else {
-    keys = Object.keys(tasks)
-    results = {}
-    pending = keys.length
-  }
-
-  function done (err) {
-    function end () {
-      if (cb) cb(err, results)
-      cb = null
-    }
-    if (isSync) process.nextTick(end)
-    else end()
-  }
-
-  function each (i, err, result) {
-    results[i] = result
-    if (--pending === 0 || err) {
-      done(err)
-    }
-  }
-
-  if (!pending) {
-    // empty
-    done(null)
-  } else if (keys) {
-    // object
-    keys.forEach(function (key) {
-      tasks[key](function (err, result) { each(key, err, result) })
-    })
-  } else {
-    // array
-    tasks.forEach(function (task, i) {
-      task(function (err, result) { each(i, err, result) })
-    })
-  }
-
-  isSync = false
-}
-
-}).call(this,require('_process'))
-
-},{"_process":51}],56:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -11264,7 +10992,7 @@ exports.connect = lookup;
 exports.Manager = require('./manager');
 exports.Socket = require('./socket');
 
-},{"./manager":57,"./socket":59,"./url":60,"debug":62,"socket.io-parser":65}],57:[function(require,module,exports){
+},{"./manager":54,"./socket":56,"./url":57,"debug":59,"socket.io-parser":62}],54:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -11839,7 +11567,7 @@ Manager.prototype.onreconnect = function () {
   this.emitAll('reconnect', attempt);
 };
 
-},{"./on":58,"./socket":59,"backo2":3,"component-bind":10,"component-emitter":11,"debug":62,"engine.io-client":18,"indexof":41,"socket.io-parser":65}],58:[function(require,module,exports){
+},{"./on":55,"./socket":56,"backo2":3,"component-bind":10,"component-emitter":11,"debug":59,"engine.io-client":17,"indexof":39,"socket.io-parser":62}],55:[function(require,module,exports){
 
 /**
  * Module exports.
@@ -11865,7 +11593,7 @@ function on (obj, ev, fn) {
   };
 }
 
-},{}],59:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -12305,7 +12033,7 @@ Socket.prototype.binary = function (binary) {
   return this;
 };
 
-},{"./on":58,"component-bind":10,"component-emitter":11,"debug":62,"has-binary2":38,"parseqs":46,"socket.io-parser":65,"to-array":70}],60:[function(require,module,exports){
+},{"./on":55,"component-bind":10,"component-emitter":11,"debug":59,"has-binary2":36,"parseqs":44,"socket.io-parser":62,"to-array":67}],57:[function(require,module,exports){
 (function (global){
 
 /**
@@ -12385,9 +12113,9 @@ function url (uri, loc) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"debug":62,"parseuri":47}],61:[function(require,module,exports){
-arguments[4][27][0].apply(exports,arguments)
-},{"dup":27}],62:[function(require,module,exports){
+},{"debug":59,"parseuri":45}],58:[function(require,module,exports){
+arguments[4][26][0].apply(exports,arguments)
+},{"dup":26}],59:[function(require,module,exports){
 (function (process){
 /**
  * This is the web browser implementation of `debug()`.
@@ -12587,9 +12315,9 @@ function localstorage() {
 
 }).call(this,require('_process'))
 
-},{"./debug":63,"_process":51}],63:[function(require,module,exports){
-arguments[4][29][0].apply(exports,arguments)
-},{"dup":29,"ms":61}],64:[function(require,module,exports){
+},{"./debug":60,"_process":49}],60:[function(require,module,exports){
+arguments[4][28][0].apply(exports,arguments)
+},{"dup":28,"ms":58}],61:[function(require,module,exports){
 (function (global){
 /*global Blob,File*/
 
@@ -12735,7 +12463,7 @@ exports.removeBlobs = function(data, callback) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./is-buffer":66,"isarray":42}],65:[function(require,module,exports){
+},{"./is-buffer":63,"isarray":40}],62:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -13154,7 +12882,7 @@ function error(msg) {
   };
 }
 
-},{"./binary":64,"./is-buffer":66,"component-emitter":11,"debug":68,"isarray":42}],66:[function(require,module,exports){
+},{"./binary":61,"./is-buffer":63,"component-emitter":11,"debug":65,"isarray":40}],63:[function(require,module,exports){
 (function (global){
 
 module.exports = isBuf;
@@ -13183,9 +12911,9 @@ function isBuf(obj) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],67:[function(require,module,exports){
-arguments[4][27][0].apply(exports,arguments)
-},{"dup":27}],68:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
+arguments[4][26][0].apply(exports,arguments)
+},{"dup":26}],65:[function(require,module,exports){
 (function (process){
 /**
  * This is the web browser implementation of `debug()`.
@@ -13385,9 +13113,9 @@ function localstorage() {
 
 }).call(this,require('_process'))
 
-},{"./debug":69,"_process":51}],69:[function(require,module,exports){
-arguments[4][29][0].apply(exports,arguments)
-},{"dup":29,"ms":67}],70:[function(require,module,exports){
+},{"./debug":66,"_process":49}],66:[function(require,module,exports){
+arguments[4][28][0].apply(exports,arguments)
+},{"dup":28,"ms":64}],67:[function(require,module,exports){
 module.exports = toArray
 
 function toArray(list, index) {
@@ -13402,7 +13130,7 @@ function toArray(list, index) {
     return array
 }
 
-},{}],71:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13413,7 +13141,7 @@ var isCordova = function isCordova() {
 };
 
 exports.default = isCordova;
-},{}],72:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13422,7 +13150,7 @@ Object.defineProperty(exports, "__esModule", {
 var isReactNative = typeof navigator !== "undefined" && typeof navigator.product === "string" && navigator.product.toLowerCase() === "reactnative";
 
 exports.default = isReactNative;
-},{}],73:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13445,7 +13173,7 @@ function readAsByteArray(chunk, callback) {
 }
 
 exports.default = readAsByteArray;
-},{}],74:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13463,19 +13191,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function newRequest() {
   return new window.XMLHttpRequest();
 } /* global window */
-
-
 function resolveUrl(origin, link) {
   return new _urlParse2.default(link, origin).toString();
 }
-},{"url-parse":83}],75:[function(require,module,exports){
+},{"url-parse":80}],72:[function(require,module,exports){
 "use strict";
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 exports.getSource = getSource;
 
 var _isReactNative = require("./isReactNative");
@@ -13560,12 +13287,12 @@ var StreamSource = function () {
       var hasEnoughData = end <= this._bufferOffset + len(this._buffer);
       if (this._done || hasEnoughData) {
         var value = this._getDataFromBuffer(start, end);
-        callback(null, value);
+        callback(null, value, value == null ? this._done : false);
         return;
       }
       this._reader.read().then(function (_ref) {
-        var value = _ref.value;
-        var done = _ref.done;
+        var value = _ref.value,
+            done = _ref.done;
 
         if (done) {
           _this._done = true;
@@ -13679,15 +13406,19 @@ function getSource(input, chunkSize, callback) {
 
   callback(new Error("source object may only be an instance of File, Blob, or Reader in this environment"));
 }
-},{"./isCordova":71,"./isReactNative":72,"./readAsByteArray":73,"./uriToBlob":77}],76:[function(require,module,exports){
+},{"./isCordova":68,"./isReactNative":69,"./readAsByteArray":70,"./uriToBlob":74}],73:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.setItem = setItem;
-exports.getItem = getItem;
-exports.removeItem = removeItem;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+exports.getStorage = getStorage;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 /* global window, localStorage */
 
 var hasStorage = false;
@@ -13711,21 +13442,38 @@ try {
 
 var canStoreURLs = exports.canStoreURLs = hasStorage;
 
-function setItem(key, value) {
-  if (!hasStorage) return;
-  return localStorage.setItem(key, value);
-}
+var LocalStorage = function () {
+  function LocalStorage() {
+    _classCallCheck(this, LocalStorage);
+  }
 
-function getItem(key) {
-  if (!hasStorage) return;
-  return localStorage.getItem(key);
-}
+  _createClass(LocalStorage, [{
+    key: "setItem",
+    value: function setItem(key, value, cb) {
+      if (!hasStorage) return cb();
+      cb(null, localStorage.setItem(key, value));
+    }
+  }, {
+    key: "getItem",
+    value: function getItem(key, cb) {
+      if (!hasStorage) return cb();
+      cb(null, localStorage.getItem(key));
+    }
+  }, {
+    key: "removeItem",
+    value: function removeItem(key, cb) {
+      if (!hasStorage) return cb();
+      cb(null, localStorage.removeItem(key));
+    }
+  }]);
 
-function removeItem(key) {
-  if (!hasStorage) return;
-  return localStorage.removeItem(key);
+  return LocalStorage;
+}();
+
+function getStorage() {
+  return new LocalStorage();
 }
-},{}],77:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13751,7 +13499,7 @@ function uriToBlob(uri, done) {
 }
 
 exports.default = uriToBlob;
-},{}],78:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13768,12 +13516,12 @@ var DetailedError = function (_Error) {
   _inherits(DetailedError, _Error);
 
   function DetailedError(error) {
-    var causingErr = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-    var xhr = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+    var causingErr = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    var xhr = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
     _classCallCheck(this, DetailedError);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DetailedError).call(this, error.message));
+    var _this = _possibleConstructorReturn(this, (DetailedError.__proto__ || Object.getPrototypeOf(DetailedError)).call(this, error.message));
 
     _this.originalRequest = xhr;
     _this.causingError = causingErr;
@@ -13793,13 +13541,20 @@ var DetailedError = function (_Error) {
 }(Error);
 
 exports.default = DetailedError;
-},{}],79:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = fingerprint;
+
+var _isReactNative = require("./node/isReactNative");
+
+var _isReactNative2 = _interopRequireDefault(_isReactNative);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Generate a fingerprint for a file which will be used the store the endpoint
  *
@@ -13807,9 +13562,32 @@ exports.default = fingerprint;
  * @return {String}
  */
 function fingerprint(file, options) {
+  if (_isReactNative2.default) {
+    return reactNativeFingerprint(file, options);
+  }
+
   return ["tus", file.name, file.type, file.size, file.lastModified, options.endpoint].join("-");
 }
-},{}],80:[function(require,module,exports){
+
+function reactNativeFingerprint(file, options) {
+  var exifHash = file.exif ? hashCode(JSON.stringify(file.exif)) : "noexif";
+  return ["tus", file.name || "noname", file.size || "nosize", exifHash, options.endpoint].join("/");
+}
+
+function hashCode(str) {
+  // from https://stackoverflow.com/a/8831937/151666
+  var hash = 0;
+  if (str.length === 0) {
+    return hash;
+  }
+  for (var i = 0; i < str.length; i++) {
+    var char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return hash;
+}
+},{"./node/isReactNative":69}],77:[function(require,module,exports){
 "use strict";
 
 var _upload = require("./upload");
@@ -13818,37 +13596,47 @@ var _upload2 = _interopRequireDefault(_upload);
 
 var _storage = require("./node/storage");
 
+var storage = _interopRequireWildcard(_storage);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* global window */
 var defaultOptions = _upload2.default.defaultOptions;
 
-var isSupported = void 0;
+
+var moduleExport = {
+  Upload: _upload2.default,
+  canStoreURLs: storage.canStoreURLs,
+  defaultOptions: defaultOptions
+};
 
 if (typeof window !== "undefined") {
   // Browser environment using XMLHttpRequest
-  var _window = window;
-  var XMLHttpRequest = _window.XMLHttpRequest;
-  var Blob = _window.Blob;
+  var _window = window,
+      XMLHttpRequest = _window.XMLHttpRequest,
+      Blob = _window.Blob;
 
 
-  isSupported = XMLHttpRequest && Blob && typeof Blob.prototype.slice === "function";
+  moduleExport.isSupported = XMLHttpRequest && Blob && typeof Blob.prototype.slice === "function";
 } else {
   // Node.js environment using http module
-  isSupported = true;
+  moduleExport.isSupported = true;
+  // make FileStorage module available as it will not be set by default.
+  moduleExport.FileStorage = storage.FileStorage;
 }
 
 // The usage of the commonjs exporting syntax instead of the new ECMAScript
 // one is actually inteded and prevents weird behaviour if we are trying to
 // import this module in another module using Babel.
-module.exports = {
-  Upload: _upload2.default,
-  isSupported: isSupported,
-  canStoreURLs: _storage.canStoreURLs,
-  defaultOptions: defaultOptions
-};
-},{"./node/storage":76,"./upload":81}],81:[function(require,module,exports){
+module.exports = moduleExport;
+},{"./node/storage":73,"./upload":78}],78:[function(require,module,exports){
 "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* global window */
 
@@ -13856,10 +13644,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 // We import the files used inside the Node environment which are rewritten
 // for browsers using the rules defined in the package.json
 
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
 var _fingerprint = require("./fingerprint");
 
@@ -13881,10 +13665,6 @@ var _source = require("./node/source");
 
 var _storage = require("./node/storage");
 
-var Storage = _interopRequireWildcard(_storage);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -13905,7 +13685,8 @@ var defaultOptions = {
   overridePatchMethod: false,
   retryDelays: null,
   removeFingerprintOnSuccess: false,
-  uploadLengthDeferred: false
+  uploadLengthDeferred: false,
+  urlStorage: null
 };
 
 var Upload = function () {
@@ -13913,6 +13694,9 @@ var Upload = function () {
     _classCallCheck(this, Upload);
 
     this.options = (0, _extend2.default)(true, {}, defaultOptions, options);
+
+    // The storage module used to store URLs
+    this._storage = this.options.urlStorage;
 
     // The underlying File/Blob object
     this.file = file;
@@ -13967,6 +13751,10 @@ var Upload = function () {
         return;
       }
 
+      if (this.options.resume && this._storage == null) {
+        this._storage = (0, _storage.getStorage)();
+      }
+
       if (this._source) {
         this._start(this._source);
       } else {
@@ -14013,47 +13801,47 @@ var Upload = function () {
           this._emitError(new Error("tus: the `retryDelays` option must either be an array or null"));
           return;
         } else {
-          (function () {
-            var errorCallback = _this2.options.onError;
-            _this2.options.onError = function (err) {
-              // Restore the original error callback which may have been set.
-              _this2.options.onError = errorCallback;
+          var errorCallback = this.options.onError;
+          this.options.onError = function (err) {
+            // Restore the original error callback which may have been set.
+            _this2.options.onError = errorCallback;
 
-              // We will reset the attempt counter if
-              // - we were already able to connect to the server (offset != null) and
-              // - we were able to upload a small chunk of data to the server
-              var shouldResetDelays = _this2._offset != null && _this2._offset > _this2._offsetBeforeRetry;
-              if (shouldResetDelays) {
-                _this2._retryAttempt = 0;
-              }
+            // We will reset the attempt counter if
+            // - we were already able to connect to the server (offset != null) and
+            // - we were able to upload a small chunk of data to the server
+            var shouldResetDelays = _this2._offset != null && _this2._offset > _this2._offsetBeforeRetry;
+            if (shouldResetDelays) {
+              _this2._retryAttempt = 0;
+            }
 
-              var isOnline = true;
-              if (typeof window !== "undefined" && "navigator" in window && window.navigator.onLine === false) {
-                isOnline = false;
-              }
+            var isOnline = true;
+            if (typeof window !== "undefined" && "navigator" in window && window.navigator.onLine === false) {
+              isOnline = false;
+            }
 
-              // We only attempt a retry if
-              // - we didn't exceed the maxium number of retries, yet, and
-              // - this error was caused by a request or it's response and
-              // - the error is not a client error (status 4xx) and
-              // - the browser does not indicate that we are offline
-              var shouldRetry = _this2._retryAttempt < retryDelays.length && err.originalRequest != null && !inStatusCategory(err.originalRequest.status, 400) && isOnline;
+            // We only attempt a retry if
+            // - we didn't exceed the maxium number of retries, yet, and
+            // - this error was caused by a request or it's response and
+            // - the error is server error (i.e. no a status 4xx or a 409 or 423) and
+            // - the browser does not indicate that we are offline
+            var status = err.originalRequest ? err.originalRequest.status : 0;
+            var isServerError = !inStatusCategory(status, 400) || status === 409 || status === 423;
+            var shouldRetry = _this2._retryAttempt < retryDelays.length && err.originalRequest != null && isServerError && isOnline;
 
-              if (!shouldRetry) {
-                _this2._emitError(err);
-                return;
-              }
+            if (!shouldRetry) {
+              _this2._emitError(err);
+              return;
+            }
 
-              var delay = retryDelays[_this2._retryAttempt++];
+            var delay = retryDelays[_this2._retryAttempt++];
 
-              _this2._offsetBeforeRetry = _this2._offset;
-              _this2.options.uploadUrl = _this2.url;
+            _this2._offsetBeforeRetry = _this2._offset;
+            _this2.options.uploadUrl = _this2.url;
 
-              _this2._retryTimeout = setTimeout(function () {
-                _this2.start();
-              }, delay);
-            };
-          })();
+            _this2._retryTimeout = setTimeout(function () {
+              _this2.start();
+            }, delay);
+          };
         }
       }
 
@@ -14076,19 +13864,25 @@ var Upload = function () {
       }
 
       // Try to find the endpoint for the file in the storage
-      if (this.options.resume) {
+      if (this._hasStorage()) {
         this._fingerprint = this.options.fingerprint(file, this.options);
-        var resumedUrl = Storage.getItem(this._fingerprint);
+        this._storage.getItem(this._fingerprint, function (err, resumedUrl) {
+          if (err) {
+            _this2._emitError(err);
+            return;
+          }
 
-        if (resumedUrl != null) {
-          this.url = resumedUrl;
-          this._resumeUpload();
-          return;
-        }
+          if (resumedUrl != null) {
+            _this2.url = resumedUrl;
+            _this2._resumeUpload();
+          } else {
+            _this2._createUpload();
+          }
+        });
+      } else {
+        // An upload has not started for the file yet, so we start a new one
+        this._createUpload();
       }
-
-      // An upload has not started for the file yet, so we start a new one
-      this._createUpload();
     }
   }, {
     key: "abort",
@@ -14096,13 +13890,18 @@ var Upload = function () {
       if (this._xhr !== null) {
         this._xhr.abort();
         this._source.close();
-        this._aborted = true;
       }
+      this._aborted = true;
 
       if (this._retryTimeout != null) {
         clearTimeout(this._retryTimeout);
         this._retryTimeout = null;
       }
+    }
+  }, {
+    key: "_hasStorage",
+    value: function _hasStorage() {
+      return this.options.resume && this._storage;
     }
   }, {
     key: "_emitXhrError",
@@ -14223,8 +14022,12 @@ var Upload = function () {
           return;
         }
 
-        if (_this3.options.resume) {
-          Storage.setItem(_this3._fingerprint, _this3.url);
+        if (_this3._hasStorage()) {
+          _this3._storage.setItem(_this3._fingerprint, _this3.url, function (err) {
+            if (err) {
+              _this3._emitError(err);
+            }
+          });
         }
 
         _this3._offset = 0;
@@ -14269,10 +14072,14 @@ var Upload = function () {
 
       xhr.onload = function () {
         if (!inStatusCategory(xhr.status, 200)) {
-          if (_this4.options.resume && inStatusCategory(xhr.status, 400)) {
+          if (_this4.options.resume && _this4._storage && inStatusCategory(xhr.status, 400)) {
             // Remove stored fingerprint and corresponding endpoint,
             // on client errors since the file can not be found
-            Storage.removeItem(_this4._fingerprint);
+            _this4._storage.removeItem(_this4._fingerprint, function (err) {
+              if (err) {
+                _this4._emitError(err);
+              }
+            });
           }
 
           // If the upload is locked (indicated by the 423 Locked status code), we
@@ -14429,33 +14236,26 @@ var Upload = function () {
         end = this._size;
       }
 
-      // A source's slice may return a value to send or a promise.
-      // When we have the value we start to send it and emit progress.
-      // TODO: merge these two branches
-      if (this.options.uploadLengthDeferred) {
-        this._source.slice(start, end, function (error, value) {
-          if (error) {
-            _this5._emitError(error);
-          } else if (value === null) {
-            _this5._size = _this5._offset;
-            xhr.setRequestHeader("Upload-Length", _this5._offset);
-            xhr.send();
-          } else {
-            xhr.send(value);
-            _this5._emitProgress(_this5._offset, _this5._size);
-          }
-        });
-      } else {
-        this._source.slice(start, end, function (error, chunk) {
-          if (error) {
-            _this5._emitError(new _error2.default("tus: could not slice file or stream (from " + start + " to " + end + ")", error));
-            return;
-          }
+      this._source.slice(start, end, function (err, value, complete) {
+        if (err) {
+          _this5._emitError(err);
+          return;
+        }
 
-          xhr.send(chunk);
-        });
-        this._emitProgress(this._offset, this._size);
-      }
+        if (_this5.options.uploadLengthDeferred) {
+          if (complete) {
+            _this5._size = _this5._offset + (value && value.size ? value.size : 0);
+            xhr.setRequestHeader("Upload-Length", _this5._size);
+          }
+        }
+
+        if (value === null) {
+          xhr.send();
+        } else {
+          xhr.send(value);
+          _this5._emitProgress(_this5._offset, _this5._size);
+        }
+      });
     }
   }]);
 
@@ -14485,7 +14285,7 @@ function inStatusCategory(status, category) {
 Upload.defaultOptions = defaultOptions;
 
 exports.default = Upload;
-},{"./error":78,"./fingerprint":79,"./node/request":74,"./node/source":75,"./node/storage":76,"extend":35,"js-base64":82}],82:[function(require,module,exports){
+},{"./error":75,"./fingerprint":76,"./node/request":71,"./node/source":72,"./node/storage":73,"extend":34,"js-base64":79}],79:[function(require,module,exports){
 (function (global){
 /*
  *  base64.js
@@ -14725,14 +14525,26 @@ exports.default = Upload;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],83:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 (function (global){
 'use strict';
 
 var required = require('requires-port')
   , qs = require('querystringify')
+  , slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//
   , protocolre = /^([a-z][a-z0-9.+-]*:)?(\/\/)?([\S\s]*)/i
-  , slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//;
+  , whitespace = '[\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\xA0\\u1680\\u180E\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200A\\u202F\\u205F\\u3000\\u2028\\u2029\\uFEFF]'
+  , left = new RegExp('^'+ whitespace +'+');
+
+/**
+ * Trim a given string.
+ *
+ * @param {String} str String to trim.
+ * @public
+ */
+function trimLeft(str) {
+  return (str ? str : '').toString().replace(left, '');
+}
 
 /**
  * These are the parse rules for the URL parser, it informs the parser
@@ -14831,6 +14643,7 @@ function lolcation(loc) {
  * @private
  */
 function extractProtocol(address) {
+  address = trimLeft(address);
   var match = protocolre.exec(address);
 
   return {
@@ -14849,6 +14662,8 @@ function extractProtocol(address) {
  * @private
  */
 function resolve(relative, base) {
+  if (relative === '') return base;
+
   var path = (base || '/').split('/').slice(0, -1).concat(relative.split('/'))
     , i = path.length
     , last = path[i - 1]
@@ -14889,6 +14704,8 @@ function resolve(relative, base) {
  * @private
  */
 function Url(address, location, parser) {
+  address = trimLeft(address);
+
   if (!(this instanceof Url)) {
     return new Url(address, location, parser);
   }
@@ -15156,13 +14973,14 @@ Url.prototype = { set: set, toString: toString };
 //
 Url.extractProtocol = extractProtocol;
 Url.location = lolcation;
+Url.trimLeft = trimLeft;
 Url.qs = qs;
 
 module.exports = Url;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"querystringify":52,"requires-port":53}],84:[function(require,module,exports){
+},{"querystringify":50,"requires-port":51}],81:[function(require,module,exports){
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -15695,7 +15513,7 @@ module.exports = Url;
 
 })));
 
-},{}],85:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 /* jshint node: true */
 'use strict';
 
@@ -15790,7 +15608,7 @@ module.exports = function(text, test, separator) {
   return matcher;
 };
 
-},{}],86:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 'use strict';
 
 var alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'.split('')
@@ -15860,7 +15678,7 @@ yeast.encode = encode;
 yeast.decode = decode;
 module.exports = yeast;
 
-},{}],87:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -15886,7 +15704,7 @@ var AuthError = function (_Error) {
 }(Error);
 
 module.exports = AuthError;
-},{}],88:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -15986,19 +15804,23 @@ module.exports = function (_RequestClient) {
       plugin.opts = _extends({}, defaultOpts, opts);
     }
 
-    if (opts.serverPattern) {
-      var pattern = opts.serverPattern;
-      // validate serverPattern param
+    if (opts.serverUrl || opts.serverPattern) {
+      throw new Error('`serverUrl` and `serverPattern` have been renamed to `companionUrl` and `companionAllowedHosts` respectively in 0.30.5 release. Please consult the docs (for example, https://uppy.io/docs/instagram/ for Instagram plugin) and use the updated options.`');
+    }
+
+    if (opts.companionAllowedHosts) {
+      var pattern = opts.companionAllowedHosts;
+      // validate companionAllowedHosts param
       if (typeof pattern !== 'string' && !Array.isArray(pattern) && !(pattern instanceof RegExp)) {
-        throw new TypeError(plugin.id + ': the option "serverPattern" must be one of string, Array, RegExp');
+        throw new TypeError(plugin.id + ': the option "companionAllowedHosts" must be one of string, Array, RegExp');
       }
-      plugin.opts.serverPattern = pattern;
+      plugin.opts.companionAllowedHosts = pattern;
     } else {
       // does not start with https://
-      if (/^(?!https?:\/\/).*$/i.test(opts.serverUrl)) {
-        plugin.opts.serverPattern = 'https://' + opts.serverUrl.replace(/^\/\//, '');
+      if (/^(?!https?:\/\/).*$/i.test(opts.companionUrl)) {
+        plugin.opts.companionAllowedHosts = 'https://' + opts.companionUrl.replace(/^\/\//, '');
       } else {
-        plugin.opts.serverPattern = opts.serverUrl;
+        plugin.opts.companionAllowedHosts = opts.companionUrl;
       }
     }
 
@@ -16007,7 +15829,7 @@ module.exports = function (_RequestClient) {
 
   return Provider;
 }(RequestClient);
-},{"./RequestClient":89,"./tokenStorage":92}],89:[function(require,module,exports){
+},{"./RequestClient":86,"./tokenStorage":89}],86:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -16051,7 +15873,7 @@ module.exports = function () {
   RequestClient.prototype.onReceiveResponse = function onReceiveResponse(response) {
     var state = this.uppy.getState();
     var companion = state.companion || {};
-    var host = this.opts.serverUrl;
+    var host = this.opts.companionUrl;
     var headers = response.headers;
     // Store the self-identified domain name for the Companion instance we just hit.
     if (headers.has('i-am') && headers.get('i-am') !== companion[host]) {
@@ -16147,7 +15969,7 @@ module.exports = function () {
       var _uppy$getState = this.uppy.getState(),
           companion = _uppy$getState.companion;
 
-      var host = this.opts.serverUrl;
+      var host = this.opts.companionUrl;
       return stripSlash(companion && companion[host] ? companion[host] : host);
     }
   }, {
@@ -16162,7 +15984,7 @@ module.exports = function () {
 
   return RequestClient;
 }();
-},{"./AuthError":87}],90:[function(require,module,exports){
+},{"./AuthError":84}],87:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ee = require('namespace-emitter');
@@ -16244,7 +16066,7 @@ module.exports = function () {
 
   return UppySocket;
 }();
-},{"namespace-emitter":45}],91:[function(require,module,exports){
+},{"namespace-emitter":43}],88:[function(require,module,exports){
 'use-strict';
 /**
  * Manages communications with Companion
@@ -16259,7 +16081,7 @@ module.exports = {
   Provider: Provider,
   Socket: Socket
 };
-},{"./Provider":88,"./RequestClient":89,"./Socket":90}],92:[function(require,module,exports){
+},{"./Provider":85,"./RequestClient":86,"./Socket":87}],89:[function(require,module,exports){
 'use strict';
 /**
  * This module serves as an Async wrapper for LocalStorage
@@ -16282,7 +16104,7 @@ module.exports.removeItem = function (key) {
     resolve();
   });
 };
-},{}],93:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -16472,7 +16294,7 @@ module.exports = function () {
 
   return Plugin;
 }();
-},{"@uppy/utils/lib/findDOMElement":158,"preact":49}],94:[function(require,module,exports){
+},{"@uppy/utils/lib/findDOMElement":157,"preact":47}],91:[function(require,module,exports){
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -16511,15 +16333,17 @@ var Uppy = function () {
 
     _classCallCheck(this, Uppy);
 
-    var defaultLocale = {
+    this.defaultLocale = {
       strings: {
         youCanOnlyUploadX: {
           0: 'You can only upload %{smart_count} file',
-          1: 'You can only upload %{smart_count} files'
+          1: 'You can only upload %{smart_count} files',
+          2: 'You can only upload %{smart_count} files'
         },
         youHaveToAtLeastSelectX: {
           0: 'You have to select at least %{smart_count} file',
-          1: 'You have to select at least %{smart_count} files'
+          1: 'You have to select at least %{smart_count} files',
+          2: 'You have to select at least %{smart_count} files'
         },
         exceedsSize: 'This file exceeds maximum allowed size of',
         youCanOnlyUploadFileTypes: 'You can only upload: %{types}',
@@ -16532,7 +16356,8 @@ var Uppy = function () {
         noFilesFound: 'You have no files or folders here',
         selectXFiles: {
           0: 'Select %{smart_count} file',
-          1: 'Select %{smart_count} files'
+          1: 'Select %{smart_count} files',
+          2: 'Select %{smart_count} files'
         },
         cancel: 'Cancel',
         logOut: 'Log out',
@@ -16559,7 +16384,6 @@ var Uppy = function () {
       onBeforeUpload: function onBeforeUpload(files) {
         return files;
       },
-      locale: defaultLocale,
       store: DefaultStore()
 
       // Merge default options with the ones set by user
@@ -16567,7 +16391,7 @@ var Uppy = function () {
     this.opts.restrictions = _extends({}, defaultOptions.restrictions, this.opts.restrictions);
 
     // i18n
-    this.translator = new Translator([defaultLocale, this.opts.locale]);
+    this.translator = new Translator([this.defaultLocale, this.opts.locale]);
     this.locale = this.translator.locale;
     this.i18n = this.translator.translate.bind(this.translator);
 
@@ -16613,6 +16437,7 @@ var Uppy = function () {
       allowNewUpload: true,
       capabilities: {
         uploadProgress: supportsUploadProgress(),
+        individualCancellation: true,
         resumableUploads: false
       },
       totalProgress: 0,
@@ -16972,6 +16797,7 @@ var Uppy = function () {
     try {
       this._checkRestrictions(newFile);
     } catch (err) {
+      this.emit('restriction-failed', newFile, err);
       onError(err);
     }
 
@@ -17555,31 +17381,29 @@ var Uppy = function () {
   /**
    * Logs stuff to console, only if `debug` is set to true. Silent in production.
    *
-   * @param {String|Object} msg to log
+   * @param {String|Object} message to log
    * @param {String} [type] optional `error` or `warning`
    */
 
 
-  Uppy.prototype.log = function log(msg, type) {
+  Uppy.prototype.log = function log(message, type) {
     if (!this.opts.debug) {
       return;
     }
 
-    var message = '[Uppy] [' + getTimeStamp() + '] ' + msg;
-
-    window['uppyLog'] = window['uppyLog'] + '\n' + 'DEBUG LOG: ' + msg;
+    var prefix = '[Uppy] [' + getTimeStamp() + ']';
 
     if (type === 'error') {
-      console.error(message);
+      console.error(prefix, message);
       return;
     }
 
     if (type === 'warning') {
-      console.warn(message);
+      console.warn(prefix, message);
       return;
     }
 
-    console.log(message);
+    console.log(prefix, message);
   };
 
   /**
@@ -17750,7 +17574,6 @@ var Uppy = function () {
 
       var currentUpload = currentUploads[uploadID];
       if (!currentUpload) {
-        _this8.log('Not setting result for an upload that has been removed: ' + uploadID);
         return;
       }
 
@@ -17773,7 +17596,6 @@ var Uppy = function () {
           currentUploads = _getState8.currentUploads;
 
       if (!currentUploads[uploadID]) {
-        _this8.log('Not setting result for an upload that has been canceled: ' + uploadID);
         return;
       }
       var currentUpload = currentUploads[uploadID];
@@ -17782,6 +17604,11 @@ var Uppy = function () {
 
       _this8._removeUpload(uploadID);
 
+      return result;
+    }).then(function (result) {
+      if (result == null) {
+        _this8.log('Not setting result for an upload that has been removed: ' + uploadID);
+      }
       return result;
     });
   };
@@ -17865,7 +17692,7 @@ module.exports = function (opts) {
 // Expose class constructor.
 module.exports.Uppy = Uppy;
 module.exports.Plugin = Plugin;
-},{"./Plugin":93,"./supportsUploadProgress":95,"@uppy/store-default":142,"@uppy/utils/lib/Translator":153,"@uppy/utils/lib/generateFileID":159,"@uppy/utils/lib/getFileNameAndExtension":161,"@uppy/utils/lib/getFileType":162,"@uppy/utils/lib/getTimeStamp":166,"cuid":13,"mime-match":44,"namespace-emitter":45,"prettier-bytes":50}],95:[function(require,module,exports){
+},{"./Plugin":90,"./supportsUploadProgress":92,"@uppy/store-default":140,"@uppy/utils/lib/Translator":152,"@uppy/utils/lib/generateFileID":158,"@uppy/utils/lib/getFileNameAndExtension":160,"@uppy/utils/lib/getFileType":161,"@uppy/utils/lib/getTimeStamp":165,"cuid":13,"mime-match":42,"namespace-emitter":43,"prettier-bytes":48}],92:[function(require,module,exports){
 // Edge 15.x does not fire 'progress' events on uploads.
 // See https://github.com/transloadit/uppy/issues/945
 // And https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/12224510/
@@ -17905,7 +17732,7 @@ module.exports = function supportsUploadProgress(userAgent) {
   // other versions don't work.
   return false;
 };
-},{}],96:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -17968,7 +17795,7 @@ var ActionBrowseTagline = function (_Component) {
 }(Component);
 
 module.exports = ActionBrowseTagline;
-},{"preact":49}],97:[function(require,module,exports){
+},{"preact":47}],94:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -17991,7 +17818,7 @@ var poweredByUppy = function poweredByUppy(props) {
     'Powered by ',
     h(
       'svg',
-      { 'aria-hidden': 'true', 'class': 'UppyIcon uppy-Dashboard-poweredByIcon', width: '11', height: '11', viewBox: '0 0 11 11', xmlns: 'http://www.w3.org/2000/svg' },
+      { 'aria-hidden': 'true', 'class': 'UppyIcon uppy-Dashboard-poweredByIcon', width: '11', height: '11', viewBox: '0 0 11 11' },
       h('path', { d: 'M7.365 10.5l-.01-4.045h2.612L5.5.806l-4.467 5.65h2.604l.01 4.044h3.718z', 'fill-rule': 'evenodd' })
     ),
     h(
@@ -18146,7 +17973,7 @@ var AddFiles = function (_Component) {
 }(Component);
 
 module.exports = AddFiles;
-},{"./ActionBrowseTagline":96,"./icons":107,"preact":49}],98:[function(require,module,exports){
+},{"./ActionBrowseTagline":93,"./icons":104,"preact":47}],95:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -18181,7 +18008,7 @@ var AddFilesPanel = function AddFilesPanel(props) {
 };
 
 module.exports = AddFilesPanel;
-},{"./AddFiles":97,"preact":49}],99:[function(require,module,exports){
+},{"./AddFiles":94,"preact":47}],96:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var FileList = require('./FileList');
@@ -18215,14 +18042,19 @@ function TransitionWrapper(props) {
 module.exports = function Dashboard(props) {
   var noFiles = props.totalFileCount === 0;
 
-  var dashboardClassName = classNames({ 'uppy-Root': props.isTargetDOMEl }, 'uppy-Dashboard', { 'Uppy--isTouchDevice': isTouchDevice() }, { 'uppy-Dashboard--animateOpenClose': props.animateOpenClose }, { 'uppy-Dashboard--isClosing': props.isClosing }, { 'uppy-Dashboard--modal': !props.inline }, { 'uppy-size--md': props.containerWidth > 576 }, { 'uppy-size--lg': props.containerWidth > 700 }, { 'uppy-size--xl': props.containerWidth > 900 }, { 'uppy-Dashboard--isAddFilesPanelVisible': props.showAddFilesPanel }, { 'uppy-Dashboard--isInnerWrapVisible': props.areInsidesReadyToBeVisible });
+  var dashboardClassName = classNames({ 'uppy-Root': props.isTargetDOMEl }, 'uppy-Dashboard', { 'Uppy--isTouchDevice': isTouchDevice() }, { 'uppy-Dashboard--animateOpenClose': props.animateOpenClose }, { 'uppy-Dashboard--isClosing': props.isClosing }, { 'uppy-Dashboard--isDraggingOver': props.isDraggingOver }, { 'uppy-Dashboard--modal': !props.inline }, { 'uppy-size--md': props.containerWidth > 576 }, { 'uppy-size--lg': props.containerWidth > 700 }, { 'uppy-size--xl': props.containerWidth > 900 }, { 'uppy-Dashboard--isAddFilesPanelVisible': props.showAddFilesPanel }, { 'uppy-Dashboard--isInnerWrapVisible': props.areInsidesReadyToBeVisible });
 
   return h(
     'div',
     { 'class': dashboardClassName,
       'aria-hidden': props.inline ? 'false' : props.isHidden,
       'aria-label': !props.inline ? props.i18n('dashboardWindowTitle') : props.i18n('dashboardTitle'),
-      onpaste: props.handlePaste },
+      onpaste: props.handlePaste,
+
+      onDragOver: props.handleDragOver,
+      onDragLeave: props.handleDragLeave,
+      onDrop: props.handleDrop
+    },
     h('div', { 'class': 'uppy-Dashboard-overlay', tabindex: -1, onclick: props.handleClickOutside }),
     h(
       'div',
@@ -18249,6 +18081,11 @@ module.exports = function Dashboard(props) {
       h(
         'div',
         { 'class': 'uppy-Dashboard-innerWrap' },
+        h(
+          'div',
+          { 'class': 'uppy-Dashboard-dropFilesHereHint' },
+          props.i18n('dropHint')
+        ),
         !noFiles && props.showSelectedFiles && h(PanelTopBar, props),
         props.showSelectedFiles ? noFiles ? h(AddFiles, props) : h(FileList, props) : h(AddFiles, props),
         h(
@@ -18277,7 +18114,7 @@ module.exports = function Dashboard(props) {
     )
   );
 };
-},{"./AddFiles":97,"./AddFilesPanel":98,"./FileCard":100,"./FileList":103,"./PickerPanelContent":105,"./PickerPanelTopBar":106,"@uppy/utils/lib/isTouchDevice":170,"classnames":9,"preact":49,"preact-css-transition-group":48}],100:[function(require,module,exports){
+},{"./AddFiles":94,"./AddFilesPanel":95,"./FileCard":97,"./FileList":100,"./PickerPanelContent":102,"./PickerPanelTopBar":103,"@uppy/utils/lib/isTouchDevice":169,"classnames":9,"preact":47,"preact-css-transition-group":46}],97:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -18442,7 +18279,7 @@ var FileCard = function (_Component) {
 }(Component);
 
 module.exports = FileCard;
-},{"../utils/getFileTypeIcon":110,"../utils/ignoreEvent.js":111,"./FilePreview":104,"preact":49}],101:[function(require,module,exports){
+},{"../utils/getFileTypeIcon":107,"../utils/ignoreEvent.js":108,"./FilePreview":101,"preact":47}],98:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var getFileNameAndExtension = require('@uppy/utils/lib/getFileNameAndExtension');
@@ -18466,7 +18303,7 @@ function FileItemProgressWrapper(props) {
     return;
   }
 
-  if (props.isUploaded || props.bundled || props.hidePauseResumeCancelButtons && !props.error) {
+  if (props.isUploaded || props.hidePauseResumeCancelButtons && !props.error) {
     return h(
       'div',
       { 'class': 'uppy-DashboardItem-progressIndicator' },
@@ -18474,7 +18311,7 @@ function FileItemProgressWrapper(props) {
         progress: props.file.progress.percentage,
         fileID: props.file.id,
         hidePauseResumeCancelButtons: props.hidePauseResumeCancelButtons,
-        bundled: props.bundled
+        individualCancellation: props.individualCancellation
       })
     );
   }
@@ -18490,12 +18327,13 @@ function FileItemProgressWrapper(props) {
     props.error ? props.hideRetryButton ? null : iconRetry() : h(FileItemProgress, {
       progress: props.file.progress.percentage,
       fileID: props.file.id,
+      individualCancellation: props.individualCancellation,
       hidePauseResumeCancelButtons: props.hidePauseResumeCancelButtons
     })
   );
 }
 
-module.exports = function fileItem(props) {
+module.exports = function FileItem(props) {
   var file = props.file;
   var acquirers = props.acquirers;
 
@@ -18523,7 +18361,7 @@ module.exports = function fileItem(props) {
 
     if (props.resumableUploads) {
       props.pauseUpload(file.id);
-    } else {
+    } else if (props.individualCancellation) {
       props.cancelUpload(file.id);
     }
   }
@@ -18542,12 +18380,16 @@ module.exports = function fileItem(props) {
         return props.i18n('resumeUpload');
       }
       return props.i18n('pauseUpload');
-    } else {
+    } else if (props.individualCancellation) {
       return props.i18n('cancelUpload');
     }
+
+    return '';
   }
 
-  var dashboardItemClass = classNames('uppy-DashboardItem', { 'is-inprogress': uploadInProgress }, { 'is-processing': isProcessing }, { 'is-complete': isUploaded }, { 'is-paused': isPaused }, { 'is-error': error }, { 'is-resumable': props.resumableUploads }, { 'is-bundled': props.bundledUpload });
+  var dashboardItemClass = classNames('uppy-DashboardItem', { 'is-inprogress': uploadInProgress }, { 'is-processing': isProcessing }, { 'is-complete': isUploaded }, { 'is-paused': isPaused }, { 'is-error': error }, { 'is-resumable': props.resumableUploads }, { 'is-noIndividualCancellation': !props.individualCancellation });
+
+  var showRemoveButton = props.individualCancellation ? !isUploaded : !uploadInProgress && !isUploaded;
 
   return h(
     'li',
@@ -18635,7 +18477,7 @@ module.exports = function fileItem(props) {
     h(
       'div',
       { 'class': 'uppy-DashboardItem-action' },
-      !isUploaded && h(
+      showRemoveButton && h(
         'button',
         { 'class': 'uppy-DashboardItem-remove',
           type: 'button',
@@ -18646,15 +18488,15 @@ module.exports = function fileItem(props) {
           } },
         h(
           'svg',
-          { 'aria-hidden': 'true', 'class': 'UppyIcon', width: '60', height: '60', viewBox: '0 0 60 60', xmlns: 'http://www.w3.org/2000/svg' },
-          h('path', { stroke: '#FFF', 'stroke-width': '1', 'fill-rule': 'nonzero', 'vector-effect': 'non-scaling-stroke', d: 'M30 1C14 1 1 14 1 30s13 29 29 29 29-13 29-29S46 1 30 1z' }),
-          h('path', { fill: '#FFF', 'vector-effect': 'non-scaling-stroke', d: 'M42 39.667L39.667 42 30 32.333 20.333 42 18 39.667 27.667 30 18 20.333 20.333 18 30 27.667 39.667 18 42 20.333 32.333 30z' })
+          { 'aria-hidden': 'true', 'class': 'UppyIcon', width: '18', height: '18', viewBox: '0 0 18 18' },
+          h('path', { d: 'M9 0C4.034 0 0 4.034 0 9s4.034 9 9 9 9-4.034 9-9-4.034-9-9-9z' }),
+          h('path', { fill: '#FFF', d: 'M13 12.222l-.778.778L9 9.778 5.778 13 5 12.222 8.222 9 5 5.778 5.778 5 9 8.222 12.222 5l.778.778L9.778 9z' })
         )
       )
     )
   );
 };
-},{"../utils/copyToClipboard":109,"../utils/getFileTypeIcon":110,"../utils/truncateString":112,"./FileItemProgress":102,"./FilePreview":104,"./icons":107,"@uppy/utils/lib/getFileNameAndExtension":161,"classnames":9,"preact":49,"prettier-bytes":50}],102:[function(require,module,exports){
+},{"../utils/copyToClipboard":106,"../utils/getFileTypeIcon":107,"../utils/truncateString":109,"./FileItemProgress":99,"./FilePreview":101,"./icons":104,"@uppy/utils/lib/getFileNameAndExtension":160,"classnames":9,"preact":47,"prettier-bytes":48}],99:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -18682,7 +18524,7 @@ module.exports = function (props) {
         "stroke-dashoffset": circleLength - circleLength / 100 * props.progress
       })
     ),
-    !props.hidePauseResumeCancelButtons && !props.bundled ? h(
+    !props.hidePauseResumeCancelButtons ? h(
       "g",
       null,
       h("polygon", { "class": "play", transform: "translate(3, 3)", points: "12 20 12 10 20 15" }),
@@ -18697,7 +18539,7 @@ module.exports = function (props) {
     h("polygon", { "class": "check", transform: "translate(2, 3)", points: "14 22.5 7 15.2457065 8.99985857 13.1732815 14 18.3547104 22.9729883 9 25 11.1005634" })
   );
 };
-},{"preact":49}],103:[function(require,module,exports){
+},{"preact":47}],100:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var FileItem = require('./FileItem');
@@ -18721,7 +18563,7 @@ module.exports = function (props) {
     })
   );
 };
-},{"./FileItem":101,"classnames":9,"preact":49}],104:[function(require,module,exports){
+},{"./FileItem":98,"classnames":9,"preact":47}],101:[function(require,module,exports){
 var getFileTypeIcon = require('../utils/getFileTypeIcon');
 
 var _require = require('preact'),
@@ -18748,17 +18590,12 @@ module.exports = function FilePreview(props) {
     ),
     h(
       'svg',
-      { 'class': 'uppy-DashboardItem-previewIconBg', width: '72', height: '93', viewBox: '0 0 72 93' },
-      h(
-        'g',
-        null,
-        h('path', { d: 'M24.08 5h38.922A2.997 2.997 0 0 1 66 8.003v74.994A2.997 2.997 0 0 1 63.004 86H8.996A2.998 2.998 0 0 1 6 83.01V22.234L24.08 5z', fill: '#FFF' }),
-        h('path', { d: 'M24 5L6 22.248h15.007A2.995 2.995 0 0 0 24 19.244V5z', fill: '#E4E4E4' })
-      )
+      { 'class': 'uppy-DashboardItem-previewIconBg', width: '58', height: '76', viewBox: '0 0 58 76' },
+      h('rect', { fill: '#FFF', width: '58', height: '76', rx: '3', 'fill-rule': 'evenodd' })
     )
   );
 };
-},{"../utils/getFileTypeIcon":110,"preact":49}],105:[function(require,module,exports){
+},{"../utils/getFileTypeIcon":107,"preact":47}],102:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -18800,7 +18637,7 @@ function PanelContent(props) {
 }
 
 module.exports = PanelContent;
-},{"../utils/ignoreEvent.js":111,"preact":49}],106:[function(require,module,exports){
+},{"../utils/ignoreEvent.js":108,"preact":47}],103:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -18906,15 +18743,15 @@ function PanelTopBar(props) {
         } },
       h(
         'svg',
-        { 'class': 'UppyIcon', width: '15', height: '15', viewBox: '0 0 13 13', version: '1.1', xmlns: 'http://www.w3.org/2000/svg' },
-        h('path', { d: 'M7,6 L13,6 L13,7 L7,7 L7,13 L6,13 L6,7 L0,7 L0,6 L6,6 L6,0 L7,0 L7,6 Z' })
+        { 'class': 'UppyIcon', width: '15', height: '15', viewBox: '0 0 15 15' },
+        h('path', { d: 'M8 6.5h6a.5.5 0 0 1 .5.5v.5a.5.5 0 0 1-.5.5H8v6a.5.5 0 0 1-.5.5H7a.5.5 0 0 1-.5-.5V8h-6a.5.5 0 0 1-.5-.5V7a.5.5 0 0 1 .5-.5h6v-6A.5.5 0 0 1 7 0h.5a.5.5 0 0 1 .5.5v6z' })
       )
     )
   );
 }
 
 module.exports = PanelTopBar;
-},{"preact":49}],107:[function(require,module,exports){
+},{"preact":47}],104:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -18970,7 +18807,7 @@ function localIcon() {
 function iconRetry() {
   return h(
     "svg",
-    { "aria-hidden": "true", "class": "UppyIcon retry", width: "28", height: "31", viewBox: "0 0 16 19", xmlns: "http://www.w3.org/2000/svg" },
+    { "aria-hidden": "true", "class": "UppyIcon retry", width: "28", height: "31", viewBox: "0 0 16 19" },
     h("path", { d: "M16 11a8 8 0 1 1-8-8v2a6 6 0 1 0 6 6h2z" }),
     h("path", { d: "M7.9 3H10v2H7.9z" }),
     h("path", { d: "M8.536.5l3.535 3.536-1.414 1.414L7.12 1.914z" }),
@@ -18989,41 +18826,45 @@ function checkIcon() {
 function iconAudio() {
   return h(
     "svg",
-    { "aria-hidden": "true", "class": "UppyIcon", width: "55", height: "55", viewBox: "0 0 55 55" },
-    h("path", { d: "M52.66.25c-.216-.19-.5-.276-.79-.242l-31 4.01a1 1 0 0 0-.87.992V40.622C18.174 38.428 15.273 37 12 37c-5.514 0-10 4.037-10 9s4.486 9 10 9 10-4.037 10-9c0-.232-.02-.46-.04-.687.014-.065.04-.124.04-.192V16.12l29-3.753v18.257C49.174 28.428 46.273 27 43 27c-5.514 0-10 4.037-10 9s4.486 9 10 9c5.464 0 9.913-3.966 9.993-8.867 0-.013.007-.024.007-.037V1a.998.998 0 0 0-.34-.75zM12 53c-4.41 0-8-3.14-8-7s3.59-7 8-7 8 3.14 8 7-3.59 7-8 7zm31-10c-4.41 0-8-3.14-8-7s3.59-7 8-7 8 3.14 8 7-3.59 7-8 7zM22 14.1V5.89l29-3.753v8.21l-29 3.754z" })
+    { "aria-hidden": "true", "class": "UppyIcon", width: "25", height: "25", viewBox: "0 0 25 25" },
+    h("path", { d: "M9.5 18.64c0 1.14-1.145 2-2.5 2s-2.5-.86-2.5-2c0-1.14 1.145-2 2.5-2 .557 0 1.079.145 1.5.396V7.25a.5.5 0 0 1 .379-.485l9-2.25A.5.5 0 0 1 18.5 5v11.64c0 1.14-1.145 2-2.5 2s-2.5-.86-2.5-2c0-1.14 1.145-2 2.5-2 .557 0 1.079.145 1.5.396V8.67l-8 2v7.97zm8-11v-2l-8 2v2l8-2zM7 19.64c.855 0 1.5-.484 1.5-1s-.645-1-1.5-1-1.5.484-1.5 1 .645 1 1.5 1zm9-2c.855 0 1.5-.484 1.5-1s-.645-1-1.5-1-1.5.484-1.5 1 .645 1 1.5 1z", fill: "#049BCF", "fill-rule": "nonzero" })
   );
 }
 
 function iconVideo() {
   return h(
     "svg",
-    { "aria-hidden": "true", "class": "UppyIcon", viewBox: "0 0 58 58" },
-    h("path", { d: "M36.537 28.156l-11-7a1.005 1.005 0 0 0-1.02-.033C24.2 21.3 24 21.635 24 22v14a1 1 0 0 0 1.537.844l11-7a1.002 1.002 0 0 0 0-1.688zM26 34.18V23.82L34.137 29 26 34.18z" }),
-    h("path", { d: "M57 6H1a1 1 0 0 0-1 1v44a1 1 0 0 0 1 1h56a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1zM10 28H2v-9h8v9zm-8 2h8v9H2v-9zm10 10V8h34v42H12V40zm44-12h-8v-9h8v9zm-8 2h8v9h-8v-9zm8-22v9h-8V8h8zM2 8h8v9H2V8zm0 42v-9h8v9H2zm54 0h-8v-9h8v9z" })
+    { "aria-hidden": "true", "class": "UppyIcon", width: "25", height: "25", viewBox: "0 0 25 25" },
+    h("path", { d: "M16 11.834l4.486-2.691A1 1 0 0 1 22 10v6a1 1 0 0 1-1.514.857L16 14.167V17a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v2.834zM15 9H5v8h10V9zm1 4l5 3v-6l-5 3z", fill: "#19AF67", "fill-rule": "nonzero" })
   );
 }
 
 function iconPDF() {
   return h(
     "svg",
-    { "aria-hidden": "true", "class": "UppyIcon", viewBox: "0 0 342 335" },
-    h("path", { d: "M329.337 227.84c-2.1 1.3-8.1 2.1-11.9 2.1-12.4 0-27.6-5.7-49.1-14.9 8.3-.6 15.8-.9 22.6-.9 12.4 0 16 0 28.2 3.1 12.1 3 12.2 9.3 10.2 10.6zm-215.1 1.9c4.8-8.4 9.7-17.3 14.7-26.8 12.2-23.1 20-41.3 25.7-56.2 11.5 20.9 25.8 38.6 42.5 52.8 2.1 1.8 4.3 3.5 6.7 5.3-34.1 6.8-63.6 15-89.6 24.9zm39.8-218.9c6.8 0 10.7 17.06 11 33.16.3 16-3.4 27.2-8.1 35.6-3.9-12.4-5.7-31.8-5.7-44.5 0 0-.3-24.26 2.8-24.26zm-133.4 307.2c3.9-10.5 19.1-31.3 41.6-49.8 1.4-1.1 4.9-4.4 8.1-7.4-23.5 37.6-39.3 52.5-49.7 57.2zm315.2-112.3c-6.8-6.7-22-10.2-45-10.5-15.6-.2-34.3 1.2-54.1 3.9-8.8-5.1-17.9-10.6-25.1-17.3-19.2-18-35.2-42.9-45.2-70.3.6-2.6 1.2-4.8 1.7-7.1 0 0 10.8-61.5 7.9-82.3-.4-2.9-.6-3.7-1.4-5.9l-.9-2.5c-2.9-6.76-8.7-13.96-17.8-13.57l-5.3-.17h-.1c-10.1 0-18.4 5.17-20.5 12.84-6.6 24.3.2 60.5 12.5 107.4l-3.2 7.7c-8.8 21.4-19.8 43-29.5 62l-1.3 2.5c-10.2 20-19.5 37-27.9 51.4l-8.7 4.6c-.6.4-15.5 8.2-19 10.3-29.6 17.7-49.28 37.8-52.54 53.8-1.04 5-.26 11.5 5.01 14.6l8.4 4.2c3.63 1.8 7.53 2.7 11.43 2.7 21.1 0 45.6-26.2 79.3-85.1 39-12.7 83.4-23.3 122.3-29.1 29.6 16.7 66 28.3 89 28.3 4.1 0 7.6-.4 10.5-1.2 4.4-1.1 8.1-3.6 10.4-7.1 4.4-6.7 5.4-15.9 4.1-25.4-.3-2.8-2.6-6.3-5-8.7z" })
+    { "aria-hidden": "true", "class": "UppyIcon", width: "25", height: "25", viewBox: "0 0 25 25" },
+    h("path", { d: "M9.766 8.295c-.691-1.843-.539-3.401.747-3.726 1.643-.414 2.505.938 2.39 3.299-.039.79-.194 1.662-.537 3.148.324.49.66.967 1.055 1.51.17.231.382.488.629.757 1.866-.128 3.653.114 4.918.655 1.487.635 2.192 1.685 1.614 2.84-.566 1.133-1.839 1.084-3.416.249-1.141-.604-2.457-1.634-3.51-2.707a13.467 13.467 0 0 0-2.238.426c-1.392 4.051-4.534 6.453-5.707 4.572-.986-1.58 1.38-4.206 4.914-5.375.097-.322.185-.656.264-1.001.08-.353.306-1.31.407-1.737-.678-1.059-1.2-2.031-1.53-2.91zm2.098 4.87c-.033.144-.068.287-.104.427l.033-.01-.012.038a14.065 14.065 0 0 1 1.02-.197l-.032-.033.052-.004a7.902 7.902 0 0 1-.208-.271c-.197-.27-.38-.526-.555-.775l-.006.028-.002-.003c-.076.323-.148.632-.186.8zm5.77 2.978c1.143.605 1.832.632 2.054.187.26-.519-.087-1.034-1.113-1.473-.911-.39-2.175-.608-3.55-.608.845.766 1.787 1.459 2.609 1.894zM6.559 18.789c.14.223.693.16 1.425-.413.827-.648 1.61-1.747 2.208-3.206-2.563 1.064-4.102 2.867-3.633 3.62zm5.345-10.97c.088-1.793-.351-2.48-1.146-2.28-.473.119-.564 1.05-.056 2.405.213.566.52 1.188.908 1.859.18-.858.268-1.453.294-1.984z", fill: "#E2514A", "fill-rule": "nonzero" })
   );
 }
 
 function iconFile() {
   return h(
     "svg",
-    { "aria-hidden": "true", "class": "UppyIcon", width: "44", height: "58", viewBox: "0 0 44 58" },
-    h("path", { d: "M27.437.517a1 1 0 0 0-.094.03H4.25C2.037.548.217 2.368.217 4.58v48.405c0 2.212 1.82 4.03 4.03 4.03H39.03c2.21 0 4.03-1.818 4.03-4.03V15.61a1 1 0 0 0-.03-.28 1 1 0 0 0 0-.093 1 1 0 0 0-.03-.032 1 1 0 0 0 0-.03 1 1 0 0 0-.032-.063 1 1 0 0 0-.03-.063 1 1 0 0 0-.032 0 1 1 0 0 0-.03-.063 1 1 0 0 0-.032-.03 1 1 0 0 0-.03-.063 1 1 0 0 0-.063-.062l-14.593-14a1 1 0 0 0-.062-.062A1 1 0 0 0 28 .708a1 1 0 0 0-.374-.157 1 1 0 0 0-.156 0 1 1 0 0 0-.03-.03l-.003-.003zM4.25 2.547h22.218v9.97c0 2.21 1.82 4.03 4.03 4.03h10.564v36.438a2.02 2.02 0 0 1-2.032 2.032H4.25c-1.13 0-2.032-.9-2.032-2.032V4.58c0-1.13.902-2.032 2.03-2.032zm24.218 1.345l10.375 9.937.75.718H30.5c-1.13 0-2.032-.9-2.032-2.03V3.89z" })
+    { "aria-hidden": "true", "class": "UppyIcon", width: "25", height: "25", viewBox: "0 0 25 25" },
+    h(
+      "g",
+      { fill: "#A7AFB7", "fill-rule": "nonzero" },
+      h("path", { d: "M5.5 22a.5.5 0 0 1-.5-.5v-18a.5.5 0 0 1 .5-.5h10.719a.5.5 0 0 1 .367.16l3.281 3.556a.5.5 0 0 1 .133.339V21.5a.5.5 0 0 1-.5.5h-14zm.5-1h13V7.25L16 4H6v17z" }),
+      h("path", { d: "M15 4v3a1 1 0 0 0 1 1h3V7h-3V4h-1z" })
+    )
   );
 }
 
 function iconText() {
   return h(
     "svg",
-    { "aria-hidden": "true", "class": "UppyIcon", width: "62", height: "62", viewBox: "0 0 62 62", xmlns: "http://www.w3.org/2000/svg" },
-    h("path", { d: "M4.309 4.309h24.912v53.382h-6.525v3.559h16.608v-3.559h-6.525V4.309h24.912v10.676h3.559V.75H.75v14.235h3.559z", "fill-rule": "nonzero", fill: "#000" })
+    { "aria-hidden": "true", "class": "UppyIcon", width: "25", height: "25", viewBox: "0 0 25 25" },
+    h("path", { d: "M4.5 7h13a.5.5 0 1 1 0 1h-13a.5.5 0 0 1 0-1zm0 3h15a.5.5 0 1 1 0 1h-15a.5.5 0 1 1 0-1zm0 3h15a.5.5 0 1 1 0 1h-15a.5.5 0 1 1 0-1zm0 3h10a.5.5 0 1 1 0 1h-10a.5.5 0 1 1 0-1z", fill: "#5A5E69", "fill-rule": "nonzero" })
   );
 }
 
@@ -19041,7 +18882,7 @@ module.exports = {
   iconFile: iconFile,
   iconText: iconText
 };
-},{"preact":49}],108:[function(require,module,exports){
+},{"preact":47}],105:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19054,13 +18895,13 @@ var _require = require('@uppy/core'),
     Plugin = _require.Plugin;
 
 var Translator = require('@uppy/utils/lib/Translator');
-var dragDrop = require('drag-drop');
 var DashboardUI = require('./components/Dashboard');
 var StatusBar = require('@uppy/status-bar');
 var Informer = require('@uppy/informer');
 var ThumbnailGenerator = require('@uppy/thumbnail-generator');
 var findAllDOMElements = require('@uppy/utils/lib/findAllDOMElements');
 var toArray = require('@uppy/utils/lib/toArray');
+var getDroppedFiles = require('@uppy/utils/src/getDroppedFiles');
 var cuid = require('cuid');
 var ResizeObserver = require('resize-observer-polyfill').default || require('resize-observer-polyfill');
 
@@ -19102,11 +18943,9 @@ module.exports = function (_Plugin) {
     _this.type = 'orchestrator';
     _this.modalName = 'uppy-Dashboard-' + cuid();
 
-    var defaultLocale = {
+    _this.defaultLocale = {
       strings: {
-        selectToUpload: 'Select files to upload',
         closeModal: 'Close Modal',
-        upload: 'Upload',
         importFrom: 'Import from %{name}',
         addingMoreFiles: 'Adding more files',
         addMoreFiles: 'Add more files',
@@ -19119,7 +18958,6 @@ module.exports = function (_Plugin) {
         fileSource: 'File source: %{name}',
         done: 'Done',
         back: 'Back',
-        name: 'Name',
         removeFile: 'Remove file',
         editFile: 'Edit file',
         editing: 'Editing %{file}',
@@ -19127,14 +18965,11 @@ module.exports = function (_Plugin) {
         finishEditingFile: 'Finish editing file',
         saveChanges: 'Save changes',
         cancel: 'Cancel',
-        localDisk: 'Local Disk',
         myDevice: 'My Device',
         dropPasteImport: 'Drop files here, paste, %{browse} or import from',
         dropPaste: 'Drop files here, paste or %{browse}',
+        dropHint: 'Drop your files here',
         browse: 'browse',
-        fileProgress: 'File progress: upload speed and ETA',
-        numberOfSelectedFiles: 'Number of selected files',
-        uploadAllNewFiles: 'Upload all new files',
         emptyFolderAdded: 'No files were added from empty folder',
         uploadComplete: 'Upload complete',
         uploadPaused: 'Upload paused',
@@ -19144,27 +18979,23 @@ module.exports = function (_Plugin) {
         cancelUpload: 'Cancel upload',
         xFilesSelected: {
           0: '%{smart_count} file selected',
-          1: '%{smart_count} files selected'
-        },
-        uploadXFiles: {
-          0: 'Upload %{smart_count} file',
-          1: 'Upload %{smart_count} files'
+          1: '%{smart_count} files selected',
+          2: '%{smart_count} files selected'
         },
         uploadingXFiles: {
           0: 'Uploading %{smart_count} file',
-          1: 'Uploading %{smart_count} files'
+          1: 'Uploading %{smart_count} files',
+          2: 'Uploading %{smart_count} files'
         },
         processingXFiles: {
           0: 'Processing %{smart_count} file',
-          1: 'Processing %{smart_count} files'
-        },
-        uploadXNewFiles: {
-          0: 'Upload +%{smart_count} file',
-          1: 'Upload +%{smart_count} files'
+          1: 'Processing %{smart_count} files',
+          2: 'Processing %{smart_count} files'
         },
         folderAdded: {
           0: 'Added %{smart_count} file from %{folder}',
-          1: 'Added %{smart_count} files from %{folder}'
+          1: 'Added %{smart_count} files from %{folder}',
+          2: 'Added %{smart_count} files from %{folder}'
         }
       }
 
@@ -19203,7 +19034,7 @@ module.exports = function (_Plugin) {
     };_this.opts = _extends({}, defaultOptions, opts);
 
     // i18n
-    _this.translator = new Translator([defaultLocale, _this.uppy.locale, _this.opts.locale]);
+    _this.translator = new Translator([_this.defaultLocale, _this.uppy.locale, _this.opts.locale]);
     _this.i18n = _this.translator.translate.bind(_this.translator);
     _this.i18nArray = _this.translator.translateArray.bind(_this.translator);
 
@@ -19228,11 +19059,18 @@ module.exports = function (_Plugin) {
     _this.handleClickOutside = _this.handleClickOutside.bind(_this);
     _this.toggleFileCard = _this.toggleFileCard.bind(_this);
     _this.toggleAddFilesPanel = _this.toggleAddFilesPanel.bind(_this);
-    _this.handleDrop = _this.handleDrop.bind(_this);
     _this.handlePaste = _this.handlePaste.bind(_this);
     _this.handleInputChange = _this.handleInputChange.bind(_this);
     _this.render = _this.render.bind(_this);
     _this.install = _this.install.bind(_this);
+
+    _this.handleDragOver = _this.handleDragOver.bind(_this);
+    _this.handleDragLeave = _this.handleDragLeave.bind(_this);
+    _this.handleDrop = _this.handleDrop.bind(_this);
+
+    // Timeouts
+    _this.makeDashboardInsidesVisibleAnywayTimeout = null;
+    _this.removeDragOverClassTimeout = null;
     return _this;
   }
 
@@ -19301,9 +19139,8 @@ module.exports = function (_Plugin) {
   Dashboard.prototype.requestCloseModal = function requestCloseModal() {
     if (this.opts.onRequestCloseModal) {
       return this.opts.onRequestCloseModal();
-    } else {
-      this.closeModal();
     }
+    return this.closeModal();
   };
 
   Dashboard.prototype.getFocusableNodes = function getFocusableNodes() {
@@ -19498,51 +19335,51 @@ module.exports = function (_Plugin) {
     if (this.opts.closeModalOnClickOutside) this.requestCloseModal();
   };
 
-  Dashboard.prototype.handlePaste = function handlePaste(ev) {
+  Dashboard.prototype.handlePaste = function handlePaste(event) {
     var _this4 = this;
 
-    var files = toArray(ev.clipboardData.items);
-    files.forEach(function (file) {
-      if (file.kind !== 'file') return;
+    // 1. Let any acquirer plugin (Url/Webcam/etc.) handle pastes to the root
+    this.uppy.iteratePlugins(function (plugin) {
+      if (plugin.type === 'acquirer') {
+        // Every Plugin with .type acquirer can define handleRootPaste(event)
+        plugin.handleRootPaste && plugin.handleRootPaste(event);
+      }
+    });
 
-      var blob = file.getAsFile();
-      if (!blob) {
-        _this4.uppy.log('[Dashboard] File pasted, but the file blob is empty');
-        _this4.uppy.info('Error pasting file', 'error');
-        return;
-      }
+    // 2. Add all dropped files
+    var files = toArray(event.clipboardData.files);
+    files.forEach(function (file) {
       _this4.uppy.log('[Dashboard] File pasted');
-      try {
-        _this4.uppy.addFile({
-          source: _this4.id,
-          name: file.name,
-          type: file.type,
-          data: blob
-        });
-      } catch (err) {
-        // Nothing, restriction errors handled in Core
-      }
+      _this4.addFile(file);
     });
   };
 
-  Dashboard.prototype.handleInputChange = function handleInputChange(ev) {
+  Dashboard.prototype.handleInputChange = function handleInputChange(event) {
     var _this5 = this;
 
-    ev.preventDefault();
-    var files = toArray(ev.target.files);
-
+    event.preventDefault();
+    var files = toArray(event.target.files);
     files.forEach(function (file) {
-      try {
-        _this5.uppy.addFile({
-          source: _this5.id,
-          name: file.name,
-          type: file.type,
-          data: file
-        });
-      } catch (err) {
-        // Nothing, restriction errors handled in Core
-      }
+      return _this5.addFile(file);
     });
+  };
+
+  Dashboard.prototype.addFile = function addFile(file) {
+    try {
+      this.uppy.addFile({
+        source: this.id,
+        name: file.name,
+        type: file.type,
+        data: file,
+        meta: {
+          // path of the file relative to the ancestor directory the user selected.
+          // e.g. 'docs/Old Prague/airbnb.pdf'
+          relativePath: file.relativePath || null
+        }
+      });
+    } catch (err) {
+      // Nothing, restriction errors handled in Core
+    }
   };
 
   // _Why make insides of Dashboard invisible until first ResizeObserver event is emitted?
@@ -19606,25 +19443,72 @@ module.exports = function (_Plugin) {
     clearTimeout(this.makeDashboardInsidesVisibleAnywayTimeout);
   };
 
-  Dashboard.prototype.initEvents = function initEvents() {
+  Dashboard.prototype.handleDragOver = function handleDragOver(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    clearTimeout(this.removeDragOverClassTimeout);
+    this.setPluginState({ isDraggingOver: true });
+  };
+
+  Dashboard.prototype.handleDragLeave = function handleDragLeave(event) {
     var _this7 = this;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    clearTimeout(this.removeDragOverClassTimeout);
+    // Timeout against flickering, this solution is taken from drag-drop library. Solution with 'pointer-events: none' didn't work across browsers.
+    this.removeDragOverClassTimeout = setTimeout(function () {
+      _this7.setPluginState({ isDraggingOver: false });
+    }, 50);
+  };
+
+  Dashboard.prototype.handleDrop = function handleDrop(event, dropCategory) {
+    var _this8 = this;
+
+    event.preventDefault();
+    event.stopPropagation();
+    clearTimeout(this.removeDragOverClassTimeout);
+    // 1. Add a small (+) icon on drop
+    event.dataTransfer.dropEffect = 'copy';
+
+    // 2. Remove dragover class
+    this.setPluginState({ isDraggingOver: false });
+
+    // 3. Let any acquirer plugin (Url/Webcam/etc.) handle drops to the root
+    this.uppy.iteratePlugins(function (plugin) {
+      if (plugin.type === 'acquirer') {
+        // Every Plugin with .type acquirer can define handleRootDrop(event)
+        plugin.handleRootDrop && plugin.handleRootDrop(event);
+      }
+    });
+
+    // 4. Add all dropped files
+    getDroppedFiles(event.dataTransfer).then(function (files) {
+      if (files.length > 0) {
+        _this8.uppy.log('[Dashboard] Files were dropped');
+        files.forEach(function (file) {
+          return _this8.addFile(file);
+        });
+      }
+    });
+  };
+
+  Dashboard.prototype.initEvents = function initEvents() {
+    var _this9 = this;
 
     // Modal open button
     var showModalTrigger = findAllDOMElements(this.opts.trigger);
     if (!this.opts.inline && showModalTrigger) {
       showModalTrigger.forEach(function (trigger) {
-        return trigger.addEventListener('click', _this7.openModal);
+        return trigger.addEventListener('click', _this9.openModal);
       });
     }
 
     if (!this.opts.inline && !showModalTrigger) {
       this.uppy.log('Dashboard modal trigger not found. Make sure `trigger` is set in Dashboard options unless you are planning to call openModal() method yourself', 'error');
     }
-
-    // Drag Drop
-    this.removeDragDropListener = dragDrop(this.el, function (files) {
-      _this7.handleDrop(files);
-    });
 
     this.startListeningToResize();
 
@@ -19648,19 +19532,17 @@ module.exports = function (_Plugin) {
   };
 
   Dashboard.prototype.removeEvents = function removeEvents() {
-    var _this8 = this;
+    var _this10 = this;
 
     var showModalTrigger = findAllDOMElements(this.opts.trigger);
     if (!this.opts.inline && showModalTrigger) {
       showModalTrigger.forEach(function (trigger) {
-        return trigger.removeEventListener('click', _this8.openModal);
+        return trigger.removeEventListener('click', _this10.openModal);
       });
     }
 
     this.stopListeningToResize();
 
-    this.removeDragDropListener();
-    // window.removeEventListener('resize', this.throttledUpdateDashboardElWidth)
     window.removeEventListener('popstate', this.handlePopState, false);
     this.uppy.off('plugin-remove', this.removeTarget);
     this.uppy.off('file-added', this.handleFileAdded);
@@ -19681,27 +19563,8 @@ module.exports = function (_Plugin) {
     });
   };
 
-  Dashboard.prototype.handleDrop = function handleDrop(files) {
-    var _this9 = this;
-
-    this.uppy.log('[Dashboard] Files were dropped');
-
-    files.forEach(function (file) {
-      try {
-        _this9.uppy.addFile({
-          source: _this9.id,
-          name: file.name,
-          type: file.type,
-          data: file
-        });
-      } catch (err) {
-        // Nothing, restriction errors handled in Core
-      }
-    });
-  };
-
   Dashboard.prototype.render = function render(state) {
-    var _this10 = this;
+    var _this11 = this;
 
     var pluginState = this.getPluginState();
     var files = state.files,
@@ -19752,15 +19615,15 @@ module.exports = function (_Plugin) {
     var isAllPaused = inProgressFiles.length !== 0 && pausedFiles.length === inProgressFiles.length;
 
     var attachRenderFunctionToTarget = function attachRenderFunctionToTarget(target) {
-      var plugin = _this10.uppy.getPlugin(target.id);
+      var plugin = _this11.uppy.getPlugin(target.id);
       return _extends({}, target, {
-        icon: plugin.icon || _this10.opts.defaultPickerIcon,
+        icon: plugin.icon || _this11.opts.defaultPickerIcon,
         render: plugin.render
       });
     };
 
     var isSupported = function isSupported(target) {
-      var plugin = _this10.uppy.getPlugin(target.id);
+      var plugin = _this11.uppy.getPlugin(target.id);
       // If the plugin does not provide a `supported` check, assume the plugin works everywhere.
       if (typeof plugin.isSupported !== 'function') {
         return true;
@@ -19777,19 +19640,19 @@ module.exports = function (_Plugin) {
     }).map(attachRenderFunctionToTarget);
 
     var startUpload = function startUpload(ev) {
-      _this10.uppy.upload().catch(function (err) {
+      _this11.uppy.upload().catch(function (err) {
         // Log error.
-        _this10.uppy.log(err.stack || err.message || err);
+        _this11.uppy.log(err.stack || err.message || err);
       });
     };
 
     var cancelUpload = function cancelUpload(fileID) {
-      _this10.uppy.removeFile(fileID);
+      _this11.uppy.removeFile(fileID);
     };
 
     var saveFileCard = function saveFileCard(meta, fileID) {
-      _this10.uppy.setFileMeta(fileID, meta);
-      _this10.toggleFileCard();
+      _this11.uppy.setFileMeta(fileID, meta);
+      _this11.toggleFileCard();
     };
 
     return DashboardUI({
@@ -19834,7 +19697,7 @@ module.exports = function (_Plugin) {
       note: this.opts.note,
       metaFields: pluginState.metaFields,
       resumableUploads: capabilities.resumableUploads || false,
-      bundled: capabilities.bundled || false,
+      individualCancellation: capabilities.individualCancellation,
       startUpload: startUpload,
       pauseUpload: this.uppy.pauseResume,
       retryUpload: this.uppy.retryUpload,
@@ -19857,22 +19720,27 @@ module.exports = function (_Plugin) {
       parentElement: this.el,
       allowedFileTypes: this.uppy.opts.restrictions.allowedFileTypes,
       maxNumberOfFiles: this.uppy.opts.restrictions.maxNumberOfFiles,
-      showSelectedFiles: this.opts.showSelectedFiles
+      showSelectedFiles: this.opts.showSelectedFiles,
+      // drag props
+      isDraggingOver: pluginState.isDraggingOver,
+      handleDragOver: this.handleDragOver,
+      handleDragLeave: this.handleDragLeave,
+      handleDrop: this.handleDrop
     });
   };
 
   Dashboard.prototype.discoverProviderPlugins = function discoverProviderPlugins() {
-    var _this11 = this;
+    var _this12 = this;
 
     this.uppy.iteratePlugins(function (plugin) {
-      if (plugin && !plugin.target && plugin.opts && plugin.opts.target === _this11.constructor) {
-        _this11.addTarget(plugin);
+      if (plugin && !plugin.target && plugin.opts && plugin.opts.target === _this12.constructor) {
+        _this12.addTarget(plugin);
       }
     });
   };
 
   Dashboard.prototype.install = function install() {
-    var _this12 = this;
+    var _this13 = this;
 
     // Set default state for Dashboard
     this.setPluginState({
@@ -19909,9 +19777,9 @@ module.exports = function (_Plugin) {
 
     var plugins = this.opts.plugins || [];
     plugins.forEach(function (pluginID) {
-      var plugin = _this12.uppy.getPlugin(pluginID);
+      var plugin = _this13.uppy.getPlugin(pluginID);
       if (plugin) {
-        plugin.mount(_this12, plugin);
+        plugin.mount(_this13, plugin);
       }
     });
 
@@ -19949,7 +19817,7 @@ module.exports = function (_Plugin) {
   };
 
   Dashboard.prototype.uninstall = function uninstall() {
-    var _this13 = this;
+    var _this14 = this;
 
     if (!this.opts.disableInformer) {
       var informer = this.uppy.getPlugin(this.id + ':Informer');
@@ -19970,7 +19838,7 @@ module.exports = function (_Plugin) {
 
     var plugins = this.opts.plugins || [];
     plugins.forEach(function (pluginID) {
-      var plugin = _this13.uppy.getPlugin(pluginID);
+      var plugin = _this14.uppy.getPlugin(pluginID);
       if (plugin) plugin.unmount();
     });
 
@@ -19980,7 +19848,7 @@ module.exports = function (_Plugin) {
 
   return Dashboard;
 }(Plugin);
-},{"./components/Dashboard":99,"./components/icons":107,"@uppy/core":94,"@uppy/informer":117,"@uppy/status-bar":141,"@uppy/thumbnail-generator":143,"@uppy/utils/lib/Translator":153,"@uppy/utils/lib/findAllDOMElements":157,"@uppy/utils/lib/toArray":176,"cuid":13,"drag-drop":17,"resize-observer-polyfill":54}],109:[function(require,module,exports){
+},{"./components/Dashboard":96,"./components/icons":104,"@uppy/core":91,"@uppy/informer":114,"@uppy/status-bar":139,"@uppy/thumbnail-generator":141,"@uppy/utils/lib/Translator":152,"@uppy/utils/lib/findAllDOMElements":156,"@uppy/utils/lib/toArray":175,"@uppy/utils/src/getDroppedFiles":176,"cuid":13,"resize-observer-polyfill":52}],106:[function(require,module,exports){
 /**
  * Copies text to clipboard by creating an almost invisible textarea,
  * adding text there, then running execCommand('copy').
@@ -20032,8 +19900,9 @@ module.exports = function copyToClipboard(textToCopy, fallbackString) {
     }
   });
 };
-},{}],110:[function(require,module,exports){
+},{}],107:[function(require,module,exports){
 var _require = require('../components/icons'),
+    iconFile = _require.iconFile,
     iconText = _require.iconText,
     iconAudio = _require.iconAudio,
     iconVideo = _require.iconVideo,
@@ -20041,8 +19910,8 @@ var _require = require('../components/icons'),
 
 module.exports = function getIconByMime(fileType) {
   var defaultChoice = {
-    color: '#cbcbcb',
-    icon: ''
+    color: '#838999',
+    icon: iconFile()
   };
 
   if (!fileType) return defaultChoice;
@@ -20052,28 +19921,28 @@ module.exports = function getIconByMime(fileType) {
 
   if (fileTypeGeneral === 'text') {
     return {
-      color: '#cbcbcb',
+      color: '#5a5e69',
       icon: iconText()
     };
   }
 
   if (fileTypeGeneral === 'audio') {
     return {
-      color: '#1abc9c',
+      color: '#068dbb',
       icon: iconAudio()
     };
   }
 
   if (fileTypeGeneral === 'video') {
     return {
-      color: '#2980b9',
+      color: '#19af67',
       icon: iconVideo()
     };
   }
 
   if (fileTypeGeneral === 'application' && fileTypeSpecific === 'pdf') {
     return {
-      color: '#e74c3c',
+      color: '#e25149',
       icon: iconPDF()
     };
   }
@@ -20087,7 +19956,7 @@ module.exports = function getIconByMime(fileType) {
 
   return defaultChoice;
 };
-},{"../components/icons":107}],111:[function(require,module,exports){
+},{"../components/icons":104}],108:[function(require,module,exports){
 // ignore drop/paste events if they are not in input or textarea —
 // otherwise when Url plugin adds drop/paste listeners to this.el,
 // draging UI elements or pasting anything into any field triggers those events —
@@ -20104,7 +19973,7 @@ function ignoreEvent(ev) {
 }
 
 module.exports = ignoreEvent;
-},{}],112:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 module.exports = function truncateString(str, length) {
   if (str.length > length) {
     return str.substr(0, length / 2) + '...' + str.substr(str.length - length / 4, str.length);
@@ -20114,7 +19983,7 @@ module.exports = function truncateString(str, length) {
   // more precise version if needed
   // http://stackoverflow.com/a/831583
 };
-},{}],113:[function(require,module,exports){
+},{}],110:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -20146,15 +20015,13 @@ module.exports = function (_Plugin) {
     _this.icon = function () {
       return h(
         'svg',
-        { 'aria-hidden': 'true', fill: '#0060ff', width: '128', height: '118', viewBox: '0 0 128 118' },
-        h('path', { d: 'M38.145.777L1.108 24.96l25.608 20.507 37.344-23.06z' }),
-        h('path', { d: 'M1.108 65.975l37.037 24.183L64.06 68.525l-37.343-23.06zM64.06 68.525l25.917 21.633 37.036-24.183-25.61-20.51z' }),
-        h('path', { d: 'M127.014 24.96L89.977.776 64.06 22.407l37.345 23.06zM64.136 73.18l-25.99 21.567-11.122-7.262v8.142l37.112 22.256 37.114-22.256v-8.142l-11.12 7.262z' })
+        { 'aria-hidden': 'true', width: '128', height: '128', viewBox: '0 0 128 128' },
+        h('path', { d: 'M31.997 11L64 31.825 31.997 52.651 0 31.825 31.997 11zM96 11l32 20.825-32 20.826-32-20.826L96 11zM0 73.476l31.997-20.825L64 73.476 31.997 94.302 0 73.476zm96-20.825l32 20.825-32 20.826-32-20.826 32-20.825zm-64.508 48.254l32.003-20.826 31.997 20.826-31.997 20.825-32.003-20.825z', fill: '#0260FF', 'fill-rule': 'nonzero' })
       );
     };
 
     _this.provider = new Provider(uppy, {
-      serverUrl: _this.opts.serverUrl,
+      companionUrl: _this.opts.companionUrl,
       serverHeaders: _this.opts.serverHeaders,
       storage: _this.opts.storage,
       provider: 'dropbox',
@@ -20202,7 +20069,7 @@ module.exports = function (_Plugin) {
 
   return Dropbox;
 }(Plugin);
-},{"@uppy/companion-client":91,"@uppy/core":94,"@uppy/provider-views":127,"preact":49}],114:[function(require,module,exports){
+},{"@uppy/companion-client":88,"@uppy/core":91,"@uppy/provider-views":124,"preact":47}],111:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20342,7 +20209,7 @@ module.exports = function (_Plugin) {
 
   return Form;
 }(Plugin);
-},{"@uppy/core":94,"@uppy/utils/lib/findDOMElement":158,"@uppy/utils/lib/toArray":176,"get-form-data":37}],115:[function(require,module,exports){
+},{"@uppy/core":91,"@uppy/utils/lib/findDOMElement":157,"@uppy/utils/lib/toArray":175,"get-form-data":35}],112:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -20372,7 +20239,7 @@ module.exports = function (_ProviderViews) {
 
   return DriveProviderViews;
 }(ProviderViews);
-},{"@uppy/provider-views":127}],116:[function(require,module,exports){
+},{"@uppy/provider-views":124}],113:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -20405,7 +20272,7 @@ module.exports = function (_Plugin) {
     _this.icon = function () {
       return h(
         'svg',
-        { 'aria-hidden': 'true', width: '18px', height: '16px', viewBox: '0 0 18 16', version: '1.1', xmlns: 'http://www.w3.org/2000/svg' },
+        { 'aria-hidden': 'true', width: '18px', height: '16px', viewBox: '0 0 18 16', version: '1.1' },
         h(
           'g',
           { 'fill-rule': 'evenodd' },
@@ -20417,7 +20284,7 @@ module.exports = function (_Plugin) {
     };
 
     _this.provider = new Provider(uppy, {
-      serverUrl: _this.opts.serverUrl,
+      companionUrl: _this.opts.companionUrl,
       serverHeaders: _this.opts.serverHeaders,
       storage: _this.opts.storage,
       provider: 'drive',
@@ -20469,7 +20336,7 @@ module.exports = function (_Plugin) {
 
   return GoogleDrive;
 }(Plugin);
-},{"./DriveProviderViews":115,"@uppy/companion-client":91,"@uppy/core":94,"preact":49}],117:[function(require,module,exports){
+},{"./DriveProviderViews":112,"@uppy/companion-client":88,"@uppy/core":91,"preact":47}],114:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20574,7 +20441,7 @@ module.exports = function (_Plugin) {
 
   return Informer;
 }(Plugin);
-},{"@uppy/core":94,"preact":49}],118:[function(require,module,exports){
+},{"@uppy/core":91,"preact":47}],115:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -20614,7 +20481,7 @@ module.exports = function (_Plugin) {
     };
 
     _this.provider = new Provider(uppy, {
-      serverUrl: _this.opts.serverUrl,
+      companionUrl: _this.opts.companionUrl,
       serverHeaders: _this.opts.serverHeaders,
       storage: _this.opts.storage,
       provider: 'instagram',
@@ -20667,7 +20534,7 @@ module.exports = function (_Plugin) {
 
   return Instagram;
 }(Plugin);
-},{"@uppy/companion-client":91,"@uppy/core":94,"@uppy/provider-views":127,"preact":49}],119:[function(require,module,exports){
+},{"@uppy/companion-client":88,"@uppy/core":91,"@uppy/provider-views":124,"preact":47}],116:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -20760,7 +20627,7 @@ var AuthView = function (_Component2) {
 }(Component);
 
 module.exports = AuthView;
-},{"preact":49}],120:[function(require,module,exports){
+},{"preact":47}],117:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -20800,7 +20667,7 @@ module.exports = function (props) {
     })
   );
 };
-},{"preact":49}],121:[function(require,module,exports){
+},{"preact":47}],118:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var classNames = require('classnames');
@@ -20874,7 +20741,7 @@ var Browser = function Browser(props) {
 };
 
 module.exports = Browser;
-},{"./Breadcrumbs":120,"./Filter":122,"./FooterActions":123,"./ItemList":125,"classnames":9,"preact":49}],122:[function(require,module,exports){
+},{"./Breadcrumbs":117,"./Filter":119,"./FooterActions":120,"./ItemList":122,"classnames":9,"preact":47}],119:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -20912,11 +20779,6 @@ module.exports = function (_Component) {
     return h(
       "div",
       { "class": "uppy-ProviderBrowser-search" },
-      h(
-        "svg",
-        { "aria-hidden": "true", "class": "UppyIcon uppy-ProviderBrowser-searchIcon", viewBox: "0 0 100 100" },
-        h("path", { d: "M87.533 80.03L62.942 55.439c3.324-4.587 5.312-10.207 5.312-16.295 0-.312-.043-.611-.092-.908.05-.301.093-.605.093-.922 0-15.36-12.497-27.857-27.857-27.857-.273 0-.536.043-.799.08-.265-.037-.526-.08-.799-.08-15.361 0-27.858 12.497-27.858 27.857 0 .312.042.611.092.909a5.466 5.466 0 0 0-.093.921c0 15.36 12.496 27.858 27.857 27.858.273 0 .535-.043.8-.081.263.038.524.081.798.081 5.208 0 10.071-1.464 14.245-3.963L79.582 87.98a5.603 5.603 0 0 0 3.976 1.647 5.621 5.621 0 0 0 3.975-9.597zM39.598 55.838c-.265-.038-.526-.081-.8-.081-9.16 0-16.612-7.452-16.612-16.612 0-.312-.042-.611-.092-.908.051-.301.093-.605.093-.922 0-9.16 7.453-16.612 16.613-16.612.272 0 .534-.042.799-.079.263.037.525.079.799.079 9.16 0 16.612 7.452 16.612 16.612 0 .312.043.611.092.909-.05.301-.094.604-.094.921 0 9.16-7.452 16.612-16.612 16.612-.274 0-.536.043-.798.081z" })
-      ),
       h("input", {
         "class": "uppy-u-reset uppy-ProviderBrowser-searchInput",
         type: "text",
@@ -20929,6 +20791,11 @@ module.exports = function (_Component) {
         ref: function ref(input) {
           _this2.input = input;
         } }),
+      h(
+        "svg",
+        { "aria-hidden": "true", "class": "UppyIcon uppy-ProviderBrowser-searchIcon", width: "12", height: "12", viewBox: "0 0 12 12" },
+        h("path", { d: "M8.638 7.99l3.172 3.172a.492.492 0 1 1-.697.697L7.91 8.656a4.977 4.977 0 0 1-2.983.983C2.206 9.639 0 7.481 0 4.819 0 2.158 2.206 0 4.927 0c2.721 0 4.927 2.158 4.927 4.82a4.74 4.74 0 0 1-1.216 3.17zm-3.71.685c2.176 0 3.94-1.726 3.94-3.856 0-2.129-1.764-3.855-3.94-3.855C2.75.964.984 2.69.984 4.819c0 2.13 1.765 3.856 3.942 3.856z" })
+      ),
       this.props.filterInput && h(
         "button",
         {
@@ -20948,7 +20815,7 @@ module.exports = function (_Component) {
 
   return Filter;
 }(Component);
-},{"preact":49}],123:[function(require,module,exports){
+},{"preact":47}],120:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -20970,7 +20837,7 @@ module.exports = function (props) {
     )
   );
 };
-},{"preact":49}],124:[function(require,module,exports){
+},{"preact":47}],121:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -21055,7 +20922,7 @@ module.exports = function (props) {
     )
   );
 };
-},{"preact":49}],125:[function(require,module,exports){
+},{"preact":47}],122:[function(require,module,exports){
 var Row = require('./Item');
 
 var _require = require('preact'),
@@ -21126,7 +20993,7 @@ module.exports = function (props) {
     )
   );
 };
-},{"./Item":124,"preact":49}],126:[function(require,module,exports){
+},{"./Item":121,"preact":47}],123:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -21141,7 +21008,7 @@ module.exports = function (props) {
     )
   );
 };
-},{"preact":49}],127:[function(require,module,exports){
+},{"preact":47}],124:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21328,7 +21195,7 @@ module.exports = function () {
         fileId: file.id
       },
       remote: {
-        serverUrl: this.plugin.opts.serverUrl,
+        companionUrl: this.plugin.opts.companionUrl,
         url: '' + this.provider.fileUrl(file.requestPath),
         body: {
           fileId: file.id
@@ -21400,7 +21267,7 @@ module.exports = function () {
 
   ProviderView.prototype.filterItems = function filterItems(items) {
     var state = this.plugin.getPluginState();
-    if (state.filterInput === '') {
+    if (!state.filterInput || state.filterInput === '') {
       return items;
     }
     return items.filter(function (folder) {
@@ -21634,8 +21501,8 @@ module.exports = function () {
 
     var authWindow = window.open(link, '_blank');
     var handleToken = function handleToken(e) {
-      if (!_this5._isOriginAllowed(e.origin, _this5.plugin.opts.serverPattern) || e.source !== authWindow) {
-        _this5.plugin.uppy.log('rejecting event from ' + e.origin + ' vs allowed pattern ' + _this5.plugin.opts.serverPattern);
+      if (!_this5._isOriginAllowed(e.origin, _this5.plugin.opts.companionAllowedHosts) || e.source !== authWindow) {
+        _this5.plugin.uppy.log('rejecting event from ' + e.origin + ' vs allowed pattern ' + _this5.plugin.opts.companionAllowedHosts);
         return;
       }
       authWindow.close();
@@ -21804,13 +21671,13 @@ module.exports = function () {
 
   return ProviderView;
 }();
-},{"./AuthView":119,"./Browser":121,"./Loader":126,"@uppy/utils/lib/generateFileID":159,"@uppy/utils/lib/getFileType":162,"@uppy/utils/lib/isPreviewSupported":169,"preact":49}],128:[function(require,module,exports){
+},{"./AuthView":116,"./Browser":118,"./Loader":123,"@uppy/utils/lib/generateFileID":158,"@uppy/utils/lib/getFileType":161,"@uppy/utils/lib/isPreviewSupported":168,"preact":47}],125:[function(require,module,exports){
 require('es6-promise/auto');
 require('whatwg-fetch');
 
 module.exports = require('./');
 
-},{"./":136,"es6-promise/auto":33,"whatwg-fetch":84}],129:[function(require,module,exports){
+},{"./":134,"es6-promise/auto":32,"whatwg-fetch":81}],126:[function(require,module,exports){
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function _classCallCheck(instance, Constructor) {
@@ -21925,7 +21792,7 @@ var AttachFileInputs = function (_Plugin) {
 
 module.exports = AttachFileInputs;
 
-},{"@uppy/core":94,"@uppy/utils/lib/findDOMElement":158,"@uppy/utils/lib/toArray":176}],130:[function(require,module,exports){
+},{"@uppy/core":91,"@uppy/utils/lib/findDOMElement":157,"@uppy/utils/lib/toArray":175}],127:[function(require,module,exports){
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function _classCallCheck(instance, Constructor) {
@@ -22014,7 +21881,7 @@ var TransloaditFormResult = function (_Plugin) {
 
 module.exports = TransloaditFormResult;
 
-},{"@uppy/core":94,"@uppy/utils/lib/findDOMElement":158}],131:[function(require,module,exports){
+},{"@uppy/core":91,"@uppy/utils/lib/findDOMElement":157}],128:[function(require,module,exports){
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _extends = Object.assign || function (target) {
@@ -22103,7 +21970,7 @@ var TransloaditResultsPlugin = function (_Plugin) {
 
 module.exports = TransloaditResultsPlugin;
 
-},{"@uppy/core":94}],132:[function(require,module,exports){
+},{"@uppy/core":91}],129:[function(require,module,exports){
 var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _extends = Object.assign || function (target) {
@@ -22135,7 +22002,7 @@ var localProviders = {
   webcam: require('@uppy/webcam')
 };
 
-var remoteProviderOptionNames = ['serverUrl', 'serverPattern', 'serverHeaders', 'target'];
+var remoteProviderOptionNames = ['companionUrl', 'companionAllowedHosts', 'serverHeaders', 'target'];
 
 // No shared options.
 var localProviderOptionNames = ['target'];
@@ -22144,8 +22011,8 @@ function addRemoteProvider(uppy, name, opts) {
   var Provider = remoteProviders[name];
   var providerOptions = {
     // Default to the :tl: Companion servers.
-    serverUrl: Transloadit.COMPANION,
-    serverPattern: Transloadit.COMPANION_PATTERN
+    companionUrl: Transloadit.COMPANION,
+    companionAllowedHosts: Transloadit.COMPANION_PATTERN
   };
 
   remoteProviderOptionNames.forEach(function (name) {
@@ -22194,7 +22061,7 @@ function addProviders(uppy, names) {
 
 module.exports = addProviders;
 
-},{"@uppy/dropbox":113,"@uppy/google-drive":116,"@uppy/instagram":118,"@uppy/transloadit":148,"@uppy/url":152,"@uppy/webcam":182}],133:[function(require,module,exports){
+},{"@uppy/dropbox":110,"@uppy/google-drive":113,"@uppy/instagram":115,"@uppy/transloadit":146,"@uppy/url":150,"@uppy/webcam":184}],130:[function(require,module,exports){
 var Transloadit = require('@uppy/transloadit');
 var TransloaditResults = require('./TransloaditResultsPlugin');
 
@@ -22215,7 +22082,7 @@ function addTransloaditPlugin(uppy, opts) {
 
 module.exports = addTransloaditPlugin;
 
-},{"./TransloaditResultsPlugin":131,"@uppy/transloadit":148}],134:[function(require,module,exports){
+},{"./TransloaditResultsPlugin":128,"@uppy/transloadit":146}],131:[function(require,module,exports){
 var _extends = Object.assign || function (target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i];for (var key in source) {
@@ -22289,7 +22156,50 @@ function createUppy(opts) {
 
 module.exports = createUppy;
 
-},{"@uppy/core":94}],135:[function(require,module,exports){
+},{"@uppy/core":91}],132:[function(require,module,exports){
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+var Dashboard = require('@uppy/dashboard');
+var createUppy = require('./createUppy');
+var addTransloaditPlugin = require('./addTransloaditPlugin');
+var addProviders = require('./addProviders');
+
+function dashboard(target) {
+  var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  var inline = opts.inline == null ? true : opts.inline;
+
+  var pluginId = 'Dashboard';
+  var uppy = createUppy(opts);
+  addTransloaditPlugin(uppy, opts);
+  uppy.use(Dashboard, {
+    id: pluginId,
+    inline: inline,
+    target: target,
+    closeAfterFinish: false
+  });
+
+  if (Array.isArray(opts.providers)) {
+    addProviders(uppy, opts.providers, _extends({}, opts, {
+      // Install providers into the Dashboard.
+      target: uppy.getPlugin(pluginId)
+    }));
+  }
+
+  return uppy;
+}
+
+module.exports = dashboard;
+
+},{"./addProviders":129,"./addTransloaditPlugin":130,"./createUppy":131,"@uppy/dashboard":105}],133:[function(require,module,exports){
 var _extends = Object.assign || function (target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i];for (var key in source) {
@@ -22377,18 +22287,20 @@ function form(target, opts) {
 
 module.exports = form;
 
-},{"./AttachFileInputs":129,"./TransloaditFormResult":130,"./addProviders":132,"./addTransloaditPlugin":133,"@uppy/core":94,"@uppy/dashboard":108,"@uppy/form":114,"@uppy/status-bar":141,"@uppy/utils/lib/findDOMElement":158}],136:[function(require,module,exports){
+},{"./AttachFileInputs":126,"./TransloaditFormResult":127,"./addProviders":129,"./addTransloaditPlugin":130,"@uppy/core":91,"@uppy/dashboard":105,"@uppy/form":111,"@uppy/status-bar":139,"@uppy/utils/lib/findDOMElement":157}],134:[function(require,module,exports){
 var form = require('./form');
+var dashboard = require('./dashboard');
 var pick = require('./pick');
 var upload = require('./upload');
 
 module.exports = {
+  dashboard: dashboard,
   form: form,
   pick: pick,
   upload: upload
 };
 
-},{"./form":135,"./pick":137,"./upload":138}],137:[function(require,module,exports){
+},{"./dashboard":132,"./form":133,"./pick":135,"./upload":136}],135:[function(require,module,exports){
 var _extends = Object.assign || function (target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i];for (var key in source) {
@@ -22453,7 +22365,7 @@ function pick() {
 
 module.exports = pick;
 
-},{"./addProviders":132,"./addTransloaditPlugin":133,"./createUppy":134,"@uppy/dashboard":108}],138:[function(require,module,exports){
+},{"./addProviders":129,"./addTransloaditPlugin":130,"./createUppy":131,"@uppy/dashboard":105}],136:[function(require,module,exports){
 var toArray = require('@uppy/utils/lib/toArray');
 var createUppy = require('./createUppy');
 var addTransloaditPlugin = require('./addTransloaditPlugin');
@@ -22485,7 +22397,7 @@ function upload(files) {
 
 module.exports = upload;
 
-},{"./addTransloaditPlugin":133,"./createUppy":134,"@uppy/utils/lib/toArray":176}],139:[function(require,module,exports){
+},{"./addTransloaditPlugin":130,"./createUppy":131,"@uppy/utils/lib/toArray":175}],137:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var throttle = require('lodash.throttle');
@@ -22639,9 +22551,12 @@ var RetryBtn = function RetryBtn(props) {
   return h(
     'button',
     { type: 'button',
-      'class': 'uppy-u-reset uppy-c-btn uppy-StatusBar-actionBtn uppy-StatusBar-actionBtn--retry',
-      'aria-label': props.i18n('retryUpload'),
-      onclick: props.retryAll },
+      'class': 'uppy-u-reset uppy-c-btn uppy-StatusBar-actionBtn uppy-StatusBar-actionBtn--retry', 'aria-label': props.i18n('retryUpload'), onclick: props.retryAll },
+    h(
+      'svg',
+      { 'aria-hidden': 'true', 'class': 'UppyIcon', width: '8', height: '10', viewBox: '0 0 8 10' },
+      h('path', { d: 'M4 2.408a2.75 2.75 0 1 0 2.75 2.75.626.626 0 0 1 1.25.018v.023a4 4 0 1 1-4-4.041V.25a.25.25 0 0 1 .389-.208l2.299 1.533a.25.25 0 0 1 0 .416l-2.3 1.533A.25.25 0 0 1 4 3.316v-.908z' })
+    ),
     props.i18n('retry')
   );
 };
@@ -22657,8 +22572,13 @@ var CancelBtn = function CancelBtn(props) {
       onclick: props.cancelAll },
     h(
       'svg',
-      { 'aria-hidden': 'true', 'class': 'UppyIcon', width: '16', height: '16', viewBox: '0 0 16 16', xmlns: 'http://www.w3.org/2000/svg' },
-      h('path', { d: 'M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zm1.414-8l2.122-2.121-1.415-1.415L8 6.586 5.879 4.464 4.464 5.88 6.586 8l-2.122 2.121 1.415 1.415L8 9.414l2.121 2.122 1.415-1.415L9.414 8z', fill: '#949494', 'fill-rule': 'evenodd' })
+      { 'aria-hidden': 'true', 'class': 'UppyIcon', width: '16', height: '16', viewBox: '0 0 16 16' },
+      h(
+        'g',
+        { fill: 'none', 'fill-rule': 'evenodd' },
+        h('circle', { fill: '#888', cx: '8', cy: '8', r: '8' }),
+        h('path', { fill: '#FFF', d: 'M9.283 8l2.567 2.567-1.283 1.283L8 9.283 5.433 11.85 4.15 10.567 6.717 8 4.15 5.433 5.433 4.15 8 6.717l2.567-2.567 1.283 1.283z' })
+      )
     )
   );
 };
@@ -22681,12 +22601,22 @@ var PauseResumeButton = function PauseResumeButton(props) {
       } },
     isAllPaused ? h(
       'svg',
-      { 'aria-hidden': 'true', 'class': 'UppyIcon', width: '16', height: '16', viewBox: '0 0 16 16', xmlns: 'http://www.w3.org/2000/svg' },
-      h('path', { d: 'M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zM6 5v6l5-3-5-3z', fill: '#949494', 'fill-rule': 'evenodd' })
+      { 'aria-hidden': 'true', 'class': 'UppyIcon', width: '16', height: '16', viewBox: '0 0 16 16' },
+      h(
+        'g',
+        { fill: 'none', 'fill-rule': 'evenodd' },
+        h('circle', { fill: '#888', cx: '8', cy: '8', r: '8' }),
+        h('path', { fill: '#FFF', d: 'M6 4.25L11.5 8 6 11.75z' })
+      )
     ) : h(
       'svg',
-      { 'aria-hidden': 'true', 'class': 'UppyIcon', width: '16', height: '16', viewBox: '0 0 16 16', xmlns: 'http://www.w3.org/2000/svg' },
-      h('path', { d: 'M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zM5 5v6h2V5H5zm4 0v6h2V5H9z', fill: '#949494', 'fill-rule': 'evenodd' })
+      { 'aria-hidden': 'true', 'class': 'UppyIcon', width: '16', height: '16', viewBox: '0 0 16 16' },
+      h(
+        'g',
+        { fill: 'none', 'fill-rule': 'evenodd' },
+        h('circle', { fill: '#888', cx: '8', cy: '8', r: '8' }),
+        h('path', { d: 'M5 4.5h2v7H5v-7zm4 0h2v7H9v-7z', fill: '#FFF' })
+      )
     )
   );
 };
@@ -22694,7 +22624,7 @@ var PauseResumeButton = function PauseResumeButton(props) {
 var LoadingSpinner = function LoadingSpinner(props) {
   return h(
     'svg',
-    { 'class': 'uppy-StatusBar-spinner', width: '14', height: '14', xmlns: 'http://www.w3.org/2000/svg' },
+    { 'class': 'uppy-StatusBar-spinner', width: '14', height: '14' },
     h('path', { d: 'M13.983 6.547c-.12-2.509-1.64-4.893-3.939-5.936-2.48-1.127-5.488-.656-7.556 1.094C.524 3.367-.398 6.048.162 8.562c.556 2.495 2.46 4.52 4.94 5.183 2.932.784 5.61-.602 7.256-3.015-1.493 1.993-3.745 3.309-6.298 2.868-2.514-.434-4.578-2.349-5.153-4.84a6.226 6.226 0 0 1 2.98-6.778C6.34.586 9.74 1.1 11.373 3.493c.407.596.693 1.282.842 1.988.127.598.073 1.197.161 1.794.078.525.543 1.257 1.15.864.525-.341.49-1.05.456-1.592-.007-.15.02.3 0 0', 'fill-rule': 'evenodd' })
   );
 };
@@ -22790,11 +22720,19 @@ var ProgressBarComplete = function ProgressBarComplete(_ref) {
     'div',
     { 'class': 'uppy-StatusBar-content', role: 'status', title: i18n('complete') },
     h(
-      'svg',
-      { 'aria-hidden': 'true', 'class': 'uppy-StatusBar-statusIndicator UppyIcon', width: '18', height: '17', viewBox: '0 0 23 17' },
-      h('path', { d: 'M8.944 17L0 7.865l2.555-2.61 6.39 6.525L20.41 0 23 2.645z' })
-    ),
-    i18n('complete')
+      'div',
+      { 'class': 'uppy-StatusBar-status' },
+      h(
+        'div',
+        { 'class': 'uppy-StatusBar-statusPrimary' },
+        h(
+          'svg',
+          { 'aria-hidden': 'true', 'class': 'uppy-StatusBar-statusIndicator UppyIcon', width: '15', height: '11', viewBox: '0 0 15 11' },
+          h('path', { d: 'M.414 5.843L1.627 4.63l3.472 3.472L13.202 0l1.212 1.213L5.1 10.528z' })
+        ),
+        i18n('complete')
+      )
+    )
   );
 };
 
@@ -22806,12 +22744,20 @@ var ProgressBarError = function ProgressBarError(_ref2) {
 
   return h(
     'div',
-    { 'class': 'uppy-StatusBar-content', role: 'alert' },
+    { 'class': 'uppy-StatusBar-content', role: 'alert', title: i18n('uploadFailed') },
     h(
-      'span',
-      { 'class': 'uppy-StatusBar-contentPadding' },
-      i18n('uploadFailed'),
-      '.'
+      'div',
+      { 'class': 'uppy-StatusBar-status' },
+      h(
+        'div',
+        { 'class': 'uppy-StatusBar-statusPrimary' },
+        h(
+          'svg',
+          { 'aria-hidden': 'true', 'class': 'uppy-StatusBar-statusIndicator UppyIcon', width: '11', height: '11', viewBox: '0 0 11 11' },
+          h('path', { d: 'M4.278 5.5L0 1.222 1.222 0 5.5 4.278 9.778 0 11 1.222 6.722 5.5 11 9.778 9.778 11 5.5 6.722 1.222 11 0 9.778z' })
+        ),
+        i18n('uploadFailed')
+      )
     ),
     h(
       'span',
@@ -22824,7 +22770,7 @@ var ProgressBarError = function ProgressBarError(_ref2) {
     )
   );
 };
-},{"./StatusBarStates":140,"@uppy/utils/lib/prettyETA":173,"classnames":9,"lodash.throttle":43,"preact":49,"prettier-bytes":50}],140:[function(require,module,exports){
+},{"./StatusBarStates":138,"@uppy/utils/lib/prettyETA":172,"classnames":9,"lodash.throttle":41,"preact":47,"prettier-bytes":48}],138:[function(require,module,exports){
 module.exports = {
   'STATE_ERROR': 'error',
   'STATE_WAITING': 'waiting',
@@ -22833,7 +22779,7 @@ module.exports = {
   'STATE_POSTPROCESSING': 'postprocessing',
   'STATE_COMPLETE': 'complete'
 };
-},{}],141:[function(require,module,exports){
+},{}],139:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22867,41 +22813,38 @@ module.exports = function (_Plugin) {
     _this.title = 'StatusBar';
     _this.type = 'progressindicator';
 
-    var defaultLocale = {
+    _this.defaultLocale = {
       strings: {
         uploading: 'Uploading',
         upload: 'Upload',
         complete: 'Complete',
         uploadFailed: 'Upload failed',
-        pleasePressRetry: 'Please press Retry to upload again',
         paused: 'Paused',
-        error: 'Error',
         retry: 'Retry',
         cancel: 'Cancel',
         pause: 'Pause',
         resume: 'Resume',
-        pressToRetry: 'Press to retry',
-        // retryUpload: 'Retry upload',
-        // resumeUpload: 'Resume upload',
-        // cancelUpload: 'Cancel upload',
-        // pauseUpload: 'Pause upload',
         filesUploadedOfTotal: {
           0: '%{complete} of %{smart_count} file uploaded',
-          1: '%{complete} of %{smart_count} files uploaded'
+          1: '%{complete} of %{smart_count} files uploaded',
+          2: '%{complete} of %{smart_count} files uploaded'
         },
         dataUploadedOfTotal: '%{complete} of %{total}',
         xTimeLeft: '%{time} left',
         uploadXFiles: {
           0: 'Upload %{smart_count} file',
-          1: 'Upload %{smart_count} files'
+          1: 'Upload %{smart_count} files',
+          2: 'Upload %{smart_count} files'
         },
         uploadXNewFiles: {
           0: 'Upload +%{smart_count} file',
-          1: 'Upload +%{smart_count} files'
+          1: 'Upload +%{smart_count} files',
+          2: 'Upload +%{smart_count} files'
         },
         xMoreFilesAdded: {
           0: '%{smart_count} more file added',
-          1: '%{smart_count} more files added'
+          1: '%{smart_count} more files added',
+          2: '%{smart_count} more files added'
         }
       }
 
@@ -22913,13 +22856,12 @@ module.exports = function (_Plugin) {
       hidePauseResumeButton: false,
       hideCancelButton: false,
       showProgressDetails: false,
-      locale: defaultLocale,
       hideAfterFinish: true
 
       // merge default options with the ones set by user
     };_this.opts = _extends({}, defaultOptions, opts);
 
-    _this.translator = new Translator([defaultLocale, _this.uppy.locale, _this.opts.locale]);
+    _this.translator = new Translator([_this.defaultLocale, _this.uppy.locale, _this.opts.locale]);
     _this.i18n = _this.translator.translate.bind(_this.translator);
 
     _this.startUpload = _this.startUpload.bind(_this);
@@ -23114,7 +23056,7 @@ module.exports = function (_Plugin) {
 
   return StatusBar;
 }(Plugin);
-},{"./StatusBar":139,"./StatusBarStates":140,"@uppy/core":94,"@uppy/utils/lib/Translator":153,"@uppy/utils/lib/getBytesRemaining":160,"@uppy/utils/lib/getSpeed":165}],142:[function(require,module,exports){
+},{"./StatusBar":137,"./StatusBarStates":138,"@uppy/core":91,"@uppy/utils/lib/Translator":152,"@uppy/utils/lib/getBytesRemaining":159,"@uppy/utils/lib/getSpeed":164}],140:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23168,7 +23110,7 @@ var DefaultStore = function () {
 module.exports = function defaultStore() {
   return new DefaultStore();
 };
-},{}],143:[function(require,module,exports){
+},{}],141:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23486,7 +23428,7 @@ module.exports = function (_Plugin) {
 
   return ThumbnailGenerator;
 }(Plugin);
-},{"@uppy/core":94,"@uppy/utils/lib/dataURItoBlob":155,"@uppy/utils/lib/isObjectURL":168,"@uppy/utils/lib/isPreviewSupported":169}],144:[function(require,module,exports){
+},{"@uppy/core":91,"@uppy/utils/lib/dataURItoBlob":154,"@uppy/utils/lib/isObjectURL":167,"@uppy/utils/lib/isPreviewSupported":168}],142:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23770,7 +23712,7 @@ var TransloaditAssembly = function (_Emitter) {
 }(Emitter);
 
 module.exports = TransloaditAssembly;
-},{"./parseUrl":149,"component-emitter":11,"socket.io-client":56}],145:[function(require,module,exports){
+},{"./parseUrl":147,"component-emitter":11,"socket.io-client":53}],143:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
@@ -23929,7 +23871,7 @@ var AssemblyOptions = function () {
 
 module.exports = AssemblyOptions;
 module.exports.validateParams = validateParams;
-},{}],146:[function(require,module,exports){
+},{}],144:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -23965,6 +23907,7 @@ var TransloaditAssemblyWatcher = function (_Emitter) {
     });
 
     _this._onAssemblyComplete = _this._onAssemblyComplete.bind(_this);
+    _this._onAssemblyCancel = _this._onAssemblyCancel.bind(_this);
     _this._onAssemblyError = _this._onAssemblyError.bind(_this);
     _this._onImportError = _this._onImportError.bind(_this);
 
@@ -23989,6 +23932,14 @@ var TransloaditAssemblyWatcher = function (_Emitter) {
     this._uppy.log('[Transloadit] AssemblyWatcher: Got Assembly finish ' + assembly.assembly_id);
 
     this.emit('assembly-complete', assembly.assembly_id);
+
+    this._checkAllComplete();
+  };
+
+  TransloaditAssemblyWatcher.prototype._onAssemblyCancel = function _onAssemblyCancel(assembly) {
+    if (!this._watching(assembly.assembly_id)) {
+      return;
+    }
 
     this._checkAllComplete();
   };
@@ -24030,12 +23981,14 @@ var TransloaditAssemblyWatcher = function (_Emitter) {
 
   TransloaditAssemblyWatcher.prototype._removeListeners = function _removeListeners() {
     this._uppy.off('transloadit:complete', this._onAssemblyComplete);
+    this._uppy.off('transloadit:assembly-cancel', this._onAssemblyCancel);
     this._uppy.off('transloadit:assembly-error', this._onAssemblyError);
     this._uppy.off('transloadit:import-error', this._onImportError);
   };
 
   TransloaditAssemblyWatcher.prototype._addListeners = function _addListeners() {
     this._uppy.on('transloadit:complete', this._onAssemblyComplete);
+    this._uppy.on('transloadit:assembly-cancel', this._onAssemblyCancel);
     this._uppy.on('transloadit:assembly-error', this._onAssemblyError);
     this._uppy.on('transloadit:import-error', this._onImportError);
   };
@@ -24044,7 +23997,7 @@ var TransloaditAssemblyWatcher = function (_Emitter) {
 }(Emitter);
 
 module.exports = TransloaditAssemblyWatcher;
-},{"component-emitter":11}],147:[function(require,module,exports){
+},{"component-emitter":11}],145:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
@@ -24101,12 +24054,28 @@ module.exports = function () {
     });
   };
 
+  /**
+   * Reserve resources for a file in an Assembly. Then addFile can be used later.
+   *
+   * @param {object} assembly
+   * @param {UppyFile} file
+   */
+
+
   Client.prototype.reserveFile = function reserveFile(assembly, file) {
     var size = encodeURIComponent(file.size);
     return fetch(assembly.assembly_ssl_url + '/reserve_file?size=' + size, { method: 'post' }).then(function (response) {
       return response.json();
     });
   };
+
+  /**
+   * Import a remote file to an Assembly.
+   *
+   * @param {object} assembly
+   * @param {UppyFile} file
+   */
+
 
   Client.prototype.addFile = function addFile(assembly, file) {
     if (!file.uploadURL) {
@@ -24119,6 +24088,19 @@ module.exports = function () {
 
     var qs = 'size=' + size + '&filename=' + filename + '&fieldname=' + fieldname + '&s3Url=' + url;
     return fetch(assembly.assembly_ssl_url + '/add_file?' + qs, { method: 'post' }).then(function (response) {
+      return response.json();
+    });
+  };
+
+  /**
+   * Cancel a running Assembly.
+   *
+   * @param {object} assembly
+   */
+
+
+  Client.prototype.cancelAssembly = function cancelAssembly(assembly) {
+    return fetch(assembly.assembly_ssl_url, { method: 'delete' }).then(function (response) {
       return response.json();
     });
   };
@@ -24138,7 +24120,7 @@ module.exports = function () {
 
   return Client;
 }();
-},{}],148:[function(require,module,exports){
+},{}],146:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24188,7 +24170,7 @@ module.exports = function (_Plugin) {
     _this.id = 'Transloadit';
     _this.title = 'Transloadit';
 
-    var defaultLocale = {
+    _this.defaultLocale = {
       strings: {
         creatingAssembly: 'Preparing upload...',
         creatingAssemblyFailed: 'Transloadit: Could not create Assembly',
@@ -24205,20 +24187,20 @@ module.exports = function (_Plugin) {
       signature: null,
       params: null,
       fields: {},
-      getAssemblyOptions: defaultGetAssemblyOptions,
-      locale: defaultLocale
+      getAssemblyOptions: defaultGetAssemblyOptions
     };
 
     _this.opts = _extends({}, defaultOptions, opts);
 
     // i18n
-    _this.translator = new Translator([defaultLocale, _this.uppy.locale, _this.opts.locale]);
+    _this.translator = new Translator([_this.defaultLocale, _this.uppy.locale, _this.opts.locale]);
     _this.i18n = _this.translator.translate.bind(_this.translator);
     _this.i18nArray = _this.translator.translateArray.bind(_this.translator);
 
     _this._prepareUpload = _this._prepareUpload.bind(_this);
     _this._afterUpload = _this._afterUpload.bind(_this);
-    _this._handleError = _this._handleError.bind(_this);
+    _this._onError = _this._onError.bind(_this);
+    _this._onCancelAll = _this._onCancelAll.bind(_this);
     _this._onFileUploadURLAvailable = _this._onFileUploadURLAvailable.bind(_this);
     _this._onRestored = _this._onRestored.bind(_this);
     _this._getPersistentData = _this._getPersistentData.bind(_this);
@@ -24266,8 +24248,8 @@ module.exports = function (_Plugin) {
       // We only replace the hostname for Transloadit's companions, so that
       // people can also self-host them while still using Transloadit for encoding.
     });var remote = file.remote;
-    if (file.remote && TL_UPPY_SERVER.test(file.remote.serverUrl)) {
-      var err = new Error('The https://api2.transloadit.com/uppy-server endpoint was renamed to ' + 'https://api2.transloadit.com/companion, please update your `serverUrl` ' + 'options accordingly.');
+    if (file.remote && TL_UPPY_SERVER.test(file.remote.companionUrl)) {
+      var err = new Error('The https://api2.transloadit.com/uppy-server endpoint was renamed to ' + 'https://api2.transloadit.com/companion, please update your `companionUrl` ' + 'options accordingly.');
       // Explicitly log this error here because it is caught by the `createAssembly`
       // Promise further along.
       // That's fine, but createAssembly only shows the informer, we need something a
@@ -24276,12 +24258,12 @@ module.exports = function (_Plugin) {
       throw err;
     }
 
-    if (file.remote && TL_COMPANION.test(file.remote.serverUrl)) {
+    if (file.remote && TL_COMPANION.test(file.remote.companionUrl)) {
       var newHost = status.companion_url.replace(/\/$/, '');
-      var path = file.remote.url.replace(file.remote.serverUrl, '').replace(/^\//, '');
+      var path = file.remote.url.replace(file.remote.companionUrl, '').replace(/^\//, '');
 
       remote = _extends({}, file.remote, {
-        serverUrl: newHost,
+        companionUrl: newHost,
         url: newHost + '/' + path
       });
     }
@@ -24484,6 +24466,36 @@ module.exports = function (_Plugin) {
     });
   };
 
+  Transloadit.prototype._cancelAssembly = function _cancelAssembly(assembly) {
+    var _this6 = this;
+
+    return this.client.cancelAssembly(assembly).then(function () {
+      // TODO bubble this through AssemblyWatcher so its event handlers can clean up correctly
+      _this6.uppy.emit('transloadit:assembly-cancelled', assembly);
+    });
+  };
+
+  /**
+   * When all files are removed, cancel in-progress Assemblies.
+   */
+
+
+  Transloadit.prototype._onCancelAll = function _onCancelAll() {
+    var _this7 = this;
+
+    var _getPluginState3 = this.getPluginState(),
+        assemblies = _getPluginState3.assemblies;
+
+    var cancelPromises = Object.keys(assemblies).map(function (assemblyID) {
+      var assembly = _this7.getAssembly(assemblyID);
+      return _this7._cancelAssembly(assembly);
+    });
+
+    Promise.all(cancelPromises).catch(function (err) {
+      _this7.uppy.log(err);
+    });
+  };
+
   /**
    * Custom state serialization for the Golden Retriever plugin.
    * It will pass this back to the `_onRestored` function.
@@ -24506,7 +24518,7 @@ module.exports = function (_Plugin) {
   };
 
   Transloadit.prototype._onRestored = function _onRestored(pluginData) {
-    var _this6 = this;
+    var _this8 = this;
 
     var savedState = pluginData && pluginData[this.id] ? pluginData[this.id] : {};
     var previousAssemblies = savedState.assemblies || {};
@@ -24525,7 +24537,7 @@ module.exports = function (_Plugin) {
         var status = assemblies[id];
 
         status.uploads.forEach(function (uploadedFile) {
-          var file = _this6._findFile(uploadedFile);
+          var file = _this8._findFile(uploadedFile);
           files[uploadedFile.id] = {
             id: file.id,
             assembly: id,
@@ -24533,7 +24545,7 @@ module.exports = function (_Plugin) {
           };
         });
 
-        var state = _this6.getPluginState();
+        var state = _this8.getPluginState();
         Object.keys(status.results).forEach(function (stepName) {
           status.results[stepName].forEach(function (result) {
             var file = state.files[result.original_id];
@@ -24548,7 +24560,7 @@ module.exports = function (_Plugin) {
         });
       });
 
-      _this6.setPluginState({
+      _this8.setPluginState({
         assemblies: assemblies,
         files: files,
         results: results,
@@ -24558,22 +24570,22 @@ module.exports = function (_Plugin) {
 
     // Set up the Assembly instances for existing Assemblies.
     var restoreAssemblies = function restoreAssemblies() {
-      var _getPluginState3 = _this6.getPluginState(),
-          assemblies = _getPluginState3.assemblies;
+      var _getPluginState4 = _this8.getPluginState(),
+          assemblies = _getPluginState4.assemblies;
 
       Object.keys(assemblies).forEach(function (id) {
         var assembly = new Assembly(assemblies[id]);
-        _this6._connectAssembly(assembly);
+        _this8._connectAssembly(assembly);
       });
     };
 
     // Force-update all Assemblies to check for missed events.
     var updateAssemblies = function updateAssemblies() {
-      var _getPluginState4 = _this6.getPluginState(),
-          assemblies = _getPluginState4.assemblies;
+      var _getPluginState5 = _this8.getPluginState(),
+          assemblies = _getPluginState5.assemblies;
 
       return Promise.all(Object.keys(assemblies).map(function (id) {
-        return _this6.activeAssemblies[id].update();
+        return _this8.activeAssemblies[id].update();
       }));
     };
 
@@ -24585,12 +24597,12 @@ module.exports = function (_Plugin) {
     });
 
     this.restored.then(function () {
-      _this6.restored = null;
+      _this8.restored = null;
     });
   };
 
   Transloadit.prototype._connectAssembly = function _connectAssembly(assembly) {
-    var _this7 = this;
+    var _this9 = this;
 
     var status = assembly.status;
 
@@ -24601,38 +24613,38 @@ module.exports = function (_Plugin) {
     assembly.on('status', function (newStatus) {
       var _extends6;
 
-      var _getPluginState5 = _this7.getPluginState(),
-          assemblies = _getPluginState5.assemblies;
+      var _getPluginState6 = _this9.getPluginState(),
+          assemblies = _getPluginState6.assemblies;
 
-      _this7.setPluginState({
+      _this9.setPluginState({
         assemblies: _extends({}, assemblies, (_extends6 = {}, _extends6[id] = newStatus, _extends6))
       });
     });
 
     assembly.on('upload', function (file) {
-      _this7._onFileUploadComplete(id, file);
+      _this9._onFileUploadComplete(id, file);
     });
     assembly.on('error', function (error) {
-      _this7.uppy.emit('transloadit:assembly-error', assembly.status, error);
+      _this9.uppy.emit('transloadit:assembly-error', assembly.status, error);
     });
 
     assembly.on('executing', function () {
-      _this7.uppy.emit('transloadit:assembly-executing', assembly.status);
+      _this9.uppy.emit('transloadit:assembly-executing', assembly.status);
     });
 
     if (this.opts.waitForEncoding) {
       assembly.on('result', function (stepName, result) {
-        _this7._onResult(id, stepName, result);
+        _this9._onResult(id, stepName, result);
       });
     }
 
     if (this.opts.waitForEncoding) {
       assembly.on('finished', function () {
-        _this7._onAssemblyFinished(assembly.status);
+        _this9._onAssemblyFinished(assembly.status);
       });
     } else if (this.opts.waitForMetadata) {
       assembly.on('metadata', function () {
-        _this7._onAssemblyFinished(assembly.status);
+        _this9._onAssemblyFinished(assembly.status);
       });
     }
 
@@ -24648,7 +24660,7 @@ module.exports = function (_Plugin) {
       assembly.once('status', resolve);
       assembly.once('error', reject);
     }).then(function () {
-      _this7.uppy.log('[Transloadit] Socket is ready');
+      _this9.uppy.log('[Transloadit] Socket is ready');
     });
 
     assembly.connect();
@@ -24656,7 +24668,7 @@ module.exports = function (_Plugin) {
   };
 
   Transloadit.prototype._prepareUpload = function _prepareUpload(fileIDs, uploadID) {
-    var _this8 = this,
+    var _this10 = this,
         _extends7;
 
     // Only use files without errors
@@ -24665,10 +24677,10 @@ module.exports = function (_Plugin) {
     });
 
     fileIDs.forEach(function (fileID) {
-      var file = _this8.uppy.getFile(fileID);
-      _this8.uppy.emit('preprocess-progress', file, {
+      var file = _this10.uppy.getFile(fileID);
+      _this10.uppy.emit('preprocess-progress', file, {
         mode: 'indeterminate',
-        message: _this8.i18n('creatingAssembly')
+        message: _this10.i18n('creatingAssembly')
       });
     });
 
@@ -24676,36 +24688,36 @@ module.exports = function (_Plugin) {
       var fileIDs = _ref.fileIDs,
           options = _ref.options;
 
-      return _this8._createAssembly(fileIDs, uploadID, options).then(function (assembly) {
-        if (_this8.opts.importFromUploadURLs) {
-          return _this8._reserveFiles(assembly, fileIDs);
+      return _this10._createAssembly(fileIDs, uploadID, options).then(function (assembly) {
+        if (_this10.opts.importFromUploadURLs) {
+          return _this10._reserveFiles(assembly, fileIDs);
         }
       }).then(function () {
         fileIDs.forEach(function (fileID) {
-          var file = _this8.uppy.getFile(fileID);
-          _this8.uppy.emit('preprocess-complete', file);
+          var file = _this10.uppy.getFile(fileID);
+          _this10.uppy.emit('preprocess-complete', file);
         });
       }).catch(function (err) {
         fileIDs.forEach(function (fileID) {
-          var file = _this8.uppy.getFile(fileID);
+          var file = _this10.uppy.getFile(fileID);
           // Clear preprocessing state when the Assembly could not be created,
           // otherwise the UI gets confused about the lingering progress keys
-          _this8.uppy.emit('preprocess-complete', file);
-          _this8.uppy.emit('upload-error', file, err);
+          _this10.uppy.emit('preprocess-complete', file);
+          _this10.uppy.emit('upload-error', file, err);
         });
         throw err;
       });
     };
 
-    var _getPluginState6 = this.getPluginState(),
-        uploadsAssemblies = _getPluginState6.uploadsAssemblies;
+    var _getPluginState7 = this.getPluginState(),
+        uploadsAssemblies = _getPluginState7.uploadsAssemblies;
 
     this.setPluginState({
       uploadsAssemblies: _extends({}, uploadsAssemblies, (_extends7 = {}, _extends7[uploadID] = [], _extends7))
     });
 
     var files = fileIDs.map(function (id) {
-      return _this8.uppy.getFile(id);
+      return _this10.uppy.getFile(id);
     });
     var assemblyOptions = new AssemblyOptions(files, this.opts);
 
@@ -24716,16 +24728,16 @@ module.exports = function (_Plugin) {
     // clear all processing state.
     function (err) {
       fileIDs.forEach(function (fileID) {
-        var file = _this8.uppy.getFile(fileID);
-        _this8.uppy.emit('preprocess-complete', file);
-        _this8.uppy.emit('upload-error', file, err);
+        var file = _this10.uppy.getFile(fileID);
+        _this10.uppy.emit('preprocess-complete', file);
+        _this10.uppy.emit('upload-error', file, err);
       });
       throw err;
     });
   };
 
   Transloadit.prototype._afterUpload = function _afterUpload(fileIDs, uploadID) {
-    var _this9 = this;
+    var _this11 = this;
 
     // Only use files without errors
     fileIDs = fileIDs.filter(function (file) {
@@ -24737,7 +24749,7 @@ module.exports = function (_Plugin) {
     // If we're still restoring state, wait for that to be done.
     if (this.restored) {
       return this.restored.then(function () {
-        return _this9._afterUpload(fileIDs, uploadID);
+        return _this11._afterUpload(fileIDs, uploadID);
       });
     }
 
@@ -24747,12 +24759,12 @@ module.exports = function (_Plugin) {
     // the socket immediately and finish the upload.
     if (!this._shouldWaitAfterUpload()) {
       assemblyIDs.forEach(function (assemblyID) {
-        var assembly = _this9.activeAssemblies[assemblyID];
+        var assembly = _this11.activeAssemblies[assemblyID];
         assembly.close();
-        delete _this9.activeAssemblies[assemblyID];
+        delete _this11.activeAssemblies[assemblyID];
       });
       var assemblies = assemblyIDs.map(function (id) {
-        return _this9.getAssembly(id);
+        return _this11.getAssembly(id);
       });
       this.uppy.addResultData(uploadID, { transloadit: assemblies });
       return Promise.resolve();
@@ -24769,60 +24781,60 @@ module.exports = function (_Plugin) {
     var watcher = new AssemblyWatcher(this.uppy, assemblyIDs);
 
     fileIDs.forEach(function (fileID) {
-      var file = _this9.uppy.getFile(fileID);
-      _this9.uppy.emit('postprocess-progress', file, {
+      var file = _this11.uppy.getFile(fileID);
+      _this11.uppy.emit('postprocess-progress', file, {
         mode: 'indeterminate',
-        message: _this9.i18n('encoding')
+        message: _this11.i18n('encoding')
       });
     });
 
     watcher.on('assembly-complete', function (id) {
-      var files = _this9.getAssemblyFiles(id);
+      var files = _this11.getAssemblyFiles(id);
       files.forEach(function (file) {
-        _this9.uppy.emit('postprocess-complete', file);
+        _this11.uppy.emit('postprocess-complete', file);
       });
     });
 
     watcher.on('assembly-error', function (id, error) {
       // Clear postprocessing state for all our files.
-      var files = _this9.getAssemblyFiles(id);
+      var files = _this11.getAssemblyFiles(id);
       files.forEach(function (file) {
         // TODO Maybe make a postprocess-error event here?
-        _this9.uppy.emit('upload-error', file, error);
+        _this11.uppy.emit('upload-error', file, error);
 
-        _this9.uppy.emit('postprocess-complete', file);
+        _this11.uppy.emit('postprocess-complete', file);
       });
     });
 
     return watcher.promise.then(function () {
       var assemblies = assemblyIDs.map(function (id) {
-        return _this9.getAssembly(id);
+        return _this11.getAssembly(id);
       });
 
       // Remove the Assembly ID list for this upload,
       // it's no longer going to be used anywhere.
-      var state = _this9.getPluginState();
+      var state = _this11.getPluginState();
       var uploadsAssemblies = _extends({}, state.uploadsAssemblies);
       delete uploadsAssemblies[uploadID];
-      _this9.setPluginState({ uploadsAssemblies: uploadsAssemblies });
+      _this11.setPluginState({ uploadsAssemblies: uploadsAssemblies });
 
-      _this9.uppy.addResultData(uploadID, {
+      _this11.uppy.addResultData(uploadID, {
         transloadit: assemblies
       });
     });
   };
 
-  Transloadit.prototype._handleError = function _handleError(err, uploadID) {
-    var _this10 = this;
+  Transloadit.prototype._onError = function _onError(err, uploadID) {
+    var _this12 = this;
 
-    this.uppy.log('[Transloadit] _handleError in upload ' + uploadID);
+    this.uppy.log('[Transloadit] _onError in upload ' + uploadID);
     this.uppy.log(err);
     var state = this.getPluginState();
     var assemblyIDs = state.uploadsAssemblies[uploadID];
 
     assemblyIDs.forEach(function (assemblyID) {
-      if (_this10.activeAssemblies[assemblyID]) {
-        _this10.activeAssemblies[assemblyID].close();
+      if (_this12.activeAssemblies[assemblyID]) {
+        _this12.activeAssemblies[assemblyID].close();
       }
     });
   };
@@ -24832,7 +24844,10 @@ module.exports = function (_Plugin) {
     this.uppy.addPostProcessor(this._afterUpload);
 
     // We may need to close socket.io connections on error.
-    this.uppy.on('error', this._handleError);
+    this.uppy.on('error', this._onError);
+
+    // Handle cancellation.
+    this.uppy.on('cancel-all', this._onCancelAll);
 
     if (this.opts.importFromUploadURLs) {
       // No uploader needed when importing; instead we take the upload URL from an existing uploader.
@@ -24863,21 +24878,43 @@ module.exports = function (_Plugin) {
       // Contains result data from Transloadit.
       results: []
     });
+
+    // We cannot cancel individual files because Assemblies tend to contain many files.
+
+    var _uppy$getState2 = this.uppy.getState(),
+        capabilities = _uppy$getState2.capabilities;
+
+    this.uppy.setState({
+      capabilities: _extends({}, capabilities, {
+        individualCancellation: false
+      })
+    });
   };
 
   Transloadit.prototype.uninstall = function uninstall() {
     this.uppy.removePreProcessor(this._prepareUpload);
     this.uppy.removePostProcessor(this._afterUpload);
-    this.uppy.off('error', this._handleError);
+    this.uppy.off('error', this._onError);
 
     if (this.opts.importFromUploadURLs) {
       this.uppy.off('upload-success', this._onFileUploadURLAvailable);
     }
+
+    var _uppy$getState3 = this.uppy.getState(),
+        capabilities = _uppy$getState3.capabilities;
+
+    this.uppy.setState({
+      capabilities: _extends({}, capabilities, {
+        individualCancellation: true
+      })
+    });
   };
 
   Transloadit.prototype.getAssembly = function getAssembly(id) {
-    var state = this.getPluginState();
-    return state.assemblies[id];
+    var _getPluginState8 = this.getPluginState(),
+        assemblies = _getPluginState8.assemblies;
+
+    return assemblies[id];
   };
 
   Transloadit.prototype.getAssemblyFiles = function getAssemblyFiles(assemblyID) {
@@ -24892,7 +24929,7 @@ module.exports = function (_Plugin) {
 module.exports.COMPANION = COMPANION;
 module.exports.UPPY_SERVER = COMPANION;
 module.exports.COMPANION_PATTERN = ALLOWED_COMPANION_PATTERN;
-},{"./Assembly":144,"./AssemblyOptions":145,"./AssemblyWatcher":146,"./Client":147,"@uppy/core":94,"@uppy/tus":150,"@uppy/utils/lib/Translator":153}],149:[function(require,module,exports){
+},{"./Assembly":142,"./AssemblyOptions":143,"./AssemblyWatcher":144,"./Client":145,"@uppy/core":91,"@uppy/tus":148,"@uppy/utils/lib/Translator":152}],147:[function(require,module,exports){
 module.exports = function parseUrl(url) {
   var scheme = /^\w+:\/\//.exec(url);
   var i = 0;
@@ -24912,7 +24949,7 @@ module.exports = function parseUrl(url) {
     pathname: url.slice(slashIndex)
   };
 };
-},{}],150:[function(require,module,exports){
+},{}],148:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25144,6 +25181,7 @@ module.exports = function (_Plugin) {
 
       _this2.onCancelAll(file.id, function () {
         _this2.resetUploaderReferences(file.id);
+        resolve('upload ' + file.id + ' was canceled');
       });
 
       _this2.onResumeAll(file.id, function () {
@@ -25204,7 +25242,7 @@ module.exports = function (_Plugin) {
 
     return new Promise(function (resolve, reject) {
       var token = file.serverToken;
-      var host = getSocketHost(file.remote.serverUrl);
+      var host = getSocketHost(file.remote.companionUrl);
       var socket = new Socket({ target: host + '/api/' + token });
       _this4.uploaderSockets[file.id] = socket;
       _this4.uploaderEvents[file.id] = createEventTracker(_this4.uppy);
@@ -25439,7 +25477,7 @@ module.exports = function (_Plugin) {
 
   return Tus;
 }(Plugin);
-},{"@uppy/companion-client":91,"@uppy/core":94,"@uppy/utils/lib/emitSocketProgress":156,"@uppy/utils/lib/getSocketHost":164,"@uppy/utils/lib/limitPromises":171,"@uppy/utils/lib/settle":175,"tus-js-client":80}],151:[function(require,module,exports){
+},{"@uppy/companion-client":88,"@uppy/core":91,"@uppy/utils/lib/emitSocketProgress":155,"@uppy/utils/lib/getSocketHost":163,"@uppy/utils/lib/limitPromises":170,"@uppy/utils/lib/settle":174,"tus-js-client":77}],149:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -25516,7 +25554,7 @@ var UrlUI = function (_Component) {
 }(Component);
 
 module.exports = UrlUI;
-},{"preact":49}],152:[function(require,module,exports){
+},{"preact":47}],150:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25537,7 +25575,7 @@ var _require3 = require('@uppy/companion-client'),
     RequestClient = _require3.RequestClient;
 
 var UrlUI = require('./UrlUI.js');
-var toArray = require('@uppy/utils/lib/toArray');
+var forEachDroppedOrPastedUrl = require('../utils/forEachDroppedOrPastedUrl');
 
 /**
  * Url
@@ -25557,13 +25595,13 @@ module.exports = function (_Plugin) {
     _this.icon = function () {
       return h(
         'svg',
-        { 'aria-hidden': 'true', width: '23', height: '23', viewBox: '0 0 23 23', xmlns: 'http://www.w3.org/2000/svg' },
+        { 'aria-hidden': 'true', width: '23', height: '23', viewBox: '0 0 23 23' },
         h('path', { d: 'M20.485 11.236l-2.748 2.737c-.184.182-.367.365-.642.547-1.007.73-2.107 1.095-3.298 1.095-1.65 0-3.298-.73-4.398-2.19-.275-.365-.183-1.003.183-1.277.367-.273 1.008-.182 1.283.183 1.191 1.642 3.482 1.915 5.13.73a.714.714 0 0 0 .367-.365l2.75-2.737c1.373-1.46 1.373-3.74-.093-5.108a3.72 3.72 0 0 0-5.13 0L12.33 6.4a.888.888 0 0 1-1.283 0 .88.88 0 0 1 0-1.277l1.558-1.55a5.38 5.38 0 0 1 7.605 0c2.29 2.006 2.382 5.564.274 7.662zm-8.979 6.294L9.95 19.081a3.72 3.72 0 0 1-5.13 0c-1.467-1.368-1.467-3.74-.093-5.108l2.75-2.737.366-.365c.824-.547 1.74-.82 2.748-.73 1.008.183 1.833.639 2.382 1.46.275.365.917.456 1.283.182.367-.273.458-.912.183-1.277-.916-1.186-2.199-1.915-3.573-2.098-1.374-.273-2.84.091-4.031 1.004l-.55.547-2.749 2.737c-2.107 2.189-2.015 5.655.092 7.753C4.727 21.453 6.101 22 7.475 22c1.374 0 2.749-.547 3.848-1.55l1.558-1.551a.88.88 0 0 0 0-1.278c-.367-.364-1.008-.456-1.375-.09z', fill: '#FF814F', 'fill-rule': 'nonzero' })
       );
     };
 
     // Set default options and locale
-    var defaultLocale = {
+    _this.defaultLocale = {
       strings: {
         import: 'Import',
         enterUrlToImport: 'Enter URL to import a file',
@@ -25572,18 +25610,16 @@ module.exports = function (_Plugin) {
       }
     };
 
-    var defaultOptions = {
-      locale: defaultLocale
-    };
+    var defaultOptions = {};
 
     _this.opts = _extends({}, defaultOptions, opts);
 
     // i18n
-    _this.translator = new Translator([defaultLocale, _this.uppy.locale, _this.opts.locale]);
+    _this.translator = new Translator([_this.defaultLocale, _this.uppy.locale, _this.opts.locale]);
     _this.i18n = _this.translator.translate.bind(_this.translator);
     _this.i18nArray = _this.translator.translateArray.bind(_this.translator);
 
-    _this.hostname = _this.opts.serverUrl;
+    _this.hostname = _this.opts.companionUrl;
 
     if (!_this.hostname) {
       throw new Error('Companion hostname is required, please consult https://uppy.io/docs/companion');
@@ -25592,14 +25628,11 @@ module.exports = function (_Plugin) {
     // Bind all event handlers for referencability
     _this.getMeta = _this.getMeta.bind(_this);
     _this.addFile = _this.addFile.bind(_this);
-    _this.handleDrop = _this.handleDrop.bind(_this);
-    _this.handleDragOver = _this.handleDragOver.bind(_this);
-    _this.handleDragLeave = _this.handleDragLeave.bind(_this);
-
-    _this.handlePaste = _this.handlePaste.bind(_this);
+    _this.handleRootDrop = _this.handleRootDrop.bind(_this);
+    _this.handleRootPaste = _this.handleRootPaste.bind(_this);
 
     _this.client = new RequestClient(uppy, {
-      serverUrl: _this.opts.serverUrl,
+      companionUrl: _this.opts.companionUrl,
       serverHeaders: _this.opts.serverHeaders
     });
     return _this;
@@ -25666,7 +25699,7 @@ module.exports = function (_Plugin) {
           url: url
         },
         remote: {
-          serverUrl: _this3.opts.serverUrl,
+          companionUrl: _this3.opts.companionUrl,
           url: _this3.hostname + '/url/get',
           body: {
             fileId: url,
@@ -25698,56 +25731,21 @@ module.exports = function (_Plugin) {
     });
   };
 
-  Url.prototype.handleDrop = function handleDrop(e) {
+  Url.prototype.handleRootDrop = function handleRootDrop(e) {
     var _this4 = this;
 
-    e.preventDefault();
-    if (e.dataTransfer.items) {
-      var items = toArray(e.dataTransfer.items);
-      items.forEach(function (item) {
-        if (item.kind === 'string' && item.type === 'text/uri-list') {
-          item.getAsString(function (url) {
-            _this4.uppy.log('[URL] Adding file from dropped url: ' + url);
-            _this4.addFile(url);
-          });
-        }
-      });
-    }
+    forEachDroppedOrPastedUrl(e.dataTransfer, 'drop', function (url) {
+      _this4.uppy.log('[URL] Adding file from dropped url: ' + url);
+      _this4.addFile(url);
+    });
   };
 
-  Url.prototype.handleDragOver = function handleDragOver(e) {
-    e.preventDefault();
-    this.el.classList.add('drag');
-  };
-
-  Url.prototype.handleDragLeave = function handleDragLeave(e) {
-    e.preventDefault();
-    this.el.classList.remove('drag');
-  };
-
-  Url.prototype.handlePaste = function handlePaste(e) {
+  Url.prototype.handleRootPaste = function handleRootPaste(e) {
     var _this5 = this;
 
-    if (!e.clipboardData.items) {
-      return;
-    }
-    var items = toArray(e.clipboardData.items);
-
-    // When a file is pasted, it appears as two items: file name string, then
-    // the file itself; Url then treats file name string as URL, which is wrong.
-    // This makes sure Url ignores paste event if it contains an actual file
-    var hasFiles = items.filter(function (item) {
-      return item.kind === 'file';
-    }).length > 0;
-    if (hasFiles) return;
-
-    items.forEach(function (item) {
-      if (item.kind === 'string' && item.type === 'text/plain') {
-        item.getAsString(function (url) {
-          _this5.uppy.log('[URL] Adding file from pasted url: ' + url);
-          _this5.addFile(url);
-        });
-      }
+    forEachDroppedOrPastedUrl(e.clipboardData, 'paste', function (url) {
+      _this5.uppy.log('[URL] Adding file from pasted url: ' + url);
+      _this5.addFile(url);
     });
   };
 
@@ -25755,15 +25753,6 @@ module.exports = function (_Plugin) {
     return h(UrlUI, {
       i18n: this.i18n,
       addFile: this.addFile });
-  };
-
-  Url.prototype.onMount = function onMount() {
-    if (this.el) {
-      this.el.addEventListener('drop', this.handleDrop);
-      this.el.addEventListener('dragover', this.handleDragOver);
-      this.el.addEventListener('dragleave', this.handleDragLeave);
-      this.el.addEventListener('paste', this.handlePaste);
-    }
   };
 
   Url.prototype.install = function install() {
@@ -25774,19 +25763,105 @@ module.exports = function (_Plugin) {
   };
 
   Url.prototype.uninstall = function uninstall() {
-    if (this.el) {
-      this.el.removeEventListener('drop', this.handleDrop);
-      this.el.removeEventListener('dragover', this.handleDragOver);
-      this.el.removeEventListener('dragleave', this.handleDragLeave);
-      this.el.removeEventListener('paste', this.handlePaste);
-    }
-
     this.unmount();
   };
 
   return Url;
 }(Plugin);
-},{"./UrlUI.js":151,"@uppy/companion-client":91,"@uppy/core":94,"@uppy/utils/lib/Translator":153,"@uppy/utils/lib/toArray":176,"preact":49}],153:[function(require,module,exports){
+},{"../utils/forEachDroppedOrPastedUrl":151,"./UrlUI.js":149,"@uppy/companion-client":88,"@uppy/core":91,"@uppy/utils/lib/Translator":152,"preact":47}],151:[function(require,module,exports){
+const toArray = require('@uppy/utils/lib/toArray')
+
+/*
+  SITUATION
+
+    1. Cross-browser dataTransfer.items
+
+      paste in chrome [Copy Image]:
+      0: {kind: "file", type: "image/png"}
+      1: {kind: "string", type: "text/html"}
+      paste in safari [Copy Image]:
+      0: {kind: "file", type: "image/png"}
+      1: {kind: "string", type: "text/html"}
+      2: {kind: "string", type: "text/plain"}
+      3: {kind: "string", type: "text/uri-list"}
+      paste in firefox [Copy Image]:
+      0: {kind: "file", type: "image/png"}
+      1: {kind: "string", type: "text/html"}
+
+      paste in chrome [Copy Image Address]:
+      0: {kind: "string", type: "text/plain"}
+      paste in safari [Copy Image Address]:
+      0: {kind: "string", type: "text/plain"}
+      1: {kind: "string", type: "text/uri-list"}
+      paste in firefox [Copy Image Address]:
+      0: {kind: "string", type: "text/plain"}
+
+      drop in chrome [from browser]:
+      0: {kind: "string", type: "text/uri-list"}
+      1: {kind: "string", type: "text/html"}
+      drop in safari [from browser]:
+      0: {kind: "string", type: "text/uri-list"}
+      1: {kind: "string", type: "text/html"}
+      2: {kind: "file", type: "image/png"}
+      drop in firefox [from browser]:
+      0: {kind: "string", type: "text/uri-list"}
+      1: {kind: "string", type: "text/x-moz-url"}
+      2: {kind: "string", type: "text/plain"}
+
+    2. We can determine if it's a 'copypaste' or a 'drop', but we can't discern between [Copy Image] and [Copy Image Address].
+
+  CONCLUSION
+
+    1. 'paste' ([Copy Image] or [Copy Image Address], we can't discern between these two)
+      Don't do anything if there is 'file' item. .handlePaste in the DashboardPlugin will deal with all 'file' items.
+      If there are no 'file' items - handle 'text/plain' items.
+
+    2. 'drop'
+      Take 'text/uri-list' items. Safari has an additional item of .kind === 'file', and you may worry about the item being duplicated (first by DashboardPlugin, and then by UrlPlugin, now), but don't. Directory handling code won't pay attention to this particular item of kind 'file'.
+*/
+
+// Finds all links dropped/pasted from one browser window to another.
+// @param {object} dataTransfer - DataTransfer instance, e.g. e.clipboardData, or e.dataTransfer
+// @param {string} isDropOrPaste - either 'drop' or 'paste'
+// @param {function} callback - (urlString) => {}
+module.exports = function forEachDroppedOrPastedUrl (dataTransfer, isDropOrPaste, callback) {
+  const items = toArray(dataTransfer.items)
+
+  let urlItems
+
+  switch (isDropOrPaste) {
+    case 'paste': {
+      const atLeastOneFileIsDragged = items.some((item) => item.kind === 'file')
+      if (atLeastOneFileIsDragged) {
+        return
+      } else {
+        urlItems = items.filter((item) =>
+          item.kind === 'string' &&
+          item.type === 'text/plain'
+        )
+      }
+      break
+    }
+    case 'drop': {
+      urlItems = items.filter((item) =>
+        item.kind === 'string' &&
+        item.type === 'text/uri-list'
+      )
+      break
+    }
+    default: {
+      throw new Error(`isDropOrPaste must be either 'drop' or 'paste', but it's ${isDropOrPaste}`)
+    }
+  }
+
+  urlItems.forEach((item) => {
+    item.getAsString((urlString) =>
+      callback(urlString)
+    )
+  })
+}
+
+},{"@uppy/utils/lib/toArray":175}],152:[function(require,module,exports){
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25931,7 +26006,7 @@ module.exports = function () {
 
   return Translator;
 }();
-},{}],154:[function(require,module,exports){
+},{}],153:[function(require,module,exports){
 var dataURItoBlob = require('./dataURItoBlob');
 
 /**
@@ -25950,7 +26025,7 @@ module.exports = function canvasToBlob(canvas, type, quality) {
     return dataURItoBlob(canvas.toDataURL(type, quality), {});
   });
 };
-},{"./dataURItoBlob":155}],155:[function(require,module,exports){
+},{"./dataURItoBlob":154}],154:[function(require,module,exports){
 module.exports = function dataURItoBlob(dataURI, opts, toFile) {
   // get the base64 data
   var data = dataURI.split(',')[1];
@@ -25976,7 +26051,7 @@ module.exports = function dataURItoBlob(dataURI, opts, toFile) {
 
   return new Blob([new Uint8Array(array)], { type: mimeType });
 };
-},{}],156:[function(require,module,exports){
+},{}],155:[function(require,module,exports){
 var throttle = require('lodash.throttle');
 
 function _emitSocketProgress(uploader, progressData, file) {
@@ -25995,7 +26070,7 @@ function _emitSocketProgress(uploader, progressData, file) {
 }
 
 module.exports = throttle(_emitSocketProgress, 300, { leading: true, trailing: true });
-},{"lodash.throttle":43}],157:[function(require,module,exports){
+},{"lodash.throttle":41}],156:[function(require,module,exports){
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var isDOMElement = require('./isDOMElement');
@@ -26016,7 +26091,7 @@ module.exports = function findAllDOMElements(element) {
     return [element];
   }
 };
-},{"./isDOMElement":167}],158:[function(require,module,exports){
+},{"./isDOMElement":166}],157:[function(require,module,exports){
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var isDOMElement = require('./isDOMElement');
@@ -26038,7 +26113,7 @@ module.exports = function findDOMElement(element) {
     return element;
   }
 };
-},{"./isDOMElement":167}],159:[function(require,module,exports){
+},{"./isDOMElement":166}],158:[function(require,module,exports){
 /**
  * Takes a file object and turns it into fileID, by converting file.name to lowercase,
  * removing extra characters and adding type, size and lastModified
@@ -26053,11 +26128,11 @@ module.exports = function generateFileID(file) {
     return val;
   }).join('-');
 };
-},{}],160:[function(require,module,exports){
+},{}],159:[function(require,module,exports){
 module.exports = function getBytesRemaining(fileProgress) {
   return fileProgress.bytesTotal - fileProgress.bytesUploaded;
 };
-},{}],161:[function(require,module,exports){
+},{}],160:[function(require,module,exports){
 /**
 * Takes a full filename string and returns an object {name, extension}
 *
@@ -26073,7 +26148,7 @@ module.exports = function getFileNameAndExtension(fullFileName) {
     extension: fileExt
   };
 };
-},{}],162:[function(require,module,exports){
+},{}],161:[function(require,module,exports){
 var getFileNameAndExtension = require('./getFileNameAndExtension');
 var mimeTypes = require('./mimeTypes');
 
@@ -26099,7 +26174,7 @@ module.exports = function getFileType(file) {
   // if all fails, fall back to a generic byte stream type
   return 'application/octet-stream';
 };
-},{"./getFileNameAndExtension":161,"./mimeTypes":172}],163:[function(require,module,exports){
+},{"./getFileNameAndExtension":160,"./mimeTypes":171}],162:[function(require,module,exports){
 // TODO Check which types are actually supported in browsers. Chrome likes webm
 // from my testing, but we may need more.
 // We could use a library but they tend to contain dozens of KBs of mappings,
@@ -26119,7 +26194,7 @@ module.exports = function getFileTypeExtension(mimeType) {
   mimeType = mimeType.replace(/;.*$/, '');
   return mimeToExtensions[mimeType] || null;
 };
-},{}],164:[function(require,module,exports){
+},{}],163:[function(require,module,exports){
 module.exports = function getSocketHost(url) {
   // get the host domain
   var regex = /^(?:https?:\/\/|\/\/)?(?:[^@\n]+@)?(?:www\.)?([^\n]+)/i;
@@ -26128,7 +26203,7 @@ module.exports = function getSocketHost(url) {
 
   return socketProtocol + '://' + host;
 };
-},{}],165:[function(require,module,exports){
+},{}],164:[function(require,module,exports){
 module.exports = function getSpeed(fileProgress) {
   if (!fileProgress.bytesUploaded) return 0;
 
@@ -26136,7 +26211,7 @@ module.exports = function getSpeed(fileProgress) {
   var uploadSpeed = fileProgress.bytesUploaded / (timeElapsed / 1000);
   return uploadSpeed;
 };
-},{}],166:[function(require,module,exports){
+},{}],165:[function(require,module,exports){
 /**
  * Returns a timestamp in the format of `hours:minutes:seconds`
 */
@@ -26154,7 +26229,7 @@ module.exports = function getTimeStamp() {
 function pad(str) {
   return str.length !== 2 ? 0 + str : str;
 }
-},{}],167:[function(require,module,exports){
+},{}],166:[function(require,module,exports){
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /**
@@ -26165,7 +26240,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 module.exports = function isDOMElement(obj) {
   return obj && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && obj.nodeType === Node.ELEMENT_NODE;
 };
-},{}],168:[function(require,module,exports){
+},{}],167:[function(require,module,exports){
 /**
  * Check if a URL string is an object URL from `URL.createObjectURL`.
  *
@@ -26175,7 +26250,7 @@ module.exports = function isDOMElement(obj) {
 module.exports = function isObjectURL(url) {
   return url.indexOf('blob:') === 0;
 };
-},{}],169:[function(require,module,exports){
+},{}],168:[function(require,module,exports){
 module.exports = function isPreviewSupported(fileType) {
   if (!fileType) return false;
   var fileTypeSpecific = fileType.split('/')[1];
@@ -26185,12 +26260,12 @@ module.exports = function isPreviewSupported(fileType) {
   }
   return false;
 };
-},{}],170:[function(require,module,exports){
+},{}],169:[function(require,module,exports){
 module.exports = function isTouchDevice() {
   return 'ontouchstart' in window || // works on most browsers
   navigator.maxTouchPoints; // works on IE10/11 and Surface
 };
-},{}],171:[function(require,module,exports){
+},{}],170:[function(require,module,exports){
 /**
  * Limit the amount of simultaneously pending Promises.
  * Returns a function that, when passed a function `fn`,
@@ -26231,7 +26306,7 @@ module.exports = function limitPromises(limit) {
     if (next) next();
   }
 };
-},{}],172:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 module.exports = {
   'md': 'text/markdown',
   'markdown': 'text/markdown',
@@ -26268,7 +26343,7 @@ module.exports = {
   'xltx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
   'xlw': 'application/vnd.ms-excel'
 };
-},{}],173:[function(require,module,exports){
+},{}],172:[function(require,module,exports){
 var secondsToTime = require('./secondsToTime');
 
 module.exports = function prettyETA(seconds) {
@@ -26285,7 +26360,7 @@ module.exports = function prettyETA(seconds) {
 
   return '' + hoursStr + minutesStr + secondsStr;
 };
-},{"./secondsToTime":174}],174:[function(require,module,exports){
+},{"./secondsToTime":173}],173:[function(require,module,exports){
 module.exports = function secondsToTime(rawSeconds) {
   var hours = Math.floor(rawSeconds / 3600) % 24;
   var minutes = Math.floor(rawSeconds / 60) % 60;
@@ -26293,7 +26368,7 @@ module.exports = function secondsToTime(rawSeconds) {
 
   return { hours: hours, minutes: minutes, seconds: seconds };
 };
-},{}],175:[function(require,module,exports){
+},{}],174:[function(require,module,exports){
 module.exports = function settle(promises) {
   var resolutions = [];
   var rejections = [];
@@ -26315,25 +26390,144 @@ module.exports = function settle(promises) {
     };
   });
 };
-},{}],176:[function(require,module,exports){
+},{}],175:[function(require,module,exports){
 /**
  * Converts list into array
 */
 module.exports = function toArray(list) {
   return Array.prototype.slice.call(list || [], 0);
 };
-},{}],177:[function(require,module,exports){
+},{}],176:[function(require,module,exports){
+const webkitGetAsEntryApi = require('./utils/webkitGetAsEntryApi')
+const fallbackApi = require('./utils/fallbackApi')
+
+// Returns a promise that resolves to the array of dropped files (if a folder is dropped, and browser supports folder parsing - promise resolves to the flat array of all files in all directories).
+// Each file has .relativePath prop appended to it (e.g. "/docs/Prague/ticket_from_prague_to_ufa.pdf") if browser supports it. Otherwise it's undefined.
+//
+// @param {DataTransfer} dataTransfer
+// @returns {Promise} - Array<File>
+module.exports = function getDroppedFiles (dataTransfer) {
+  // Get all files from all subdirs. Works (at least) in Chrome, Mozilla, and Safari
+  if (dataTransfer.items[0] && 'webkitGetAsEntry' in dataTransfer.items[0]) {
+    return webkitGetAsEntryApi(dataTransfer)
+  // Otherwise just return all first-order files
+  } else {
+    return fallbackApi(dataTransfer)
+  }
+}
+
+},{"./utils/fallbackApi":177,"./utils/webkitGetAsEntryApi":178}],177:[function(require,module,exports){
+const toArray = require('../../../lib/toArray')
+
+// .files fallback, should be implemented in any browser
+module.exports = function fallbackApi (dataTransfer) {
+  const files = toArray(dataTransfer.files)
+  return Promise.resolve(files)
+}
+
+},{"../../../lib/toArray":175}],178:[function(require,module,exports){
+const toArray = require('../../../lib/toArray')
+
+// Recursive function, calls the original callback() when the directory is entirely parsed.
+// @param {function} callback - called with ([ all files and directories in that directoryReader ])
+function readEntries (directoryReader, oldEntries, callback) {
+  directoryReader.readEntries(
+    (entries) => {
+      const newEntries = [...oldEntries, ...entries]
+      // According to the FileSystem API spec, readEntries() must be called until it calls the callback with an empty array.
+      if (entries.length) {
+        setTimeout(() => {
+          readEntries(directoryReader, newEntries, callback)
+        }, 0)
+      // Done iterating this particular directory
+      } else {
+        callback(newEntries)
+      }
+    },
+    // Make sure we resolve on error anyway
+    () =>
+      callback(oldEntries)
+  )
+}
+
+// @param {function} resolve - function that will be called when :files array is appended with a file
+// @param {Array<File>} files - array of files to enhance
+// @param {FileSystemFileEntry} fileEntry
+function addEntryToFiles (resolve, files, fileEntry) {
+  // Creates a new File object which can be used to read the file.
+  fileEntry.file(
+    (file) => {
+      // Preserve the relative path from the FileSystemFileEntry#fullPath, because File#webkitRelativePath is always '', at least onDrop.
+      // => "/docs/Prague/ticket_from_prague_to_ufa.pdf"
+      file.relativePath = fileEntry.fullPath
+      files.push(file)
+      resolve()
+    },
+    // Make sure we resolve on error anyway
+    () =>
+      resolve()
+  )
+}
+
+// @param {function} resolve - function that will be called when :directoryEntry is done being recursively parsed
+// @param {Array<File>} files - array of files to enhance
+// @param {FileSystemDirectoryEntry} directoryEntry
+function recursivelyAddFilesFromDirectory (resolve, files, directoryEntry) {
+  const directoryReader = directoryEntry.createReader()
+  readEntries(directoryReader, [], (entries) => {
+    const promises =
+      entries.map((entry) =>
+        createPromiseToAddFileOrParseDirectory(files, entry)
+      )
+    Promise.all(promises)
+      .then(() =>
+        resolve()
+      )
+  })
+}
+
+// @param {Array<File>} files - array of files to enhance
+// @param {(FileSystemFileEntry|FileSystemDirectoryEntry)} entry
+function createPromiseToAddFileOrParseDirectory (files, entry) {
+  return new Promise((resolve) => {
+    if (entry.isFile) {
+      addEntryToFiles(resolve, files, entry)
+    } else if (entry.isDirectory) {
+      recursivelyAddFilesFromDirectory(resolve, files, entry)
+    }
+  })
+}
+
+module.exports = function webkitGetAsEntryApi (dataTransfer) {
+  const files = []
+
+  const rootPromises = []
+
+  toArray(dataTransfer.items)
+    .forEach((item) => {
+      const entry = item.webkitGetAsEntry()
+      // :entry can be null when we drop the url e.g.
+      if (entry) {
+        rootPromises.push(createPromiseToAddFileOrParseDirectory(files, entry))
+      }
+    })
+
+  return Promise.all(rootPromises)
+    .then(() => files)
+}
+
+},{"../../../lib/toArray":175}],179:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
 module.exports = function (props) {
   return h(
     "svg",
-    { "aria-hidden": "true", fill: "#0097DC", width: "66", height: "55", viewBox: "0 0 66 55", xmlns: "http://www.w3.org/2000/svg" },
+    { "aria-hidden": "true", fill: "#0097DC", width: "66", height: "55", viewBox: "0 0 66 55" },
     h("path", { d: "M57.3 8.433c4.59 0 8.1 3.51 8.1 8.1v29.7c0 4.59-3.51 8.1-8.1 8.1H8.7c-4.59 0-8.1-3.51-8.1-8.1v-29.7c0-4.59 3.51-8.1 8.1-8.1h9.45l4.59-7.02c.54-.54 1.35-1.08 2.16-1.08h16.2c.81 0 1.62.54 2.16 1.08l4.59 7.02h9.45zM33 14.64c-8.62 0-15.393 6.773-15.393 15.393 0 8.62 6.773 15.393 15.393 15.393 8.62 0 15.393-6.773 15.393-15.393 0-8.62-6.773-15.393-15.393-15.393zM33 40c-5.648 0-9.966-4.319-9.966-9.967 0-5.647 4.318-9.966 9.966-9.966s9.966 4.319 9.966 9.966C42.966 35.681 38.648 40 33 40z", "fill-rule": "evenodd" })
   );
 };
-},{"preact":49}],178:[function(require,module,exports){
+},{"preact":47}],180:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -26399,7 +26593,7 @@ var CameraScreen = function (_Component) {
 }(Component);
 
 module.exports = CameraScreen;
-},{"./RecordButton":180,"./SnapshotButton":181,"preact":49}],179:[function(require,module,exports){
+},{"./RecordButton":182,"./SnapshotButton":183,"preact":47}],181:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -26424,7 +26618,7 @@ module.exports = function (props) {
     )
   );
 };
-},{"preact":49}],180:[function(require,module,exports){
+},{"preact":47}],182:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -26465,7 +26659,7 @@ module.exports = function RecordButton(_ref) {
     )
   );
 };
-},{"preact":49}],181:[function(require,module,exports){
+},{"preact":47}],183:[function(require,module,exports){
 var _require = require('preact'),
     h = _require.h;
 
@@ -26485,7 +26679,7 @@ module.exports = function (_ref) {
     CameraIcon()
   );
 };
-},{"./CameraIcon":177,"preact":49}],182:[function(require,module,exports){
+},{"./CameraIcon":179,"preact":47}],184:[function(require,module,exports){
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -26550,7 +26744,7 @@ module.exports = function (_Plugin) {
     _this.type = 'acquirer';
     _this.icon = CameraIcon;
 
-    var defaultLocale = {
+    _this.defaultLocale = {
       strings: {
         smile: 'Smile!',
         takePicture: 'Take a picture',
@@ -26566,7 +26760,6 @@ module.exports = function (_Plugin) {
         return Promise.resolve();
       },
       countdown: false,
-      locale: defaultLocale,
       modes: ['video-audio', 'video-only', 'audio-only', 'picture'],
       mirror: true,
       facingMode: 'user'
@@ -26575,7 +26768,7 @@ module.exports = function (_Plugin) {
     };_this.opts = _extends({}, defaultOptions, opts);
 
     // i18n
-    _this.translator = new Translator([defaultLocale, _this.uppy.locale, _this.opts.locale]);
+    _this.translator = new Translator([_this.defaultLocale, _this.uppy.locale, _this.opts.locale]);
     _this.i18n = _this.translator.translate.bind(_this.translator);
     _this.i18nArray = _this.translator.translateArray.bind(_this.translator);
 
@@ -26884,10 +27077,10 @@ module.exports = function (_Plugin) {
 
   return Webcam;
 }(Plugin);
-},{"./CameraIcon":177,"./CameraScreen":178,"./PermissionsScreen":179,"./supportsMediaRecorder":183,"@uppy/core":94,"@uppy/utils/lib/Translator":153,"@uppy/utils/lib/canvasToBlob":154,"@uppy/utils/lib/getFileTypeExtension":163,"preact":49}],183:[function(require,module,exports){
+},{"./CameraIcon":179,"./CameraScreen":180,"./PermissionsScreen":181,"./supportsMediaRecorder":185,"@uppy/core":91,"@uppy/utils/lib/Translator":152,"@uppy/utils/lib/canvasToBlob":153,"@uppy/utils/lib/getFileTypeExtension":162,"preact":47}],185:[function(require,module,exports){
 module.exports = function supportsMediaRecorder() {
   return typeof MediaRecorder === 'function' && !!MediaRecorder.prototype && typeof MediaRecorder.prototype.start === 'function';
 };
-},{}]},{},[128])(128)
+},{}]},{},[125])(125)
 });
 //# sourceMappingURL=robodog.js.map

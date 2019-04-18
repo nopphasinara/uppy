@@ -328,6 +328,13 @@
           
           
           <li>
+            <a href="/docs/robodog/dashboard/" class="sidebar-link">Robodog Dashboard</a>
+          </li>
+        
+          
+          
+          
+          <li>
             <a href="/docs/transloadit/" class="sidebar-link">Transloadit</a>
           </li>
         
@@ -495,15 +502,15 @@ uppy<span class="token punctuation">.</span><span class="token function">use</sp
 <h2 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h2><p>The <code>@uppy/dropbox</code> plugin has the following configurable options:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre>uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Dropbox<span class="token punctuation">,</span> <span class="token punctuation">{</span>
   target<span class="token punctuation">:</span> Dashboard<span class="token punctuation">,</span>
-  serverUrl<span class="token punctuation">:</span> <span class="token string">'https://companion.uppy.io/'</span><span class="token punctuation">,</span>
+  companionUrl<span class="token punctuation">:</span> <span class="token string">'https://companion.uppy.io/'</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 </pre></td></tr></table></figure>
 <h3 id="id-39-Dropbox-39"><a href="#id-39-Dropbox-39" class="headerlink" title="id: &#39;Dropbox&#39;"></a><code>id: &#39;Dropbox&#39;</code></h3><p>A unique identifier for this plugin. It defaults to <code>&#39;Dropbox&#39;</code>.</p>
 <h3 id="title-39-Dropbox-39"><a href="#title-39-Dropbox-39" class="headerlink" title="title: &#39;Dropbox&#39;"></a><code>title: &#39;Dropbox&#39;</code></h3><p>Title / name shown in the UI, such as Dashboard tabs. It defaults to <code>&#39;Dropbox&#39;</code>.</p>
 <h3 id="target-null"><a href="#target-null" class="headerlink" title="target: null"></a><code>target: null</code></h3><p>DOM element, CSS selector, or plugin to mount the Dropbox provider into. This should normally be the Dashboard.</p>
-<h3 id="serverUrl-null"><a href="#serverUrl-null" class="headerlink" title="serverUrl: null"></a><code>serverUrl: null</code></h3><p>URL to a <a href="/docs/companion">Companion</a> instance.</p>
+<h3 id="companionUrl-null"><a href="#companionUrl-null" class="headerlink" title="companionUrl: null"></a><code>companionUrl: null</code></h3><p>URL to a <a href="/docs/companion">Companion</a> instance.</p>
 <h3 id="serverHeaders"><a href="#serverHeaders" class="headerlink" title="serverHeaders: {}"></a><code>serverHeaders: {}</code></h3><p>Custom headers that should be sent along to <a href="/docs/companion">Companion</a> on every request.</p>
-<h3 id="serverPattern-serverUrl"><a href="#serverPattern-serverUrl" class="headerlink" title="serverPattern: serverUrl"></a><code>serverPattern: serverUrl</code></h3><p>The valid and authorised URL(s) from which OAuth responses should be accepted.</p>
+<h3 id="companionAllowedHosts-companionUrl"><a href="#companionAllowedHosts-companionUrl" class="headerlink" title="companionAllowedHosts: companionUrl"></a><code>companionAllowedHosts: companionUrl</code></h3><p>The valid and authorised URL(s) from which OAuth responses should be accepted.</p>
 <p>This value can be a <code>String</code>, a <code>Regex</code> pattern, or an <code>Array</code> of both.</p>
 <p>This is useful when you have your <a href="/docs/companion">Companion</a> running on multiple hosts. Otherwise, the default value should do just fine.</p>
 <h3 id="locale"><a href="#locale" class="headerlink" title="locale: {}"></a><code>locale: {}</code></h3><p>Localize text that is shown to the user.</p>

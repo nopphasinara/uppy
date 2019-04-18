@@ -16,7 +16,7 @@ save it as a layout partial
   <span class="token punctuation">}</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Instagram<span class="token punctuation">,</span> <span class="token punctuation">{</span>
     target<span class="token punctuation">:</span> Dashboard<span class="token punctuation">,</span>
-    serverUrl<span class="token punctuation">:</span> <span class="token string">'https://companion.uppy.io'</span>
+    companionUrl<span class="token punctuation">:</span> <span class="token string">'https://companion.uppy.io'</span>
   <span class="token punctuation">}</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Tus<span class="token punctuation">,</span> <span class="token punctuation">{</span> endpoint<span class="token punctuation">:</span> <span class="token string">'https://master.tus.io/files/'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'complete'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>

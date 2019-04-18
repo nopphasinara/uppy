@@ -328,6 +328,13 @@
           
           
           <li>
+            <a href="/docs/robodog/dashboard/" class="sidebar-link">Robodog Dashboard</a>
+          </li>
+        
+          
+          
+          
+          <li>
             <a href="/docs/transloadit/" class="sidebar-link">Transloadit</a>
           </li>
         
@@ -500,7 +507,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
   meta<span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
   onBeforeFileAdded<span class="token punctuation">:</span> <span class="token punctuation">(</span>currentFile<span class="token punctuation">,</span> files<span class="token punctuation">)</span> <span class="token operator">=></span> currentFile<span class="token punctuation">,</span>
   onBeforeUpload<span class="token punctuation">:</span> <span class="token punctuation">(</span>files<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
-  locale<span class="token punctuation">:</span> defaultLocale<span class="token punctuation">,</span>
+  locale<span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
   store<span class="token punctuation">:</span> <span class="token keyword">new</span> <span class="token class-name">DefaultStore</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 </pre></td></tr></table></figure>
@@ -610,6 +617,14 @@ onBeforeFileAdded<span class="token punctuation">:</span> <span class="token pun
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </pre></td></tr></table></figure>
+<p>Instead of overriding strings yourself, consider using <a href="https://github.com/transloadit/uppy/tree/master/packages/%40uppy/locales" target="_blank" rel="noopener">one of our language packs</a> (or contributing one!):</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="token keyword">const</span> russianLocale <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/locales/lib/ru_RU'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> uppy <span class="token operator">=</span> <span class="token function">Uppy</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  locale<span class="token punctuation">:</span> russianLocale<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</pre></td></tr></table></figure>
+<p>If you use Uppy from a CDN, <a href="/examples/i18n/">there’s an example</a> showcasing how to change languages.</p>
+<p>For flexibility, you can pass a <code>locale</code> at the <code>Uppy</code>/core level, or to Plugins individually. The locale strings that you set in core take precedence.</p>
 <p>It also offers the pluralization function, which is used to determine which string will be used for the provided <code>smart_count</code> number.</p>
 <p>For example, for the Icelandic language, the pluralization function would be:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre>locale<span class="token punctuation">:</span> <span class="token punctuation">{</span>

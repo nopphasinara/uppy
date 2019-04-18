@@ -328,6 +328,13 @@
           
           
           <li>
+            <a href="/docs/robodog/dashboard/" class="sidebar-link">Robodog Dashboard</a>
+          </li>
+        
+          
+          
+          
+          <li>
             <a href="/docs/transloadit/" class="sidebar-link current">Transloadit</a>
           </li>
         
@@ -505,27 +512,27 @@ uppy<span class="token punctuation">.</span><span class="token function">use</sp
 <span class="token keyword">const</span> Transloadit <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/transloadit'</span><span class="token punctuation">)</span>
 
 uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Dropbox<span class="token punctuation">,</span> <span class="token punctuation">{</span>
-  serverUrl<span class="token punctuation">:</span> Transloadit<span class="token punctuation">.</span><span class="token constant">COMPANION</span>
-  serverPattern<span class="token punctuation">:</span> Transloadit<span class="token punctuation">.</span><span class="token constant">COMPANION_PATTERN</span>
+  companionUrl<span class="token punctuation">:</span> Transloadit<span class="token punctuation">.</span><span class="token constant">COMPANION</span>
+  companionAllowedHosts<span class="token punctuation">:</span> Transloadit<span class="token punctuation">.</span><span class="token constant">COMPANION_PATTERN</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 </pre></td></tr></table></figure>
-<p>When using <code>Transloadit.COMPANION</code>, you should also configure <a href="#Transloadit-COMPANION-PATTERN"><code>serverPattern: Transloadit.COMPANION_PATTERN</code></a>.</p>
+<p>When using <code>Transloadit.COMPANION</code>, you should also configure <a href="#Transloadit-COMPANION-PATTERN"><code>companionAllowedHosts: Transloadit.COMPANION_PATTERN</code></a>.</p>
 <p>The value of this constant is <code>https://api2.transloadit.com/companion</code>. If you are using a custom <a href="#service"><code>service</code></a> option, you should also set a custom host option in your provider plugins, by taking a Transloadit API url and appending <code>/companion</code>:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre>uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Dropbox<span class="token punctuation">,</span> <span class="token punctuation">{</span>
-  serverUrl<span class="token punctuation">:</span> <span class="token string">'https://api2-us-east-1.transloadit.com/companion'</span>
+  companionUrl<span class="token punctuation">:</span> <span class="token string">'https://api2-us-east-1.transloadit.com/companion'</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 </pre></td></tr></table></figure>
-<h3 id="Transloadit-COMPANION-PATTERN"><a href="#Transloadit-COMPANION-PATTERN" class="headerlink" title="Transloadit.COMPANION_PATTERN"></a><code>Transloadit.COMPANION_PATTERN</code></h3><p>A RegExp pattern matching Transloadit’s hosted companion endpoints. The pattern is used in remote provider <code>serverPattern</code> options, to ensure that third party authentication messages cannot be faked by an attacker’s page, but can only originate from Transloadit’s servers.</p>
-<p>Use it whenever you use <code>serverUrl: Transloadit.COMPANION</code>, like so:</p>
+<h3 id="Transloadit-COMPANION-PATTERN"><a href="#Transloadit-COMPANION-PATTERN" class="headerlink" title="Transloadit.COMPANION_PATTERN"></a><code>Transloadit.COMPANION_PATTERN</code></h3><p>A RegExp pattern matching Transloadit’s hosted companion endpoints. The pattern is used in remote provider <code>companionAllowedHosts</code> options, to ensure that third party authentication messages cannot be faked by an attacker’s page, but can only originate from Transloadit’s servers.</p>
+<p>Use it whenever you use <code>companionUrl: Transloadit.COMPANION</code>, like so:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="token keyword">const</span> Dropbox <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/dropbox'</span><span class="token punctuation">)</span>
 <span class="token keyword">const</span> Transloadit <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/transloadit'</span><span class="token punctuation">)</span>
 
 uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Dropbox<span class="token punctuation">,</span> <span class="token punctuation">{</span>
-  serverUrl<span class="token punctuation">:</span> Transloadit<span class="token punctuation">.</span><span class="token constant">COMPANION</span>
-  serverPattern<span class="token punctuation">:</span> Transloadit<span class="token punctuation">.</span><span class="token constant">COMPANION_PATTERN</span>
+  companionUrl<span class="token punctuation">:</span> Transloadit<span class="token punctuation">.</span><span class="token constant">COMPANION</span>
+  companionAllowedHosts<span class="token punctuation">:</span> Transloadit<span class="token punctuation">.</span><span class="token constant">COMPANION_PATTERN</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 </pre></td></tr></table></figure>
-<p>The value of this constant covers <em>all</em> Transloadit’s Companion servers, so it does not need to be changed if you are using a custom <a href="#service"><code>service</code></a> option. However, if you are not using the Transloadit Companion servers at <code>*.transloadit.com</code>, make sure to set the <code>serverPattern</code> option to something that matches what you do use.</p>
+<p>The value of this constant covers <em>all</em> Transloadit’s Companion servers, so it does not need to be changed if you are using a custom <a href="#service"><code>service</code></a> option. However, if you are not using the Transloadit Companion servers at <code>*.transloadit.com</code>, make sure to set the <code>companionAllowedHosts</code> option to something that matches what you do use.</p>
 <h2 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h2><p>The <code>@uppy/transloadit</code> plugin has the following configurable options:</p>
 <h3 id="id-39-Transloadit-39"><a href="#id-39-Transloadit-39" class="headerlink" title="id: &#39;Transloadit&#39;"></a><code>id: &#39;Transloadit&#39;</code></h3><p>A unique identifier for this plugin. It defaults to <code>&#39;Transloadit&#39;</code>.</p>
 <h3 id="service"><a href="#service" class="headerlink" title="service"></a><code>service</code></h3><p>The Transloadit API URL to use. It defaults to <code>https://api2.transloadit.com</code>, which will attempt to route traffic efficiently based on the location of your users. You can set this to something like <code>https://api2-us-east-1.transloadit.com</code> if you want to use a particular region.</p>

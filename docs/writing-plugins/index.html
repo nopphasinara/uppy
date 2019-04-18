@@ -328,6 +328,13 @@
           
           
           <li>
+            <a href="/docs/robodog/dashboard/" class="sidebar-link">Robodog Dashboard</a>
+          </li>
+        
+          
+          
+          
+          <li>
             <a href="/docs/transloadit/" class="sidebar-link">Transloadit</a>
           </li>
         
@@ -586,6 +593,25 @@ module<span class="token punctuation">.</span>exports <span class="token operato
     <span class="token punctuation">)</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
+</pre></td></tr></table></figure>
+<h2 id="Locales"><a href="#Locales" class="headerlink" title="Locales"></a>Locales</h2><p>For any user facing language that you use while writing your Plugin, please provide them as strings in the <code>defaultLocale</code> property like so:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="token keyword">this</span><span class="token punctuation">.</span>defaultLocale <span class="token operator">=</span> <span class="token punctuation">{</span>
+  strings<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    youCanOnlyUploadFileTypes<span class="token punctuation">:</span> <span class="token string">'You can only upload: %{types}'</span><span class="token punctuation">,</span>
+    youCanOnlyUploadX<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token number">0</span><span class="token punctuation">:</span> <span class="token string">'You can only upload %{smart_count} file'</span><span class="token punctuation">,</span>
+      <span class="token number">1</span><span class="token punctuation">:</span> <span class="token string">'You can only upload %{smart_count} files'</span><span class="token punctuation">,</span>
+      <span class="token number">2</span><span class="token punctuation">:</span> <span class="token string">'You can only upload %{smart_count} files'</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre></td></tr></table></figure>
+<p>This allows them to be overridden by Locale Packs, or directly when users pass <code>locale: { strings: youCanOnlyUploadFileTypes: &#39;Something else completely about %{types}&#39;} }</code>. For this to work, it’s currently also required that you add:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="token comment">// i18n</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>translator <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Translator</span><span class="token punctuation">(</span><span class="token punctuation">[</span> <span class="token keyword">this</span><span class="token punctuation">.</span>defaultLocale<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>uppy<span class="token punctuation">.</span>locale<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>opts<span class="token punctuation">.</span>locale <span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>i18n <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>translator<span class="token punctuation">.</span>translate<span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>translator<span class="token punctuation">)</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>i18nArray <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>translator<span class="token punctuation">.</span>translateArray<span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>translator<span class="token punctuation">)</span> 
+<span class="token comment">// ^-- Only if you're using i18nArray, which allows you to pass in JSX Components as well.</span>
 </pre></td></tr></table></figure>
 
     

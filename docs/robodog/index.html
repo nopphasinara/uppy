@@ -328,6 +328,13 @@
           
           
           <li>
+            <a href="/docs/robodog/dashboard/" class="sidebar-link">Robodog Dashboard</a>
+          </li>
+        
+          
+          
+          
+          <li>
             <a href="/docs/transloadit/" class="sidebar-link">Transloadit</a>
           </li>
         
@@ -482,9 +489,9 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
 <p>Then, with a bundler such as <a href="https://webpack.js.org" target="_blank" rel="noopener">webpack</a> or <a href="https://browserify.org" target="_blank" rel="noopener">Browserify</a>, do:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="token keyword">const</span> transloadit <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@uppy/robodog'</span><span class="token punctuation">)</span>
 </pre></td></tr></table></figure>
-<p>If you are not using a bundler, you can also import the Robodog using an HTML script tag.</p>
+<p>If you are not using a bundler, you can also import Robodog using an HTML script tag.</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>link</span> <span class="token attr-name">rel</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>stylesheet<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://transloadit.edgly.net/releases/uppy/v0.30.4/robodog.min.css<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://transloadit.edgly.net/releases/uppy/v0.30.4/robodog.min.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span> 
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://transloadit.edgly.net/releases/uppy/v0.30.4/robodog.min.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
 </pre></td></tr></table></figure>
 <h2 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h2><p>Robodog has several methods for different use cases.</p>
 <p>If you want to have a modal UI that users can use to select files from their local device or from third party sources like Instagram, use the <a href="#File-Picker">File Picker API</a>. This can be used for one-off uploads <em>outside</em> an HTML form, like profile avatars or images to embed in a blog post.</p>

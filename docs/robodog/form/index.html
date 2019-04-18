@@ -328,6 +328,13 @@
           
           
           <li>
+            <a href="/docs/robodog/dashboard/" class="sidebar-link">Robodog Dashboard</a>
+          </li>
+        
+          
+          
+          
+          <li>
             <a href="/docs/transloadit/" class="sidebar-link">Transloadit</a>
           </li>
         
@@ -500,7 +507,7 @@ transloadit<span class="token punctuation">.</span><span class="token function">
 <h3 id="restrictions-minNumberOfFiles"><a href="#restrictions-minNumberOfFiles" class="headerlink" title="restrictions.minNumberOfFiles"></a><code>restrictions.minNumberOfFiles</code></h3><p>The minimum number of files that must be selected before the upload. The upload will fail and the form will not be submitted if fewer files were selected.</p>
 <h3 id="restrictions-allowedFileTypes"><a href="#restrictions-allowedFileTypes" class="headerlink" title="restrictions.allowedFileTypes"></a><code>restrictions.allowedFileTypes</code></h3><p>Array of mime type wildcards <code>image/*</code>, exact mime types <code>image/jpeg</code>, or file extensions <code>.jpg</code>: <code>[&#39;image/*&#39;, &#39;.jpg&#39;, &#39;.jpeg&#39;, &#39;.png&#39;, &#39;.gif&#39;]</code>.</p>
 <p>If provided, the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Limiting_accepted_file_types" target="_blank" rel="noopener"><code>&lt;input accept&gt;</code></a> attribute will be added to <code>&lt;input type=&quot;file&quot;&gt;</code> fields, so only acceptable files can be selected in the system file dialog.</p>
-<h2 id="Progress-Reporting"><a href="#Progress-Reporting" class="headerlink" title="Progress Reporting"></a>Progress Reporting</h2><p>Uploads using HTML forms have no builtin progress reporting. With the Robodog, you can use the <code>statusBar</code> option to show an <a href="/docs/status-bar">@uppy/status-bar</a>: an element styled like a progress bar, reporting both upload and Assembly execution progress.</p>
+<h2 id="Progress-Reporting"><a href="#Progress-Reporting" class="headerlink" title="Progress Reporting"></a>Progress Reporting</h2><p>Uploads using HTML forms have no builtin progress reporting. With Robodog, you can use the <code>statusBar</code> option to show an <a href="/docs/status-bar">@uppy/status-bar</a>: an element styled like a progress bar, reporting both upload and Assembly execution progress.</p>
 <p>Point it to an element or a CSS selector:</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>my-form<span class="token punctuation">"</span></span> <span class="token attr-name">...</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>progress<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
@@ -519,7 +526,7 @@ transloadit<span class="token punctuation">.</span><span class="token function">
 **TODO have an option to replace the inputs with a Dashboard modal button?**
 -->
 <h2 id="Migrating-From-the-jQuery-SDK"><a href="#Migrating-From-the-jQuery-SDK" class="headerlink" title="Migrating From the jQuery SDK"></a>Migrating From the jQuery SDK</h2><p>We now recommend using Uppy over the jQuery SDK. Uppy is framework- and library-agnostic, and much more extensible.</p>
-<p>Like the Transloadit jQuery SDK, this API enhances an existing form. That makes this a good candidate for migration. Most of the jQuery SDK options have a direct equivalent in the Robodog.</p>
+<p>Like the Transloadit jQuery SDK, this API enhances an existing form. That makes this a good candidate for migration. Most of the jQuery SDK options have a direct equivalent in Robodog.</p>
 <p>First, change your import URLs and initialization code:</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="token comment">&lt;!-- The old jQuery way… --></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>//assets.transloadit.com/js/jquery.transloadit2-v3-latest.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>

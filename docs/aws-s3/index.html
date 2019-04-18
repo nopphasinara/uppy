@@ -328,6 +328,13 @@
           
           
           <li>
+            <a href="/docs/robodog/dashboard/" class="sidebar-link">Robodog Dashboard</a>
+          </li>
+        
+          
+          
+          
+          <li>
             <a href="/docs/transloadit/" class="sidebar-link">Transloadit</a>
           </li>
         
@@ -481,7 +488,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
 uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>AwsS3<span class="token punctuation">,</span> <span class="token punctuation">{</span>
   limit<span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
   timeout<span class="token punctuation">:</span> <span class="token function">ms</span><span class="token punctuation">(</span><span class="token string">'1 minute'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  serverUrl<span class="token punctuation">:</span> <span class="token string">'https://uppy-companion.myapp.com/'</span>
+  companionUrl<span class="token punctuation">:</span> <span class="token string">'https://uppy-companion.myapp.com/'</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 </pre></td></tr></table></figure>
 <p>There are broadly two ways of uploading to S3 in a browser. A server can generate a presigned URL for a <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html" target="_blank" rel="noopener">PUT upload</a>, or a server can generate form data for a <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPOST.html" target="_blank" rel="noopener">POST upload</a>. Companion uses a POST upload. See <a href="#post-uploads">POST Uploads</a> for some caveats if you would like to use POST uploads without Companion. See <a href="#example-presigned-url">Generating a presigned upload URL server-side</a> for an example of a PUT upload.</p>
@@ -495,9 +502,9 @@ uppy<span class="token punctuation">.</span><span class="token function">use</sp
 </pre></td></tr></table></figure>
 <h2 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h2><p>The <code>@uppy/aws-s3</code> plugin has the following configurable options:</p>
 <h3 id="id-39-AwsS3-39"><a href="#id-39-AwsS3-39" class="headerlink" title="id: &#39;AwsS3&#39;"></a><code>id: &#39;AwsS3&#39;</code></h3><p>A unique identifier for this plugin. Defaults to <code>&#39;AwsS3&#39;</code>.</p>
-<h3 id="serverUrl"><a href="#serverUrl" class="headerlink" title="serverUrl"></a><code>serverUrl</code></h3><p>When using <a href="/docs/companion">Companion</a> to sign S3 uploads, set this option to the root URL of the Companion instance.</p>
+<h3 id="companionUrl"><a href="#companionUrl" class="headerlink" title="companionUrl"></a><code>companionUrl</code></h3><p>When using <a href="/docs/companion">Companion</a> to sign S3 uploads, set this option to the root URL of the Companion instance.</p>
 <figure class="highlight js"><table><tr><td class="code"><pre>uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>AwsS3<span class="token punctuation">,</span> <span class="token punctuation">{</span>
-  serverUrl<span class="token punctuation">:</span> <span class="token string">'https://uppy-companion.my-app.com/'</span>
+  companionUrl<span class="token punctuation">:</span> <span class="token string">'https://uppy-companion.my-app.com/'</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 </pre></td></tr></table></figure>
 <h3 id="serverHeaders"><a href="#serverHeaders" class="headerlink" title="serverHeaders: {}"></a><code>serverHeaders: {}</code></h3><blockquote>

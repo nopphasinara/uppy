@@ -126,7 +126,7 @@
           
           
           <li>
-            <a href="/examples/i18n/" class="sidebar-link">Bundle & i18n</a>
+            <a href="/examples/i18n/" class="sidebar-link">CDN & Locales</a>
           </li>
         
           
@@ -311,7 +311,7 @@ uppy
     <span class="token punctuation">}</span><span class="token punctuation">,</span>
     waitForEncoding<span class="token punctuation">:</span> <span class="token boolean">true</span>
   <span class="token punctuation">}</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Instagram<span class="token punctuation">,</span> <span class="token punctuation">{</span> target<span class="token punctuation">:</span> Dashboard<span class="token punctuation">,</span> serverUrl<span class="token punctuation">:</span> <span class="token string">'https://api2.transloadit.com/companion'</span><span class="token punctuation">,</span> serverPattern<span class="token punctuation">:</span> <span class="token regex">/\.transloadit\.com$/</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Instagram<span class="token punctuation">,</span> <span class="token punctuation">{</span> target<span class="token punctuation">:</span> Dashboard<span class="token punctuation">,</span> companionUrl<span class="token punctuation">:</span> <span class="token string">'https://api2.transloadit.com/companion'</span><span class="token punctuation">,</span> companionAllowedHosts<span class="token punctuation">:</span> <span class="token regex">/\.transloadit\.com$/</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Dashboard<span class="token punctuation">,</span> <span class="token punctuation">{</span>
     inline<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
     maxHeight<span class="token punctuation">:</span> <span class="token number">400</span><span class="token punctuation">,</span>

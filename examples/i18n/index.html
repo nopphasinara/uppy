@@ -7,9 +7,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Bundle & i18n — Uppy File Uploader</title>
+    <title>CDN & Locales — Uppy File Uploader</title>
     <meta charset="utf-8">
-    <meta name="title" content="Bundle &amp; i18n — Uppy File Uploader">
+    <meta name="title" content="CDN &amp; Locales — Uppy File Uploader">
     <meta name="description" content="Sleek, modular file uploader that integrates seamlessly with any website or app. It fetches files from local disk, Google Drive, Dropbox, Instagram, remote URLs, cameras etc, and then uploads them to the final destination. It’s fast, easy to use and let’s you worry about more important problems than building a file uploader.
 ">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,8 +17,8 @@
     <meta name="twitter:site" content="@uppy_io">
     <meta name="twitter:creator" content="@uppy_io">
     <meta property="og:url" content="https://uppy.io/examples/i18n/index.html">
-    <meta property="og:title" content="Bundle & i18n — Uppy File Uploader">
-    <meta name="twitter:title" content="Bundle & i18n — Uppy File Uploader">
+    <meta property="og:title" content="CDN & Locales — Uppy File Uploader">
+    <meta name="twitter:title" content="CDN & Locales — Uppy File Uploader">
     <meta name="twitter:description" content="Sleek, modular file uploader that integrates seamlessly with any website or app. It fetches files from local disk, Google Drive, Dropbox, Instagram, remote URLs, cameras etc, and then uploads them to the final destination. It’s fast, easy to use and let’s you worry about more important problems than building a file uploader.
 ">
     <meta property="og:image" content="http://uppy.io/images/uppy-social-pink.png">
@@ -126,7 +126,7 @@
           
           
           <li>
-            <a href="/examples/i18n/" class="sidebar-link current">Bundle & i18n</a>
+            <a href="/examples/i18n/" class="sidebar-link current">CDN & Locales</a>
           </li>
         
           
@@ -187,7 +187,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
 
 
 <div class="Content js-Content examples with-sidebar">
-  <h1>Bundle & i18n Example</h1>
+  <h1>CDN & Locales Example</h1>
 
   
 <blockquote><p>Here you’ll see a demo of how you might use internationalization (i18n) in Uppy, as well as how to load Uppy using a pre-bundled version (CDN).</p>
@@ -203,14 +203,20 @@ https://transloadit.edgly.net/releases/uppy/v0.30.4/uppy.min.css -->
 <!-- Load Uppy pre-built bundled version. You can use Transloadit's CDN, Edgly:
 https://transloadit.edgly.net/releases/uppy/v0.30.4/uppy.min.js -->
 <script src="/uppy/uppy.min.js"></script>
+<script src="/uppy/locales/ru_RU.min.js"></script>
 <script>
-  var uppy = Uppy.Core({ debug: true, autoProceed: true });
+  var uppy = Uppy.Core({ 
+    debug: true, 
+    autoProceed: true,
+    locale: Uppy.locales.ru_RU
+  });
   uppy.use(Uppy.DragDrop, {
     target: '.UppyDragDrop',
+    // We are using the ru_RU locale pack (set above in Uppy.Core options),
+    // but you can also override specific strings like so:
     locale: {
       strings: {
-        dropHereOr: 'Перенесите файлы сюда или %{browse}',
-        browse: 'выберите'
+        browse: 'выберите ;-)'
       }
     }
   });
@@ -239,14 +245,20 @@ https://transloadit.edgly.net/releases/uppy/v0.30.4/uppy.min.css --></span>
 <span class="token comment">&lt;!-- Load Uppy pre-built bundled version. You can use Transloadit's CDN, Edgly:
 https://transloadit.edgly.net/releases/uppy/v0.30.4/uppy.min.js --></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/uppy/uppy.min.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/uppy/locales/ru_RU.min.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script language-javascript">
-  <span class="token keyword">var</span> uppy <span class="token operator">=</span> Uppy<span class="token punctuation">.</span><span class="token function">Core</span><span class="token punctuation">(</span><span class="token punctuation">{</span> debug<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> autoProceed<span class="token punctuation">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> uppy <span class="token operator">=</span> Uppy<span class="token punctuation">.</span><span class="token function">Core</span><span class="token punctuation">(</span><span class="token punctuation">{</span> 
+    debug<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> 
+    autoProceed<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    locale<span class="token punctuation">:</span> Uppy<span class="token punctuation">.</span>locales<span class="token punctuation">.</span>ru_RU
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   uppy<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>Uppy<span class="token punctuation">.</span>DragDrop<span class="token punctuation">,</span> <span class="token punctuation">{</span>
     target<span class="token punctuation">:</span> <span class="token string">'.UppyDragDrop'</span><span class="token punctuation">,</span>
+    <span class="token comment">// We are using the ru_RU locale pack (set above in Uppy.Core options),</span>
+    <span class="token comment">// but you can also override specific strings like so:</span>
     locale<span class="token punctuation">:</span> <span class="token punctuation">{</span>
       strings<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-        dropHereOr<span class="token punctuation">:</span> <span class="token string">'Перенесите файлы сюда или %{browse}'</span><span class="token punctuation">,</span>
-        browse<span class="token punctuation">:</span> <span class="token string">'выберите'</span>
+        browse<span class="token punctuation">:</span> <span class="token string">'выберите ;-)'</span>
       <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
   <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
