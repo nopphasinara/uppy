@@ -244,7 +244,7 @@ class Uploader {
    * @see emitProgress
    * @param {number=} bytesUploaded the bytes actually Uploaded so far
    */
-  emitIllusiveProgress (bytesUploaded) {
+  emitIllusiveProgress (bytesUploaded = 0) {
     if (this._paused) {
       return
     }
@@ -253,7 +253,6 @@ class Uploader {
     if (!this.streamsEnded) {
       bytesTotal = Math.max(bytesTotal, this.bytesWritten)
     }
-    bytesUploaded = bytesUploaded || 0
     // for a 10MB file, 10MB of download will account for 5MB upload progress
     // and 10MB of actual upload will account for the other 5MB upload progress.
     const illusiveBytesUploaded = (this.bytesWritten / 2) + (bytesUploaded / 2)
