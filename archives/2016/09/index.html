@@ -7,19 +7,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Uppy File Uploader</title>
+    <title>Uppy</title>
     <meta charset="utf-8">
-    <meta name="title" content="Uppy File Uploader">
-    <meta name="description" content="Sleek, modular file uploader that integrates seamlessly with any website or app. It fetches files from local disk, Google Drive, Dropbox, Instagram, remote URLs, cameras etc, and then uploads them to the final destination. It’s fast, easy to use and let’s you worry about more important problems than building a file uploader.
+    <meta name="title" content="Uppy">
+    <meta name="description" content="Uppy fetches files locally and from remote places like Dropbox or Instagram.  With its seamless integration, reliability and ease of use,  Uppy is truly your best friend in file uploading.
 ">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@uppy_io">
     <meta name="twitter:creator" content="@uppy_io">
     <meta property="og:url" content="https://uppy.io/archives/2016/09/index.html">
-    <meta property="og:title" content="Uppy File Uploader">
-    <meta name="twitter:title" content="Uppy File Uploader">
-    <meta name="twitter:description" content="Sleek, modular file uploader that integrates seamlessly with any website or app. It fetches files from local disk, Google Drive, Dropbox, Instagram, remote URLs, cameras etc, and then uploads them to the final destination. It’s fast, easy to use and let’s you worry about more important problems than building a file uploader.
+    <meta property="og:title" content="Uppy">
+    <meta name="twitter:title" content="Uppy">
+    <meta name="twitter:description" content="Uppy fetches files locally and from remote places like Dropbox or Instagram.  With its seamless integration, reliability and ease of use,  Uppy is truly your best friend in file uploading.
 ">
     <meta property="og:image" content="http://uppy.io/images/uppy-social-pink.png">
     <meta name="twitter:image" content="http://uppy.io/images/uppy-social-pink.png">
@@ -27,10 +27,8 @@
     <meta name="google-site-verification" content="JxARoHXoCI8bD07pLV_u3z6xpuWNcSIZIcHEytyCkUc" />
 
     <link rel="icon" href="/images/logos/uppy-dog-head-arrow.png" type="image/x-icon">
-    <link rel="alternate" type="application/rss+xml" title="Uppy File Uploader" href="/atom.xml">
+    <link rel="alternate" type="application/rss+xml" title="Uppy" href="/atom.xml">
 
-    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,600|Roboto+Mono" rel="stylesheet">
-    <link href="//fonts.googleapis.com/css?family=Poiret+One:400" rel="stylesheet">
     <script>
       window.PAGE_TYPE = ""
     </script>
@@ -39,13 +37,25 @@
   </head>
   <body class="page-inner">
     <div class="page">
+      <div class="TransloaditBar">
+        <a class="TransloaditBar-logo" href="https://transloadit.com/" target="_blank" rel="noopener noreferrer">
+          <img class="TransloaditBar-logoImg" src="/images/transloadit.svg" width="82" height="19" alt="Transloadit">
+        </a>
+        <div class="TransloaditBar-about">Uppy is an open source project by <a class="TransloaditBar-link" href="https://transloadit.com/" target="_blank">Transloadit</a></div>
+      </div>
+
       <header id="header" class="MainHeader js-MainHeader">
         <button class="MainHeader-menuBtn js-MenuBtn"></button>
 
-        <a id="logo" class="MainLogo" href="/">
-          <img class="MainLogo-img" src="/images/logos/uppy-dog-head-arrow.svg">
-          <span class="MainLogo-text">Uppy File Uploader</span>
-        </a>
+        <span id="logo" class="MainLogo">
+          <a class="MainLogo-link" href="/">Uppy</a>
+          <a class="MainLogo-version" href="/blog/2019/04/1.0/">
+            1.0
+            <span class="MainLogo-emoji">
+              <img src="/images/party-popper.png" srcset="/images/party-popper@2x.png 2x" alt="🎉">
+            </span>
+          </a>
+        </span>
 
         <nav>
           <ul id="nav" class="MainMenu">
@@ -61,102 +71,93 @@
 <!--li><a href="/stats/" class="nav-link">Stats</a></li-->
 <li><a href="/blog/" class="nav-link">Blog</a></li>
 <li><a href="/support/" class="nav-link">Support</a></li>
-<li><a href="https://github.com/transloadit/uppy" class="nav-link">Github</a></li>
+<li><a href="https://github.com/transloadit/uppy" class="nav-link">GitHub</a></li>
 
           </ul>
         </nav>
 
-        <a href="https://github.com/transloadit/uppy" class="github-corner" aria-label="View source on Github"><svg width="67" height="67" viewBox="0 0 250 250" style="fill:#e02177; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+        <div class="MainHeader-tagline">
+          The file uploader that <span class="MainHeader-taglinePart js-MainHeader-taglinePart is-visible">loves to play fetch</span>
+        </div>
+
+        <ul class="MainHeader-taglineList js-MainHeader-taglineList">
+          
+          <li>won’t chew on your shoes</li>
+          
+          <li>is fully housebroken</li>
+          
+          <li>just wants to play with you</li>
+          
+          <li>doesn’t hump your leg</li>
+          
+          <li>also accepts cat pictures</li>
+          
+          <li>loves you unconditionally</li>
+          
+          <li>you don’t have to keep on a leash</li>
+          
+          <li>won’t pee on your rug</li>
+          
+          <li>loves to play fetch</li>
+          
+          <li>doesn’t bite (hard)</li>
+          
+          <li>won’t bark at the mailman</li>
+          
+          <li>is great with the kids</li>
+          
+          <li>can digest anything, even chocolate cake</li>
+          
+          <li>is always happy to see you</li>
+          
+          <li>isn’t afraid of fireworks</li>
+          
+          <li>is allowed everywhere</li>
+          
+        </ul>
       </header>
 
       <main class="MainContent js-MainContent" id="main">
         
           <section id="hero" class="IndexHero">
-  <header id="logo-wrap" class="IndexHero-header">
-    <img id="logo" class="IndexHero-logo" title="Uppy" alt="Uppy" src="/images/logos/uppy-dog-head-arrow.svg">
-    <h1 class="IndexHero-title">Uppy File Uploader</h1>
+  <img class="IndexHero-logo" title="Uppy" alt="Uppy" src="/images/logos/uppy-logo-2019.svg">
+  <h1 class="IndexHero-title">
+    Sleek, modular open source JavaScript file uploader
+  </h1>
+  <div class="IndexHero-description">
+    Uppy fetches files locally and from remote places like Dropbox or Instagram.  With its seamless integration, reliability and ease of use,  Uppy is truly your best friend in file uploading.
 
-    <h2 class="IndexHero-tagline">
-      The file uploader that <br>
-      <span class="IndexHero-taglinePart js-IndexHero-taglinePart is-visible">loves to play fetch</span>
-    </h2>
-
-    <ul class="IndexHero-taglineList js-IndexHero-taglineList">
-      
-        <li>won’t chew on your shoes</li>
-      
-        <li>is fully housebroken</li>
-      
-        <li>just wants to play with you</li>
-      
-        <li>doesn’t hump your leg</li>
-      
-        <li>also accepts cat pictures</li>
-      
-        <li>loves you unconditionally</li>
-      
-        <li>you don’t have to keep on a leash</li>
-      
-        <li>won’t pee on your rug</li>
-      
-        <li>loves to play fetch</li>
-      
-        <li>doesn’t bite (hard)</li>
-      
-        <li>won’t bark at the mailman</li>
-      
-        <li>is great with the kids</li>
-      
-        <li>can digest anything, even chocolate cake</li>
-      
-        <li>is always happy to see you</li>
-      
-        <li>isn’t afraid of fireworks</li>
-      
-        <li>is allowed everywhere</li>
-      
-    </ul>
-  </header>
-
-  <ul class="Social">
-  <li><a href="https://twitter.com/uppy_io" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @uppy_io</a></li>
-  <li><iframe src="https://ghbtns.com/github-btn.html?user=transloadit&repo=uppy&type=watch&count=true"
-allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe></li>
-  <!-- to regenerate you can use this link: https://img.shields.io/badge/community-forum-d8006a.svg -->
-  <li><a href="https://community.transloadit.com/c/uppy"><img src="/images/community-forum-d8006a.svg" /> </a></li>
-  <li class="BuildBadge">
-   <span class="wrapper">
-     <a href="https://travis-ci.org/transloadit/uppy"><img src="https://travis-ci.org/transloadit/uppy.svg?branch=master" alt="Build Status"></a>
-   </span>
-  </li>
-  <li class="SauceBadge">
-   <span class="wrapper">
-     <a href="https://saucelabs.com/u/transloadit-uppy">
-       <img src="https://saucelabs.com/buildstatus/transloadit-uppy" alt="Sauce Test Status"/>
-     </a>
-   </span>
-  </li>
-</ul>
-
+  </div>
+  <div class="IndexHero-buttons">
+    <a href="/docs/" class="button button--cta">Get Started</a>
+    <a href="https://github.com/transloadit/uppy" class="button button--secondary">
+      Uppy on GitHub
+      <span class="GithubStars">★ 19084</span>
+    </a>
+  </div>
 </section>
 
-<section id="example" class="IndexExample">
-  <!-- <h2 class="IndexSection-title">Demo</h2> -->
+<section class="IndexDemo">
+  <div class="IndexDemo-tabContent">
+    <div class="TabPane TabPane--active" id="live-demo">
+      <div class="IndexDemo-uppyWrapper">
+        <div class="IndexDemo-uppy" id="demo"></div>
+      </div>
+    </div> <!-- /live-demo -->
+    
+    <div class="TabPane" id="video">
+      <div class="IndexDemo-video">
+        <video autoplay loop muted playsinline>
+          <source src="/images/uppy-demo-oct-2018.mp4" type="video/mp4">
+          Your browser does not support the video tag, you can <a href="/images/uppy-demo-oct-2018.mp4">download the video</a>
+          to watch it.
+        </video>
+      </div>
+    </div> <!-- /video -->
 
-  <div class="IndexExample-block">
-    <video class="IndexExample-video"
-           autoplay loop muted playsinline>
-      <source src="/images/uppy-demo-oct-2018.mp4" type="video/mp4">
-      Your browser does not support the video tag, you can <a href="/images/uppy-demo-oct-2018.mp4">download the video</a> to watch it.
-    </video>
-    <form id="upload-form">
-      <input type="file">
-    </form>
-    <p class="TryMe-line">Try me: <button id="select-files" class="TryMe-btn">Select Files</button></p>
-  </div>
-
-  <div class="IndexExample-block">
-    <figure class="highlight bash"><table><tbody><tr><td class="code"><pre>$ <span class="token function">npm</span> <span class="token function">install</span> @uppy/core @uppy/dashboard @uppy/instagram @uppy/tus </pre></td></tr></tbody></table></figure>
+    <div class="TabPane" id="code">
+      <div class="IndexDemo-code">
+        <figure class="highlight bash"><table><tbody><tr><td class="code"><pre>$ <span class="token function">npm</span> <span class="token function">install</span> @uppy/core @uppy/dashboard @uppy/instagram @uppy/tus </pre></td></tr></tbody></table></figure>
 
 <figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="token keyword">import</span> Uppy <span class="token keyword">from</span> <span class="token string">&apos;@uppy/core&apos;</span>
 <span class="token keyword">import</span> Dashboard <span class="token keyword">from</span> <span class="token string">&apos;@uppy/dashboard&apos;</span>
@@ -195,78 +196,95 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
             document.body.appendChild(img);
           });
       </script>
+      </div>
+    </div> <!-- /code -->
   </div>
 
-  <a class="GetStartedBtn" href="/docs/">Get Started</a>
+  <ul class="Tabs">
+    <li class="Tabs-item">
+      <a class="Tabs-link Tabs-link--active" href="#live-demo">
+        <span class="Tabs-icon">
+          <svg width="11" height="15" viewBox="0 0 11 15">
+            <path d="M0 0v12.5L3.667 9l3.143 6 2.619-1.5L5.762 8 11 7.5z" fill-rule="evenodd" />
+          </svg>
+        </span>
+        Live demo
+      </a>
+    </li>
+    <li class="Tabs-item">
+      <a class="Tabs-link" href="#video">
+        <span class="Tabs-icon">
+          <svg width="19" height="19" viewBox="0 0 19 19">
+            <path
+              d="M9.5 19a9.5 9.5 0 1 1 0-19 9.5 9.5 0 0 1 0 19zm0-2a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15zM14 9.5l-6.75 3.897V5.603L14 9.5z"
+              fill-rule="nonzero" />
+          </svg>
+        </span>
+        Video
+      </a>
+    </li>
+    <li class="Tabs-item">
+      <a class="Tabs-link" href="#code">
+        <span class="Tabs-icon">
+          <svg width="29" height="17" viewBox="0 0 29 17">
+            <path
+              d="M8.45 5.748L2.402 8.484 8.45 11.22v2.16L.17 9.6V7.44l8.28-3.78v2.088zm11.34 5.544l6.048-2.736L19.79 5.82V3.66l8.28 3.78V9.6l-8.28 3.78v-2.088zm-9.7 5.308L15.85.4h2.16l-5.76 16.2h-2.16z"
+              fill-rule="nonzero" />
+          </svg>
+        </span>
+        Code
+      </a>
+    </li>
+  </ul>
 </section>
 
-<section class="IndexAbout">
-  <div class="IndexAbout-item">
-    <!-- <img class="IndexAbout-icon" src="/images/traffic-light.svg"> -->
-    <h2 class="IndexSection-title">What is Uppy</h2>
-    <p>Sleek, modular file uploader that integrates seamlessly with any website or app. It fetches files from local disk, Google Drive, Dropbox, Instagram, remote URLs, cameras etc, and then uploads them to the final destination. It’s fast, easy to use and let’s you worry about more important problems than building a file uploader.
-</p>
-  </div>
-  <div class="IndexAbout-item">
-    <a href="https://transloadit.com"><img class="IndexAbout-icon" src="/images/transloadit-logo.png"></a>
-    <h2 class="IndexSection-title">Open Source</h2>
-    <p>Uppy is brought to you by the people behind <a href="https://transloadit.com">Transloadit</a>, and as such will have first class support for adding their uploading and encoding backend, but this is opt-in, and you can just as easily roll your own.
-</p>
-  </div>
+<section class="IndexFeatures">
+  <h2>Features</h2>
+  <ul class="IndexFeatures-list">
+    <li><strong>Lightweight</strong> and modular, plugin-based architecture, easy on dependencies <img width="16" align="absmiddle" src="/images/emojis/zap.png" /></li>
+    <li>Large uploads survive network hiccups thanks to <strong>resumable file uploads</strong> via the open <strong><a href="https://tus.io/">tus</a></strong> standard</li>
+    <li><img width="16" align="absmiddle" src="/images/emojis/battery.png" /> Saves battery and data plan by letting users pick files from <strong>Webcam, Dropbox, Google Drive and Instagram</strong>, while letting servers do the heavy lifting via <strong><a href="/docs/companion/">Companion</a></strong></li>
+    <li>Works great with the file encoding and processing backend from <strong><a href="https://transloadit.com/">Transloadit</a></strong>, but also works great without <img width="16" align="absmiddle" src="/images/emojis/transloadit.png" /></li>
+    <li><strong>Open source and driven by the community</strong> We listen closely and adjust the project based on your feedback <img width="16" align="absmiddle" src="/images/emojis/heart.png" /></li>
+    <li><strong>Sleek user interface <img width="16" align="absmiddle" src="/images/emojis/sparkles.png" /></strong></li>
+    <li>File recovery (after a browser crash or accidental navigation) via <strong><a href="/docs/golden-retriever/">Golden Retriever</a></strong></li>
+    <li>Speaks <strong>multiple languages</strong> (i18n) <img width="16" align="absmiddle" src="/images/emojis/earth_africa.png" /></li>
+    <li>Built with accessibility in mind</li>
+    <li><strong>Free to the world, forever</strong></li>
+    <li>Cute as a puppy, also accepts cat pictures <img width="16" align="absmiddle" src="/images/emojis/dog.png" /></li>
+  </ul>
 </section>
 
-<section class="IndexDesignGoals">
-  <h2>Design Goals:</h2>
-  <ul>
-    
-    <li>
-      Lightweight / easy on dependencies
+<section class="IndexReviews">
+  <ul class="IndexReviews-list">
+    <li class="IndexReviews-item">
+      <a class="IndexReviews-link" href="https://books.producthunt.com/bestof2017" target="_blank"
+        rel="noreferrer noopener">
+        <div class="IndexReviews-imgWrapper">
+          <img class="IndexReviews-img" src="/images/testimonials/producthunt.png"
+            srcset="/images/testimonials/producthunt@2x.png 2x" alt="Product Hunt">
+        </div>
+        The Best Product Launches
+      </a>
     </li>
-    
-    <li>
-      Small core, modular architecture. Everything is a plugin
+
+    <li class="IndexReviews-item">
+      <a class="IndexReviews-link" href="https://stackshare.io/posts/top-developer-tools-2017" target="_blank" rel="noreferrer noopener">
+        <div class="IndexReviews-imgWrapper">
+          <img class="IndexReviews-img" src="/images/testimonials/stackshare.png" srcset="/images/testimonials/stackshare@2x.png 2x" alt="StackShare">
+        </div>
+        Top 10 tools of the year
+      </a>
     </li>
-    
-    <li>
-      ES6, with transpiled ES5 versions available
+
+    <li class="IndexReviews-item">
+      <a class="IndexReviews-link" href="https://twitter.com/smashingmag/status/1097870169043546112?lang=ca" target="_blank" rel="noreferrer noopener">
+        <div class="IndexReviews-imgWrapper">
+          <img class="IndexReviews-img" src="/images/testimonials/smashing-magazine.png" srcset="/images/testimonials/smashing-magazine@2x.png 2x" alt="Smashing Magazine">
+        </div>
+        “Soooo useful”
+      </a>
     </li>
-    
-    <li>
-      Usable as a bundle straight from a CDN, as well as a module to import
-    </li>
-    
-    <li>
-      Resumable file uploads via the open tus standard
-    </li>
-    
-    <li>
-      Robust: retries for all-the-things, avoid showing ‘weird errors’
-    </li>
-    
-    <li>
-      Themable UI with a beautiful default
-    </li>
-    
-    <li>
-      i18n support: Easily switch languages or supply your own copy
-    </li>
-    
-    <li>
-      Compatible with React (Native) (work on React Native in progress)
-    </li>
-    
-    <li>
-      Works great on mobile
-    </li>
-    
-    <li>
-      Works great with Transloadit. Works great without
-    </li>
-    
-    <li>
-      Offering sugared shortcuts for novice users (presets)
-    </li>
-    
   </ul>
 </section>
 
@@ -274,22 +292,39 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
   <h2>Activity Feed</h2>
 
   <div class="on-the-githubs" data-event-source="repos/transloadit/uppy">Loading...</div>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script src="//kvz.github.io/on-the-githubs/js/jquery.on-the-githubs.min.js"></script>
-  <script type="text/javascript">
-    $('.on-the-githubs').onthegithubs();
-  </script>
+</section>
+
+<section>
+  <ul class="Social">
+  <li><a href="https://twitter.com/uppy_io" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @uppy_io</a></li>
+  <li><iframe src="https://ghbtns.com/github-btn.html?user=transloadit&repo=uppy&type=watch&count=true"
+allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe></li>
+  <!-- to regenerate you can use this link: https://img.shields.io/badge/community-forum-d8006a.svg -->
+  <li><a href="https://community.transloadit.com/c/uppy"><img src="/images/community-forum-d8006a.svg" /> </a></li>
+  <li class="BuildBadge">
+   <span class="wrapper">
+     <a href="https://travis-ci.org/transloadit/uppy"><img src="https://travis-ci.org/transloadit/uppy.svg?branch=master" alt="Build Status"></a>
+   </span>
+  </li>
+  <li class="SauceBadge">
+   <span class="wrapper">
+     <a href="https://saucelabs.com/u/transloadit-uppy">
+       <img src="https://saucelabs.com/buildstatus/transloadit-uppy" alt="Sauce Test Status"/>
+     </a>
+   </span>
+  </li>
+</ul>
+
 </section>
 
 <footer class="IndexFooter">
-  <p>Released under the <a href="http://opensource.org/licenses/MIT" rel="noreferrer noopener" target="_blank">MIT License</a></p>
-  <p>This site borrows heavily from Evan You's excellent <a href="https://github.com/vuejs/vuejs.org">Vue.js</a> (<a href="https://github.com/transloadit/uppy/blob/master/website/VUEORG_LICENSE">LICENSE</a>) (he <a href="https://twitter.com/youyuxi/status/672441843183960067">approves</a>)</p>
-  <p>© 2019 <a href="https://transloadit.com" rel="noreferrer noopener" target="_blank">Transloadit</a></p>
-  <p><a href="/privacy-policy/">Privacy Policy</a></p>
+  <p><img class="IndexFooter-logo" title="Uppy" alt="Uppy" src="/images/logos/uppy-logo-2019.svg"></p>
+  <p>Released under the <a href="http://opensource.org/licenses/MIT" rel="noreferrer noopener" target="_blank">MIT License</a> ⋅ <a href="/privacy-policy/">Privacy Policy</a></p>
+  <p>© 2019 <a href="https://transloadit.com" target="_blank">Transloadit</a></p>
 </footer>
 
-<link href="https://transloadit.edgly.net/releases/uppy/v0.30.4/uppy.min.css" rel="stylesheet">
-<script src="https://transloadit.edgly.net/releases/uppy/v0.30.4/uppy.min.js"></script>
+<link href="https://transloadit.edgly.net/releases/uppy/v1.0.0/uppy.min.css" rel="stylesheet">
+<script src="https://transloadit.edgly.net/releases/uppy/v1.0.0/uppy.min.js"></script>
 
 <script>
   var TUS_ENDPOINT = 'https://master.tus.io/files/'
@@ -301,17 +336,18 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
   var uppy = Uppy.Core({ debug: true, autoProceed: false })
     .use(Uppy.Dashboard, {
       trigger: '#select-files',
-      target: '#upload-form',
+      target: '#demo',
+      inline: true,
       replaceTargetContent: true,
       metaFields: [
         { id: 'license', name: 'License', placeholder: 'specify license' },
         { id: 'caption', name: 'Caption', placeholder: 'describe what the image is about' }
       ]
     })
-    .use(Uppy.GoogleDrive, { target: Uppy.Dashboard, serverUrl: COMPANION_ENDPOINT })
-    .use(Uppy.Instagram, { target: Uppy.Dashboard, serverUrl: COMPANION_ENDPOINT })
+    .use(Uppy.GoogleDrive, { target: Uppy.Dashboard, companionUrl: COMPANION_ENDPOINT })
+    .use(Uppy.Instagram, { target: Uppy.Dashboard, companionUrl: COMPANION_ENDPOINT })
     .use(Uppy.Webcam, { target: Uppy.Dashboard })
-    .use(Uppy.Url, { target: Uppy.Dashboard, serverUrl: COMPANION_ENDPOINT })
+    .use(Uppy.Url, { target: Uppy.Dashboard, companionUrl: COMPANION_ENDPOINT })
     .use(Uppy.Tus, { endpoint: TUS_ENDPOINT})
 
   uppy.on('success', (files) => {
@@ -336,6 +372,8 @@ allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"><
 
       
         <script src="/js/smooth-scroll.min.js"></script>
+        <!-- Place this tag in your head or just before your close body tag. -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
       
       <script src="/js/common.js"></script>
 
